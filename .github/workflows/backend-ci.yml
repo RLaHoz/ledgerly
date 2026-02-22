@@ -9,7 +9,7 @@ on:
       - "DECISIONS.md"
       - "skills/**"
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths:
       - "backend/**"
       - ".github/**"
