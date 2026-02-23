@@ -1,0 +1,27 @@
+:root.theme-dark {
+  color-scheme: dark;
+
+  --app-bg: #040b1a;
+  --app-surface: #0f1b33;
+  --app-surface-1: #040b1a;
+  --app-surface-2: #0f1b33;
+  --app-card: #111f38;
+
+  --app-text-1: rgba(255, 255, 255, 0.92);
+  --app-text-2: rgba(255, 255, 255, 0.62);
+  --app-text-primary: var(--app-text-1);
+  --app-text-secondary: var(--app-text-2);
+
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-border-1: rgba(255, 255, 255, 0.09);
+
+  --app-tab-inactive: rgba(255, 255, 255, 0.56);
+  --app-tab-active: #3d9eff;
+
+  --ion-background-color: var(--app-bg);
+  --ion-text-color: var(--app-text-1);
+  --ion-border-color: var(--app-border-1);
+  --ion-toolbar-background: var(--app-surface-1);
+  --ion-tab-bar-background: var(--app-surface-1);
+  --ion-item-background: var(--app-surface-2);
+}

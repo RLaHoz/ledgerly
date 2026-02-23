@@ -1,0 +1,31 @@
+<ion-toolbar class="toolbar">
+  <div class="container">
+    <div class="left">
+      <div class="period">{{ periodLabel() }}</div>
+      <div class="title">{{ title() }}</div>
+    </div>
+
+    <div class="right">
+      <!-- Theme -->
+      <button class="icon-pill" type="button" (click)="themeToggle.emit()" [attr.aria-label]="themeAriaLabel()">
+        <ion-icon [name]="themeIcon()"></ion-icon>
+      </button>
+
+      <!-- Notifications -->
+      <div class="notif-wrap">
+        <button class="icon-pill" type="button" (click)="notificationsClick.emit()" aria-label="Notifications">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </button>
+
+        @if (hasNotifications()) {
+          <span class="notif-dot"></span>
+        }
+      </div>
+
+      <!-- Avatar -->
+      <button class="avatar" type="button" (click)="avatarClick.emit()" aria-label="Profile">
+        {{ avatarText() }}
+      </button>
+    </div>
+  </div>
+</ion-toolbar>

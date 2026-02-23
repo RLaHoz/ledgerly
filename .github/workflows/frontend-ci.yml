@@ -35,6 +35,19 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
+          lfs: false
+
+      - name: Debug workspace (temporary)
+        run: |
+          echo "ROOT:"
+          pwd
+          echo "LIST ROOT:"
+          ls -la ..
+          echo "LIST FRONTEND:"
+          ls -la .
+          echo "LOCKFILE:"
+          ls -la package-lock.json
+        working-directory: frontend
 
       - name: Setup Node
         uses: actions/setup-node@v4

@@ -1,0 +1,12 @@
+@use './light';
+@use './dark';
+
+// For information on how to create your own theme, please refer to:
+// https://ionicframework.com/docs/theming/
+:root {
+  --app-accent: #3b82f6;
+  --app-success: #16a34a;
+
+  --app-radius-lg: 18px;
+  --app-radius-md: 14px;
+}

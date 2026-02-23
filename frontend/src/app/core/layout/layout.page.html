@@ -1,0 +1,19 @@
+<ion-header>
+  <app-layout-header
+    [title]="ui.headerVm().title"
+    [periodLabel]="ui.headerVm().periodLabel"
+    [avatarText]="ui.headerVm().avatarText"
+    [hasNotifications]="ui.headerVm().hasNotifications"
+    [themeIcon]="themeStore.themeIcon()"
+    (themeToggle)="onThemeToggle()"
+    (notificationsClick)="onNotificationsClick()"
+    (avatarClick)="onAvatarClick()"
+  />
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-tabs>
+    <ion-router-outlet></ion-router-outlet>
+    <app-layout-tabs-footer />
+  </ion-tabs>
+</ion-content>

@@ -1,0 +1,10 @@
+ion-content {
+  --background: var(--app-bg);
+  color: var(--app-text-1);
+}
+
+ion-toolbar,
+ion-tab-bar {
+  --background: var(--app-surface-1);
+  border-color: var(--app-border-1);
+}

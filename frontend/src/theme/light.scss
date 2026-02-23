@@ -1,0 +1,28 @@
+:root,
+:root.theme-light {
+  color-scheme: light;
+
+  --app-bg: #f2f4f8;
+  --app-surface: #ffffff;
+  --app-surface-1: #f2f4f8;
+  --app-surface-2: #ffffff;
+  --app-card: #ffffff;
+
+  --app-text-1: #0f172a;
+  --app-text-2: #6b7280;
+  --app-text-primary: var(--app-text-1);
+  --app-text-secondary: var(--app-text-2);
+
+  --app-border: rgba(15, 23, 42, 0.08);
+  --app-border-1: rgba(15, 23, 42, 0.1);
+
+  --app-tab-inactive: rgba(15, 23, 42, 0.6);
+  --app-tab-active: #2f7fe8;
+
+  --ion-background-color: var(--app-bg);
+  --ion-text-color: var(--app-text-1);
+  --ion-border-color: var(--app-border-1);
+  --ion-toolbar-background: var(--app-surface-1);
+  --ion-tab-bar-background: var(--app-surface-1);
+  --ion-item-background: var(--app-surface-2);
+}
