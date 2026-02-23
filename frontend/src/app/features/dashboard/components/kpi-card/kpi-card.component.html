@@ -1,0 +1,18 @@
+<article class="card">
+  <header class="card-header">
+    <h3 class="title">{{ title() }}</h3>
+    <span class="icon-pill" [class.success]="iconTone() === 'success'">
+      <ion-icon [name]="icon()"></ion-icon>
+    </span>
+  </header>
+
+  <p class="value">{{ value() }}</p>
+
+  @if (hasProgress()) {
+    <div class="progress" role="progressbar" aria-label="Budget usage" [attr.aria-valuenow]="safeProgress()" aria-valuemin="0" aria-valuemax="100">
+      <span class="progress-fill" [style.width.%]="safeProgress()"></span>
+    </div>
+  }
+
+  <p class="subtitle" [class.success]="subtitleTone() === 'success'">{{ subtitle() }}</p>
+</article>

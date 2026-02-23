@@ -1,1 +1,39 @@
-<p> Dashboard</p>
+<ion-content [fullscreen]="true">
+  <section class="dashboard-page">
+    <app-month-nav
+      [label]="store.monthLabel()"
+      [selectedDate]="store.selectedDate()"
+      [minDate]="store.minDate()"
+      [maxDate]="store.maxDate()"
+      (previousRequested)="onPreviousMonth()"
+      (nextRequested)="onNextMonth()"
+      (dateSelected)="onDateSelected($event)"
+    />
+
+    <section class="kpi-grid" aria-label="Financial summary">
+      @for (card of store.metricCards(); track card.id) {
+        <app-kpi-card
+          [title]="card.title"
+          [value]="card.value"
+          [subtitle]="card.subtitle"
+          [subtitleTone]="card.subtitleTone"
+          [icon]="card.icon"
+          [iconTone]="card.iconTone"
+          [progressPercent]="card.progressPercent"
+        />
+      }
+    </section>
+
+    <app-insight-banner
+      [icon]="store.insight().icon"
+      [emphasis]="store.insight().emphasis"
+      [detail]="store.insight().detail"
+    />
+
+    <app-spending-chart-card
+      [title]="store.chartData().title"
+      [labels]="store.chartData().labels"
+      [values]="store.chartData().values"
+    />
+  </section>
+</ion-content>

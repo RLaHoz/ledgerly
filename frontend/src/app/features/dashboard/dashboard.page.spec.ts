@@ -7,6 +7,10 @@ describe('DashboardPage', () => {
   let fixture: ComponentFixture<DashboardPage>;
 
   beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DashboardPage],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(DashboardPage);
     component = fixture.componentInstance;
     fixture.detectChanges();

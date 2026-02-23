@@ -1,0 +1,110 @@
+:host {
+  display: block;
+}
+
+.month-nav {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 4;
+}
+
+.month-center {
+  position: relative;
+}
+
+.month-trigger {
+  align-items: center;
+  --color: var(--app-text-1);
+  --padding-end: 0;
+  --padding-start: 0;
+  --ripple-color: transparent;
+  color: var(--app-text-1);
+  display: inline-flex;
+  font-size: clamp(1.25rem, 3.6vw, 1.55rem);
+  font-weight: 700;
+  gap: 6px;
+  justify-content: center;
+  letter-spacing: -0.02em;
+  margin: 0;
+  min-height: 44px;
+  pointer-events: auto;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.month-trigger ion-icon {
+  color: var(--app-text-2);
+  font-size: 18px;
+}
+
+.nav-button {
+  --background: var(--app-surface-2);
+  --border-color: var(--app-border-1);
+  --border-style: solid;
+  --border-width: 1px;
+  --border-radius: 13px;
+  --color: var(--app-text-2);
+  --padding-end: 0;
+  --padding-start: 0;
+  --ripple-color: transparent;
+  height: 44px;
+  margin: 0;
+  min-height: 44px;
+  pointer-events: auto;
+  width: 44px;
+}
+
+.nav-button ion-icon {
+  font-size: 20px;
+}
+
+.picker-popover {
+  --backdrop-opacity: 0.2;
+  --offset-y: 8px;
+  --width: min(360px, calc(100vw - 24px));
+}
+
+.picker-datetime {
+  --background: var(--app-surface-2);
+  --background-rgb: var(--ion-background-color-rgb, 255, 255, 255);
+  --title-color: var(--app-text-1);
+  --wheel-highlight-background: color-mix(in srgb, var(--app-tab-active) 22%, transparent);
+  --wheel-highlight-border-radius: 12px;
+  --wheel-fade-background-rgb: var(--ion-background-color-rgb, 255, 255, 255);
+  --ion-color-primary: var(--app-tab-active);
+  color: var(--app-text-1);
+}
+
+.picker-datetime::part(month-year-button),
+.picker-datetime::part(time-button),
+.picker-datetime::part(wheel-item),
+.picker-datetime::part(calendar-day) {
+  color: var(--app-text-2);
+}
+
+.picker-datetime::part(wheel-item active),
+.picker-datetime::part(time-button active),
+.picker-datetime::part(calendar-day active) {
+  color: var(--app-text-1);
+  background: color-mix(in srgb, var(--app-tab-active) 22%, transparent);
+  border-radius: 999px;
+}
+
+.picker-datetime::part(calendar-day today) {
+  color: var(--app-tab-active);
+  border: 1px solid color-mix(in srgb, var(--app-tab-active) 45%, transparent);
+  border-radius: 999px;
+}
+
+.picker-datetime::part(calendar-day disabled) {
+  color: color-mix(in srgb, var(--app-text-2) 42%, transparent);
+}
+
+:host-context(.theme-dark) .picker-datetime {
+  --wheel-highlight-background: color-mix(in srgb, var(--app-tab-active) 28%, transparent);
+}

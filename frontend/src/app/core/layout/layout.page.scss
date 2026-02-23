@@ -1,10 +1,126 @@
-ion-content {
-  --background: var(--app-bg);
-  color: var(--app-text-1);
+:host {
+  --app-shell-header-offset: calc(env(safe-area-inset-top, 0px) + 124px);
+  --app-shell-tabs-offset: calc(72px + env(safe-area-inset-bottom, 0px));
+  display: block;
+  height: 100%;
 }
 
-ion-toolbar,
-ion-tab-bar {
+ion-router-outlet {
+  display: block;
+  min-height: 100%;
+}
+
+/* Prevent transparent header area from blocking content taps. */
+ion-header {
+  pointer-events: none;
+}
+
+.layout-header-container,
+.layout-header-container * {
+  pointer-events: auto;
+}
+
+ion-toolbar {
   --background: var(--app-surface-1);
-  border-color: var(--app-border-1);
+  --border-color: transparent;
+  --min-height: 76px;
+}
+
+.layout-toolbar {
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.layout-header-container {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 14px)
+    max(16px, env(safe-area-inset-right, 0px))
+    14px
+    max(16px, env(safe-area-inset-left, 0px));
+}
+
+.layout-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.layout-header-period {
+  color: var(--app-text-2);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.layout-header-title {
+  color: var(--app-text-1);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.layout-header-right {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.icon-pill {
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  height: 38px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  width: 38px;
+}
+
+.icon-pill:active {
+  transform: translateY(1px);
+}
+
+.icon-pill ion-icon {
+  color: var(--app-text-2);
+  font-size: 19px;
+}
+
+.notif-wrap {
+  display: inline-flex;
+  position: relative;
+}
+
+.notif-dot {
+  background: var(--app-tab-active);
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--app-surface-1);
+  height: 9px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 9px;
+}
+
+.avatar {
+  align-items: center;
+  background: #3b82f6;
+  border: 0;
+  border-radius: 999px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 800;
+  height: 40px;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  width: 40px;
 }

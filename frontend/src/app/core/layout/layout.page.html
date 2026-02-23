@@ -1,19 +1,34 @@
 <ion-header>
-  <app-layout-header
-    [title]="ui.headerVm().title"
-    [periodLabel]="ui.headerVm().periodLabel"
-    [avatarText]="ui.headerVm().avatarText"
-    [hasNotifications]="ui.headerVm().hasNotifications"
-    [themeIcon]="themeStore.themeIcon()"
-    (themeToggle)="onThemeToggle()"
-    (notificationsClick)="onNotificationsClick()"
-    (avatarClick)="onAvatarClick()"
-  />
+  <ion-toolbar class="layout-toolbar">
+    <div class="layout-header-container">
+      <div class="layout-header-left">
+        <div class="layout-header-period">{{ headerVm().periodLabel }}</div>
+        <div class="layout-header-title">{{ headerVm().title }}</div>
+      </div>
+
+      <div class="layout-header-right">
+        <button class="icon-pill" type="button" (click)="onThemeToggle()" [attr.aria-label]="themeAriaLabel()">
+          <ion-icon [name]="themeStore.themeIcon()"></ion-icon>
+        </button>
+
+        <div class="notif-wrap">
+          <button class="icon-pill" type="button" (click)="onNotificationsClick()" aria-label="Notifications">
+            <ion-icon name="notifications-outline"></ion-icon>
+          </button>
+
+          @if (headerVm().hasNotifications) {
+            <span class="notif-dot"></span>
+          }
+        </div>
+
+        <button class="avatar" type="button" (click)="onAvatarClick()" aria-label="Profile">
+          {{ headerVm().avatarText }}
+        </button>
+      </div>
+    </div>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
-  <ion-tabs>
-    <ion-router-outlet></ion-router-outlet>
-    <app-layout-tabs-footer />
-  </ion-tabs>
-</ion-content>
+<ion-router-outlet></ion-router-outlet>
+
+<app-layout-tabs-footer />

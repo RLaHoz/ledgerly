@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import {
-  IonTabs,
-  IonTabBar,
-  IonTabButton,
-  IonIcon,
-  IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { IonIcon, IonLabel, IonTabBar, IonTabButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   gridOutline,
@@ -20,18 +15,9 @@ import {
   selector: 'app-layout-tabs-footer',
   templateUrl: './layout-tabs-footer.component.html',
   styleUrls: ['./layout-tabs-footer.component.scss'],
-  imports: [IonRouterOutlet,
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonLabel,
-  ]
+  imports: [RouterLink, RouterLinkActive, IonTabBar, IonTabButton, IonIcon, IonLabel]
 })
-export class LayoutTabsFooterComponent  implements OnInit {
+export class LayoutTabsFooterComponent {
 
   constructor() {
     addIcons({
@@ -41,10 +27,6 @@ export class LayoutTabsFooterComponent  implements OnInit {
       'funnel-outline': funnelOutline,
       'settings-outline': settingsOutline,
     });
-  }
-
-  ngOnInit() {
-    console.log('INit');
   }
 
 }
