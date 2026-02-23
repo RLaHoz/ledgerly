@@ -1,6 +1,6 @@
 # Ledgerly
 
-Mobile-first personal finance control system.
+Mobile-first personal finance control systems.
 
 ## Product Positioning
 Ledgerly is not only an expense tracker. It is an offline-first financial control system with:
