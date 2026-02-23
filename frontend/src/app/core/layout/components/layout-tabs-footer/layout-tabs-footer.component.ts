@@ -43,6 +43,8 @@ export class LayoutTabsFooterComponent  implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('INit');
+  }
 
 }

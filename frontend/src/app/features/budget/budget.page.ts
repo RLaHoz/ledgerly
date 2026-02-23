@@ -15,6 +15,7 @@ export class BudgetPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('INit');
   }
 
 }

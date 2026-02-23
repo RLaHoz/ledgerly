@@ -15,6 +15,7 @@ export class HistoryPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('INit');
   }
 
 }

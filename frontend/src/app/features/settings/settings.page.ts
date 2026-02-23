@@ -15,6 +15,7 @@ export class SettingsPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('INit');
   }
 
 }
