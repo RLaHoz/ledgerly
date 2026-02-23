@@ -18,6 +18,9 @@ on:
       - "DECISIONS.md"
       - "skills/**"
 
+permissions:
+  contents: read
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -29,12 +32,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: "npm"
+          node-version: 22
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install
