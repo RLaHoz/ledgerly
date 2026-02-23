@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LayoutTabsFooterComponent } from './layout-tabs-footer.component';
+import { provideRouter } from '@angular/router';
 
 describe('LayoutTabsFooterComponent', () => {
   let component: LayoutTabsFooterComponent;
@@ -7,7 +8,8 @@ describe('LayoutTabsFooterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LayoutTabsFooterComponent], // ✅ standalone va aquí
+      imports: [LayoutTabsFooterComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutTabsFooterComponent);
