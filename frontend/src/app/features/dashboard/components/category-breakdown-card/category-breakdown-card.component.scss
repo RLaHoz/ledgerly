@@ -1,0 +1,84 @@
+:host {
+  display: block;
+}
+
+.category-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border-1);
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  padding: 18px 16px 16px;
+}
+
+.title {
+  color: var(--app-text-1);
+  font-size: clamp(1.2rem, 3.8vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.chart-wrap {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 4px;
+}
+
+.legend-grid {
+  display: grid;
+  gap: 8px 30px;
+  grid-template-columns: max-content max-content;
+  justify-content: center;
+  margin-inline: auto;
+  width: fit-content;
+}
+
+.legend-column {
+  display: grid;
+  gap: 8px;
+}
+
+.legend-item {
+  align-items: center;
+  column-gap: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, max-content) max-content;
+  justify-content: start;
+}
+
+.legend-info {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.dot {
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 10px;
+  width: 10px;
+}
+
+.label {
+  color: var(--app-text-2);
+  font-size: clamp(0.9rem, 2.55vw, 1.02rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amount {
+  color: var(--app-text-1);
+  font-size: clamp(0.95rem, 2.6vw, 1.08rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-left: 2px;
+}
+
+@media (max-width: 360px) {
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+}

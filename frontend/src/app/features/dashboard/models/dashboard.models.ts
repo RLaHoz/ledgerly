@@ -24,10 +24,61 @@ export interface DashboardChartData {
   values: number[];
 }
 
+export interface DashboardCategoryItem {
+  id: string;
+  label: string;
+  amount: number;
+  amountLabel: string;
+  color: string;
+}
+
+export interface DashboardCategoryBreakdown {
+  title: string;
+  totalLabel: string;
+  totalAmountLabel: string;
+  categories: DashboardCategoryItem[];
+}
+
+export interface DashboardSplitSegment {
+  id: string;
+  label: string;
+  percent: number;
+  color: string;
+}
+
+export interface DashboardCoupleSplit {
+  title: string;
+  periodLabel: string;
+  segments: DashboardSplitSegment[];
+}
+
+export type DashboardTransactionAmountTone = 'income' | 'expense';
+
+export interface DashboardRecentTransaction {
+  id: string;
+  merchant: string;
+  category: string;
+  owner: string;
+  ownerColor: string;
+  dateLabel: string;
+  icon: string;
+  amountLabel: string;
+  amountTone: DashboardTransactionAmountTone;
+}
+
+export interface DashboardRecentTransactions {
+  title: string;
+  viewAllLabel: string;
+  transactions: DashboardRecentTransaction[];
+}
+
 export interface DashboardMonthData {
   key: string;
   monthLabel: string;
   metrics: DashboardMetricCard[];
   insight: DashboardInsight;
   chart: DashboardChartData;
+  categoryBreakdown: DashboardCategoryBreakdown;
+  coupleSplit: DashboardCoupleSplit;
+  recentTransactions: DashboardRecentTransactions;
 }

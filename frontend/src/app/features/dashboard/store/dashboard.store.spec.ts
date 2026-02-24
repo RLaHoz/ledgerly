@@ -14,6 +14,9 @@ describe('DashboardStore', () => {
     expect(store.monthLabel()).toBe('Feb 2026');
     expect(store.metricCards()).toHaveSize(4);
     expect(store.chartData().values.length).toBeGreaterThan(0);
+    expect(store.categoryBreakdown().categories.length).toBe(5);
+    expect(store.coupleSplit().segments.length).toBe(3);
+    expect(store.recentTransactions().transactions.length).toBe(4);
   });
 
   it('should preserve day and move to previous month', () => {

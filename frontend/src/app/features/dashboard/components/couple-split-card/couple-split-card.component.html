@@ -1,0 +1,27 @@
+<article class="split-card">
+  <header class="split-header">
+    <h2 class="title">{{ title() }}</h2>
+    <span class="period">{{ periodLabel() }}</span>
+  </header>
+
+  <div class="split-track" aria-label="Couple split percentages">
+    @for (segment of segments(); track segment.id) {
+      <span
+        class="split-fill"
+        [style.width.%]="segment.percent"
+        [style.background]="segment.color"
+        [attr.aria-label]="segment.label + ' ' + segment.percent + '%'"
+      ></span>
+    }
+  </div>
+
+  <section class="split-legend">
+    @for (segment of segments(); track segment.id) {
+      <div class="legend-item">
+        <span class="dot" [style.background]="segment.color"></span>
+        <span class="label">{{ segment.label }}</span>
+        <strong class="value">{{ segment.percent }}%</strong>
+      </div>
+    }
+  </section>
+</article>

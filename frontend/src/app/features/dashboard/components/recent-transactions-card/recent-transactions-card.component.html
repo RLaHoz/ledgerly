@@ -1,0 +1,29 @@
+<article class="transactions-card">
+  <header class="transactions-header">
+    <h2 class="title">{{ title() }}</h2>
+    <button class="view-all" type="button">
+      <span>{{ viewAllLabel() }}</span>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </button>
+  </header>
+
+  <section class="transactions-list" aria-label="Recent transaction list">
+    @for (item of transactions(); track item.id) {
+      <article class="row">
+        <div class="icon">{{ item.icon }}</div>
+
+        <div class="content">
+          <h3 class="merchant">{{ item.merchant }}</h3>
+
+          <div class="meta">
+            <span class="chip">{{ item.category }}</span>
+            <span class="chip owner" [style.--owner-color]="item.ownerColor">{{ item.owner }}</span>
+            <span class="date">{{ item.dateLabel }}</span>
+          </div>
+        </div>
+
+        <p class="amount" [class.income]="item.amountTone === 'income'">{{ item.amountLabel }}</p>
+      </article>
+    }
+  </section>
+</article>

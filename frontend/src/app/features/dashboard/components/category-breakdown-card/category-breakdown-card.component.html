@@ -1,0 +1,43 @@
+<article class="category-card">
+  <h2 class="title">{{ title() }}</h2>
+
+  <div class="chart-wrap">
+    <apx-chart
+      [chart]="donutOptions().chart"
+      [labels]="donutOptions().labels"
+      [series]="donutOptions().series"
+      [colors]="donutOptions().colors"
+      [dataLabels]="donutOptions().dataLabels"
+      [plotOptions]="donutOptions().plotOptions"
+      [stroke]="donutOptions().stroke"
+      [legend]="donutOptions().legend"
+      [tooltip]="donutOptions().tooltip"
+    />
+  </div>
+
+  <section class="legend-grid" aria-label="Category summary">
+    <div class="legend-column">
+      @for (category of leftColumnCategories(); track category.id) {
+        <div class="legend-item">
+          <div class="legend-info">
+            <span class="dot" [style.background]="category.color"></span>
+            <span class="label">{{ category.label }}</span>
+          </div>
+          <span class="amount">{{ category.amountLabel }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="legend-column">
+      @for (category of rightColumnCategories(); track category.id) {
+        <div class="legend-item">
+          <div class="legend-info">
+            <span class="dot" [style.background]="category.color"></span>
+            <span class="label">{{ category.label }}</span>
+          </div>
+          <span class="amount">{{ category.amountLabel }}</span>
+        </div>
+      }
+    </div>
+  </section>
+</article>

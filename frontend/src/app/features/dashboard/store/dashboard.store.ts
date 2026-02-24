@@ -30,6 +30,22 @@ export const DashboardStore = signalStore(
       const current = store.months().find((month) => month.key === store.selectedDate().slice(0, 7));
       return (current ?? store.months()[0]).chart;
     }),
+    categoryBreakdown: computed(() => {
+      const current = store.months().find((month) => month.key === store.selectedDate().slice(0, 7));
+      return (current ?? store.months()[0]).categoryBreakdown;
+    }),
+    coupleSplit: computed(() => {
+      const current = store.months().find((month) => month.key === store.selectedDate().slice(0, 7));
+      return (current ?? store.months()[0]).coupleSplit;
+    }),
+    recentTransactions: computed(() => {
+      const current = store.months().find((month) => month.key === store.selectedDate().slice(0, 7));
+      const recentTransactions = (current ?? store.months()[0]).recentTransactions;
+      return {
+        ...recentTransactions,
+        transactions: recentTransactions.transactions.slice(0, 4),
+      };
+    }),
     minDate: computed(() => MIN_DATE),
     maxDate: computed(() => MAX_DATE),
   })),

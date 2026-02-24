@@ -1,0 +1,73 @@
+:host {
+  display: block;
+}
+
+.split-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border-1);
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.split-header {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  color: var(--app-text-1);
+  font-size: clamp(1.12rem, 3.3vw, 1.32rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.period {
+  color: var(--app-text-2);
+  font-size: clamp(0.92rem, 2.5vw, 1.03rem);
+}
+
+.split-track {
+  background: color-mix(in srgb, var(--app-text-2) 24%, transparent);
+  border-radius: 999px;
+  display: flex;
+  height: 10px;
+  overflow: hidden;
+}
+
+.split-fill {
+  display: inline-flex;
+  height: 100%;
+}
+
+.split-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.legend-item {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+}
+
+.dot {
+  border-radius: 999px;
+  display: inline-flex;
+  height: 10px;
+  width: 10px;
+}
+
+.label {
+  color: var(--app-text-2);
+  font-size: clamp(0.95rem, 2.45vw, 1.03rem);
+}
+
+.value {
+  color: var(--app-text-1);
+  font-size: clamp(0.96rem, 2.5vw, 1.06rem);
+}

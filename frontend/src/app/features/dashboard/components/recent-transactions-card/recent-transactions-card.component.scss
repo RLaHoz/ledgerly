@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.transactions-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border-1);
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  overflow: hidden;
+}
+
+.transactions-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 16px 12px;
+}
+
+.title {
+  color: var(--app-text-1);
+  font-size: clamp(1.14rem, 3.5vw, 1.32rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.view-all {
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--app-tab-active);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: clamp(0.86rem, 2.3vw, 0.98rem);
+  gap: 4px;
+  padding: 0;
+}
+
+.view-all ion-icon {
+  font-size: 14px;
+}
+
+.transactions-list {
+  display: grid;
+}
+
+.row {
+  align-items: center;
+  border-top: 1px solid var(--app-border-1);
+  column-gap: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: 12px 16px;
+}
+
+.icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--app-text-2) 18%, transparent);
+  border-radius: 16px;
+  display: inline-flex;
+  font-size: 20px;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.merchant {
+  color: var(--app-text-1);
+  font-size: clamp(0.84rem, 2.4vw, 0.96rem);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  background: color-mix(in srgb, var(--app-text-2) 16%, transparent);
+  border-radius: 999px;
+  color: var(--app-text-1);
+  font-size: clamp(0.7rem, 1.95vw, 0.8rem);
+  line-height: 1;
+  padding: 4px 8px;
+}
+
+.chip.owner {
+  background: color-mix(in srgb, var(--owner-color) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--owner-color) 44%, transparent);
+  color: var(--owner-color);
+}
+
+.date {
+  color: var(--app-text-2);
+  font-size: clamp(0.72rem, 1.9vw, 0.8rem);
+}
+
+.amount {
+  color: var(--app-text-1);
+  font-size: clamp(0.92rem, 2.55vw, 1.04rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.amount.income {
+  color: var(--app-success);
+}
