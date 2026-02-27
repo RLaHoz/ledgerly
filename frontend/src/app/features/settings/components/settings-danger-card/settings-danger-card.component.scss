@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.danger-card {
+  align-items: center;
+  background: var(--settings-danger-bg, color-mix(in srgb, #2a0f1d 22%, var(--app-card)));
+  border: 0;
+  border-radius: calc(var(--app-radius-md) + 4px);
+  box-shadow:
+    0 0 0 1px var(--settings-danger-border, #e2bfc6),
+    0 2px 8px rgba(15, 23, 42, 0.06);
+  column-gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 14px 16px;
+}
+
+.danger-copy h3 {
+  color: var(--settings-danger-text, #dc3238);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.danger-copy p {
+  color: var(--app-text-2);
+  font-size: 10px;
+  line-height: 14px;
+  margin: 3px 0 0;
+}
+
+.danger-action {
+  --background: transparent;
+  --background-activated: transparent;
+  --background-focused: transparent;
+  --border-color: var(--settings-danger-border, color-mix(in srgb, #ff5d82 34%, transparent));
+  --border-radius: 15px;
+  --border-width: 1px;
+  --color: var(--settings-danger-text, #dc3238);
+  --padding-start: 14px;
+  --padding-end: 14px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+:host-context(.theme-dark) .danger-card {
+  background: var(--settings-danger-bg, #080f21);
+  box-shadow: 0 0 0 1px var(--settings-danger-border, rgba(129, 31, 50, 0.56));
+}

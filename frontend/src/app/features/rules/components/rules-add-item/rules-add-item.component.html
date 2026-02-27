@@ -1,0 +1,177 @@
+<article class="add-card" aria-label="Create rule">
+  <header class="card-header">
+    <h2>Create rule</h2>
+
+    <button type="button" class="close-btn" aria-label="Close" (click)="closed.emit()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </header>
+
+  <label class="field">
+    <span>Rule Name</span>
+    <input
+      type="text"
+      autocomplete="off"
+      placeholder="e.g., Auto-categorize Starbucks"
+      [value]="ruleName()"
+      (input)="onTextInput($event, ruleNameChanged)"
+    />
+    <small>Optional -- used for identification</small>
+  </label>
+
+  <section class="field">
+    <span>Type</span>
+    <div class="select-wrap compact" [class.open]="isDropdownOpen('ruleType')">
+      <button type="button" class="select-trigger" (click)="toggleDropdown('ruleType')">
+        <span>{{ ruleType() }}</span>
+        <ion-icon name="chevron-down-outline"></ion-icon>
+      </button>
+
+      @if (isDropdownOpen('ruleType')) {
+        <ul class="options-menu">
+          @for (option of ruleTypeOptions(); track option) {
+            <li>
+              <button type="button" [class.selected]="option === ruleType()" (click)="selectRuleType(option)">
+                <span>{{ option }}</span>
+                @if (option === ruleType()) {
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                }
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Condition</h3>
+
+    <div class="panel-row">
+      <strong>IF</strong>
+
+      <div class="select-wrap compact" [class.open]="isDropdownOpen('conditionField')">
+        <button type="button" class="select-trigger" (click)="toggleDropdown('conditionField')">
+          <span>{{ conditionField() }}</span>
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </button>
+
+        @if (isDropdownOpen('conditionField')) {
+          <ul class="options-menu">
+            @for (option of conditionFieldOptions(); track option) {
+              <li>
+                <button type="button" [class.selected]="option === conditionField()" (click)="selectConditionField(option)">
+                  <span>{{ option }}</span>
+                  @if (option === conditionField()) {
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                  }
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+      <input
+        type="text"
+        autocomplete="off"
+        placeholder="keyword"
+        [value]="conditionValue()"
+        (input)="onTextInput($event, conditionValueChanged)"
+      />
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Action</h3>
+
+    <div class="panel-row">
+      <strong>THEN</strong>
+
+      <div class="select-wrap compact" [class.open]="isDropdownOpen('actionType')">
+        <button type="button" class="select-trigger" (click)="toggleDropdown('actionType')">
+          <span>{{ actionType() }}</span>
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </button>
+
+        @if (isDropdownOpen('actionType')) {
+          <ul class="options-menu">
+            @for (option of actionTypeOptions(); track option) {
+              <li>
+                <button type="button" [class.selected]="option === actionType()" (click)="selectActionType(option)">
+                  <span>{{ option }}</span>
+                  @if (option === actionType()) {
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                  }
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+      <div class="select-wrap" [class.open]="isDropdownOpen('actionValue')">
+        <button type="button" class="select-trigger" (click)="toggleDropdown('actionValue')">
+          <span>{{ actionValue() }}</span>
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </button>
+
+        @if (isDropdownOpen('actionValue')) {
+          <ul class="options-menu">
+            @for (option of actionValueOptions(); track option) {
+              <li>
+                <button type="button" [class.selected]="option === actionValue()" (click)="selectActionValue(option)">
+                  <span>{{ option }}</span>
+                  @if (option === actionValue()) {
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                  }
+                </button>
+              </li>
+            }
+            <li class="menu-footer">
+              <ion-icon name="chevron-down-outline"></ion-icon>
+            </li>
+          </ul>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="impact">
+    <h4>Impact preview</h4>
+    <p>Would have applied to 12 transactions in the last 30 days.</p>
+  </section>
+
+  <button type="button" class="advanced-btn" (click)="toggleAdvanced()">
+    <span>Advanced options</span>
+    <ion-icon [name]="advancedOpen() ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+  </button>
+
+  @if (advancedOpen()) {
+    <section class="advanced-panel">
+      <div class="advanced-field">
+        <span>Amount range</span>
+        <div class="range-row">
+          <input type="text" autocomplete="off" placeholder="Min $" />
+          <p>to</p>
+          <input type="text" autocomplete="off" placeholder="Max $" />
+        </div>
+      </div>
+
+      <label class="advanced-field">
+        <span>Exclude merchant</span>
+        <input type="text" autocomplete="off" placeholder="e.g., Amazon" />
+      </label>
+
+      <label class="toggle-row">
+        <ion-toggle [checked]="recurringOnly()" (ionChange)="onRecurringToggle($event)"></ion-toggle>
+        <span>Apply only to recurring</span>
+      </label>
+    </section>
+  }
+
+  <footer class="actions">
+    <button type="button" class="btn-cancel" (click)="canceled.emit()">Cancel</button>
+    <button type="button" class="btn-create" [disabled]="!canCreate()" (click)="created.emit()">Create</button>
+  </footer>
+</article>

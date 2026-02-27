@@ -1,0 +1,190 @@
+:host {
+  display: block;
+}
+
+.preferences-card {
+  background: var(--settings-card-bg, #eff3f8);
+  border: 1px solid var(--settings-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--settings-card-shadow, var(--shadow-sm));
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom: 1px solid var(--settings-divider, var(--border));
+  padding: 14px 20px;
+}
+
+.card-header h2 {
+  color: var(--settings-section-title, #4c586b);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.rows {
+  display: grid;
+}
+
+.row {
+  align-items: center;
+  border-top: 1px solid var(--settings-divider, var(--border));
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.row:first-child {
+  border-top: 0;
+}
+
+.row-main {
+  align-items: center;
+  display: inline-flex;
+  flex: 1 1 auto;
+  gap: 10px;
+  min-width: 0;
+}
+
+.row-icon {
+  align-items: center;
+  color: var(--settings-icon, #8693a8);
+  display: inline-flex;
+  font-size: 16px;
+  justify-content: center;
+  width: 16px;
+}
+
+.row-copy {
+  min-width: 0;
+}
+
+.row-copy h3,
+.row-copy p {
+  margin: 0;
+}
+
+.row-copy h3 {
+  color: var(--settings-text-primary, #1b2334);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.08;
+}
+
+.row-copy p {
+  color: var(--settings-text-secondary, #7f8ca1);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.08;
+  margin-top: 4px;
+}
+
+.row-select {
+  --highlight-color-focused: var(--settings-action-accent-bg, #2aaea5);
+  min-height: 28px;
+  min-width: 80px;
+  width: 80px;
+}
+
+.row-select::part(container) {
+  align-items: center;
+  background: var(--settings-select-bg, #eef2f7);
+  border: 1px solid var(--settings-select-border, #d0d8e3);
+  border-radius: 8px;
+  color: var(--settings-text-primary, #2f394d);
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 500;
+  justify-content: space-between;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  min-height: 28px;
+  padding: 0 10px;
+  text-align: left;
+  width: 80px;
+}
+
+.row-select::part(icon) {
+  color: var(--settings-icon, #8b98ab);
+  font-size: 12px;
+  margin-inline-start: 6px;
+}
+
+.switch {
+  background: var(--settings-switch-off, #c4cfde);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  height: 18px;
+  padding: 2px;
+  transition: background 150ms ease;
+  width: 32px;
+}
+
+.switch-handle {
+  background: var(--settings-switch-handle, #f4f8fd);
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(25, 36, 56, 0.2);
+  display: block;
+  height: 14px;
+  transition: transform 150ms ease;
+  width: 14px;
+}
+
+.switch.is-on {
+  background: var(--settings-switch-on, #243f66);
+}
+
+.switch.is-on .switch-handle {
+  background: var(--settings-switch-on-handle, #f4f8fd);
+  transform: translateX(14px);
+}
+
+.theme-segment {
+  align-items: center;
+  background: var(--settings-segment-bg, #e7ebf2);
+  border: 1px solid var(--settings-select-border, #d0d8e3);
+  border-radius: 8px;
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+}
+
+.theme-option {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--settings-segment-text, #6f7d94);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 4px;
+  letter-spacing: 0;
+  line-height: 1;
+  min-height: 24px;
+  padding: 4px 10px;
+}
+
+.theme-option ion-icon {
+  font-size: 12px;
+}
+
+.theme-option.is-active {
+  background: var(--settings-segment-active-bg, #f8fbff);
+  color: var(--settings-segment-active-text, #1c2436);
+  box-shadow: var(--shadow-sm);
+}
+
+.row.is-off .row-icon,
+.row.is-off .row-copy h3 {
+  color: var(--settings-text-disabled, #8b98ab);
+}

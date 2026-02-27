@@ -1,0 +1,14 @@
+<article class="safe-alert-card" aria-label="Safe pace and alerts">
+  <section class="safe-column">
+    <h3 class="title">{{ model().safePaceLabel }}</h3>
+    <p class="value">{{ model().dailyTargetLabel }}</p>
+    <span class="safe-pill">{{ model().paceChipLabel }}</span>
+    <p class="sub-value">{{ model().currentPaceLabel }}</p>
+  </section>
+
+  <section class="alerts-column">
+    <h3 class="title">{{ model().alertsTitle }}</h3>
+    <p class="critical-pill">{{ model().criticalLabel }}</p>
+    <p class="warning">{{ model().warningLabel }}</p>
+  </section>
+</article>

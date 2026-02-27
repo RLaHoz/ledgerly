@@ -79,7 +79,7 @@ ion-toolbar::part(background) {
   position: absolute;
   top: 0px;
   right: 0px;
-  background: var(--app-tab-active); /* azul del sistema */
+  background: var(--app-tab-active);
   box-shadow: 0 0 0 2px var(--app-surface-1);
 }
 
@@ -98,11 +98,8 @@ ion-toolbar::part(background) {
   font-weight: 800;
   letter-spacing: .02em;
   color: #fff;
-  background: #3b82f6;
-
-  box-shadow:
-    0 10px 25px rgba(0,0,0,.25),
-    inset 0 1px 0 rgba(255,255,255,.12);
+  background: var(--app-avatar-bg, var(--app-tab-active));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
 
   -webkit-tap-highlight-color: transparent;
 }

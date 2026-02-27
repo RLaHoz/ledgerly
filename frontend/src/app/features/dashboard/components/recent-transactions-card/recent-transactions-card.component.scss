@@ -6,22 +6,29 @@
   background: var(--app-card);
   border: 1px solid var(--app-border-1);
   border-radius: calc(var(--app-radius-lg) + 2px);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
   overflow: hidden;
+}
+
+:host-context(.theme-dark) .transactions-card {
+  box-shadow: none;
 }
 
 .transactions-header {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 16px 16px 12px;
+  padding: 14px 16px 10px;
 }
 
 .title {
   color: var(--app-text-1);
-  font-size: clamp(1.14rem, 3.5vw, 1.32rem);
-  font-weight: 650;
+  font-size: 16px;
+  font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .view-all {
@@ -31,7 +38,7 @@
   color: var(--app-tab-active);
   cursor: pointer;
   display: inline-flex;
-  font-size: clamp(0.86rem, 2.3vw, 0.98rem);
+  font-size: 14px;
   gap: 4px;
   padding: 0;
 }
@@ -50,18 +57,22 @@
   column-gap: 12px;
   display: grid;
   grid-template-columns: auto 1fr auto;
-  padding: 12px 16px;
+  padding: 11px 16px;
+}
+
+.transactions-list > .row:first-child {
+  border-top: none;
 }
 
 .icon {
   align-items: center;
   background: color-mix(in srgb, var(--app-text-2) 18%, transparent);
-  border-radius: 16px;
+  border-radius: 14px;
   display: inline-flex;
-  font-size: 20px;
-  height: 42px;
+  font-size: 18px;
+  height: 40px;
   justify-content: center;
-  width: 42px;
+  width: 40px;
 }
 
 .content {
@@ -70,7 +81,7 @@
 
 .merchant {
   color: var(--app-text-1);
-  font-size: clamp(0.84rem, 2.4vw, 0.96rem);
+  font-size: 12px;
   font-weight: 550;
   letter-spacing: -0.02em;
   margin: 0 0 4px;
@@ -90,7 +101,7 @@
   background: color-mix(in srgb, var(--app-text-2) 16%, transparent);
   border-radius: 999px;
   color: var(--app-text-1);
-  font-size: clamp(0.7rem, 1.95vw, 0.8rem);
+  font-size: 10px;
   line-height: 1;
   padding: 4px 8px;
 }
@@ -103,12 +114,12 @@
 
 .date {
   color: var(--app-text-2);
-  font-size: clamp(0.72rem, 1.9vw, 0.8rem);
+  font-size: 11px;
 }
 
 .amount {
   color: var(--app-text-1);
-  font-size: clamp(0.92rem, 2.55vw, 1.04rem);
+  font-size: 13px;
   font-weight: 650;
   letter-spacing: -0.02em;
   margin: 0;

@@ -1,5 +1,60 @@
 <ion-content [fullscreen]="true">
-  <section class="feature-page">
-    <h2>Rules</h2>
+  <section class="rules-page">
+    <p class="rules-intro">{{ store.description() }}</p>
+
+    <app-rules-quick-template
+      [title]="store.quickTemplatesTitle()"
+      [items]="store.quickTemplates()"
+    />
+
+    <app-rules-active
+      [title]="store.activeTitle()"
+      [summary]="store.activeSummary()"
+      [addLabel]="store.addLabel()"
+      [items]="store.activeRules()"
+      (addRequested)="onOpenAddRule()"
+      (toggled)="onRuleToggle($event)"
+    />
+
+    <app-rules-triggered-alerts
+      [title]="store.triggeredTitle()"
+      [count]="store.triggeredCount()"
+      [summary]="store.triggeredSummary()"
+      [items]="store.triggeredAlerts()"
+    />
   </section>
+
+  <ion-modal
+    [cssClass]="'rules-add-modal'"
+    class="rules-add-modal"
+    [isOpen]="store.isAddRuleModalOpen()"
+    [showBackdrop]="false"
+    [backdropDismiss]="true"
+    (didDismiss)="onCloseAddRule()"
+  >
+    <ng-template>
+      <app-rules-add-item
+        [ruleName]="store.addDraft().ruleName"
+        [ruleType]="store.addDraft().ruleType"
+        [conditionField]="store.addDraft().conditionField"
+        [conditionValue]="store.addDraft().conditionValue"
+        [actionType]="store.addDraft().actionType"
+        [actionValue]="store.addDraft().actionValue"
+        [ruleTypeOptions]="store.ruleTypeOptions()"
+        [conditionFieldOptions]="store.conditionFieldOptions()"
+        [actionTypeOptions]="store.actionTypeOptions()"
+        [actionValueOptions]="store.actionValueOptions()"
+        [canCreate]="store.canCreateRule()"
+        (closed)="onCloseAddRule()"
+        (canceled)="onCloseAddRule()"
+        (created)="onCreateRule()"
+        (ruleNameChanged)="onRuleNameChanged($event)"
+        (ruleTypeChanged)="onRuleTypeChanged($event)"
+        (conditionFieldChanged)="onConditionFieldChanged($event)"
+        (conditionValueChanged)="onConditionValueChanged($event)"
+        (actionTypeChanged)="onActionTypeChanged($event)"
+        (actionValueChanged)="onActionValueChanged($event)"
+      />
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -1,58 +1,26 @@
 <ion-content [fullscreen]="true">
-  <section class="dashboard-page">
-    <app-month-nav
-      [label]="store.monthLabel()"
-      [selectedDate]="store.selectedDate()"
-      [minDate]="store.minDate()"
-      [maxDate]="store.maxDate()"
+  <section class="home-layout-page">
+    <app-budget-health
+      [monthLabel]="monthLabel()"
+      [healthLabel]="budgetHealthLabel"
+      [updatedLabel]="updatedLabel"
+      [trendLabel]="trendLabel"
+      [stats]="budgetHealthStats"
       (previousRequested)="onPreviousMonth()"
       (nextRequested)="onNextMonth()"
-      (dateSelected)="onDateSelected($event)"
     />
 
-    <section class="kpi-grid" aria-label="Financial summary">
-      @for (card of store.metricCards(); track card.id) {
-        <app-kpi-card
-          [title]="card.title"
-          [value]="card.value"
-          [subtitle]="card.subtitle"
-          [subtitleTone]="card.subtitleTone"
-          [icon]="card.icon"
-          [iconTone]="card.iconTone"
-          [progressPercent]="card.progressPercent"
-        />
-      }
-    </section>
+    <app-main-budget-info [model]="mainBudgetInfo()" />
 
-    <app-insight-banner
-      [icon]="store.insight().icon"
-      [emphasis]="store.insight().emphasis"
-      [detail]="store.insight().detail"
-    />
+    <app-safe-place-alerts [model]="safePlaceAlerts" />
 
-    <app-spending-chart-card
-      [title]="store.chartData().title"
-      [labels]="store.chartData().labels"
-      [values]="store.chartData().values"
-    />
+    <app-priority [items]="priorityItems" />
 
-    <app-category-breakdown-card
-      [title]="store.categoryBreakdown().title"
-      [totalLabel]="store.categoryBreakdown().totalLabel"
-      [totalAmountLabel]="store.categoryBreakdown().totalAmountLabel"
-      [categories]="store.categoryBreakdown().categories"
-    />
-
-    <app-couple-split-card
-      [title]="store.coupleSplit().title"
-      [periodLabel]="store.coupleSplit().periodLabel"
-      [segments]="store.coupleSplit().segments"
-    />
-
-    <app-recent-transactions-card
-      [title]="store.recentTransactions().title"
-      [viewAllLabel]="store.recentTransactions().viewAllLabel"
-      [transactions]="store.recentTransactions().transactions"
+    <app-budget-pressure
+      [items]="budgetPressureItems"
+      [editable]="false"
+      (viewAllRequested)="onBudgetPressureViewAll()"
+      (itemAction)="onBudgetPressureItemAction($event)"
     />
   </section>
 </ion-content>

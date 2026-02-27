@@ -3,14 +3,48 @@
 }
 
 ion-content {
-  --background: var(--app-bg);
-  color: var(--app-text-1);
+  --background: var(--settings-page-bg, var(--bg-background));
+  color: var(--settings-text-strong, var(--text-text-primary));
 }
 
-.feature-page {
+.settings-page {
+  --settings-page-bg: var(--bg-background);
+  --settings-card-bg: var(--bg-surface);
+  --settings-card-border: var(--border);
+  --settings-card-shadow: var(--shadow-sm);
+  --settings-divider: var(--border);
+  --settings-section-title: var(--text-text-secondary);
+  --settings-text-strong: var(--text-text-primary);
+  --settings-text-primary: var(--text-text-primary);
+  --settings-text-secondary: var(--text-text-tertiary);
+  --settings-text-disabled: var(--text-text-disabled);
+  --settings-icon: var(--text-text-tertiary);
+  --settings-avatar-bg: var(--primary);
+  --settings-avatar-text: var(--text-primary-foreground);
+  --settings-success: var(--text-success);
+  --settings-action-bg: var(--bg-surface-secondary);
+  --settings-action-border: var(--border);
+  --settings-action-text: var(--text-text-primary);
+  --settings-action-accent-bg: var(--text-accent);
+  --settings-action-accent-text: #f2fffd;
+  --settings-select-bg: var(--bg-surface-secondary);
+  --settings-select-border: var(--border);
+  --settings-segment-bg: var(--bg-surface-secondary);
+  --settings-segment-text: var(--text-text-tertiary);
+  --settings-segment-active-bg: var(--bg-surface);
+  --settings-segment-active-text: var(--text-text-primary);
+  --settings-switch-off: var(--switch-off);
+  --settings-switch-on: var(--switch-on);
+  --settings-switch-handle: #ffffff;
+  --settings-switch-on-handle: #ffffff;
+
+  display: grid;
+  gap: 14px;
+  margin: 0 auto;
+  max-width: 430px;
   padding:
     var(--app-shell-header-offset, 112px)
-    max(16px, env(safe-area-inset-right, 0px))
-    calc(var(--app-shell-tabs-offset, 58px) + 16px)
-    max(16px, env(safe-area-inset-left, 0px));
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 52px) + 44px)
+    max(20px, env(safe-area-inset-left, 0px));
 }

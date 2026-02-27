@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { Location } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { IonHeader, IonIcon, IonToolbar } from '@ionic/angular/standalone';
 import { IonRouterOutlet } from '@ionic/angular/standalone';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, startWith } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LayoutUiStore } from '../store/layout/layout.store';
-import { ThemeStore } from '../store/theme/theme.store';
 import { LayoutTabsFooterComponent } from './components/layout-tabs-footer/layout-tabs-footer.component';
 import { addIcons } from 'ionicons';
-import { moonOutline, notificationsOutline, sunnyOutline } from 'ionicons/icons';
+import { chevronBackOutline, refreshOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-layout',
@@ -16,31 +19,53 @@ import { moonOutline, notificationsOutline, sunnyOutline } from 'ionicons/icons'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutPage {
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
   readonly ui = inject(LayoutUiStore);
-  readonly themeStore = inject(ThemeStore);
-  readonly headerVm = this.ui.headerVm;
-  readonly themeAriaLabel = computed(() =>
-    this.themeStore.themeIcon() === 'moon-outline' ? 'Switch to dark mode' : 'Switch to light mode',
-  );
+  readonly currentUrl = signal<string>(this.router.url);
+
+  readonly isDetailRoute = computed(() => this.currentUrl().includes('/detail/'));
+  readonly pageTitle = computed(() => resolvePageTitle(this.currentUrl()));
+  readonly syncLabel = computed(() => this.ui.headerVm().syncLabel);
 
   constructor() {
     addIcons({
-      'moon-outline': moonOutline,
-      'notifications-outline': notificationsOutline,
-      'sunny-outline': sunnyOutline,
+      'chevron-back-outline': chevronBackOutline,
+      'refresh-outline': refreshOutline,
     });
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        startWith(null),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.currentUrl.set(this.router.url);
+      });
   }
 
-  onThemeToggle(): void {
-    this.themeStore.toggleMode();
+  onSyncClick(): void {
+    // Placeholder for sync workflow.
   }
 
-  onNotificationsClick(): void {
-    console.log('notifications');
+  onBackClick(): void {
+    this.location.back();
+  }
+}
+
+function resolvePageTitle(url: string): string {
+  if (url.startsWith('/settings')) {
+    return 'Settings';
   }
 
-  onAvatarClick(): void {
-    console.log('avatar');
+  if (url.startsWith('/rules')) {
+    return 'Rules';
   }
 
+  if (url.startsWith('/budget') || url.startsWith('/budgets')) {
+    return 'Budgets';
+  }
+
+  return 'Home';
 }

@@ -33,3 +33,98 @@
  */
 
 /* App theme is controlled with `theme-light` / `theme-dark` classes in ThemeService. */
+
+html,
+body {
+  background: var(--bg-muted);
+  color: var(--text-text-primary);
+  font-family: var(--font-sans);
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+app-root,
+ion-app {
+  background: var(--bg-background);
+  display: block;
+  margin: 0 auto;
+  max-width: 430px;
+  min-height: 100dvh;
+  width: 100%;
+}
+
+* {
+  font-family: var(--font-sans);
+}
+
+ion-modal.new-budget-modal {
+  --background: transparent;
+  --backdrop-opacity: 0;
+  --box-shadow: none;
+  --height: 100%;
+  --width: 100%;
+}
+
+ion-modal.new-budget-modal::part(backdrop) {
+  background: transparent;
+  opacity: 0;
+}
+
+ion-modal.new-budget-modal::part(content) {
+  align-items: center;
+  background: transparent;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 8px;
+}
+
+ion-modal.rules-add-modal {
+  --background: transparent;
+  --backdrop-opacity: 0;
+  --box-shadow: none;
+  --height: 100%;
+  --width: 100%;
+}
+
+ion-modal.rules-add-modal::part(backdrop) {
+  background: transparent;
+  opacity: 0;
+}
+
+ion-modal.rules-add-modal::part(content) {
+  align-items: center;
+  background: transparent;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 8px;
+}
+
+ion-modal.adjust-budget-modal {
+  --background: transparent;
+  --backdrop-opacity: 0;
+  --box-shadow: none;
+  --height: 100%;
+  --width: 100%;
+}
+
+ion-modal.adjust-budget-modal::part(backdrop) {
+  background: transparent;
+  opacity: 0;
+}
+
+ion-modal.adjust-budget-modal::part(content) {
+  align-items: center;
+  background: transparent;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 8px;
+}

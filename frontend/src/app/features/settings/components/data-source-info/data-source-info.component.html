@@ -1,0 +1,58 @@
+<article class="data-source-card" aria-label="Data sources">
+  <header class="card-header">
+    <h2>{{ model().title }}</h2>
+  </header>
+
+  <section class="sources-list">
+    @for (item of model().items; track item.id) {
+      <article class="source-row">
+        <div class="source-main">
+          <span class="source-icon" aria-hidden="true">
+            <ion-icon [name]="item.iconName"></ion-icon>
+          </span>
+
+          <div class="source-copy">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.subtitle }}</p>
+          </div>
+        </div>
+
+        <p class="source-status">
+          <ion-icon name="checkmark-outline" aria-hidden="true"></ion-icon>
+          <span>{{ item.statusLabel }}</span>
+        </p>
+      </article>
+    }
+  </section>
+
+  <div class="actions-row">
+    <button type="button" class="action-secondary" (click)="connectBankClicked.emit()">
+      <ion-icon name="business-outline" aria-hidden="true"></ion-icon>
+      <span>{{ model().connectBankLabel }}</span>
+    </button>
+
+    <button type="button" class="action-primary" (click)="uploadClicked.emit()">
+      <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
+      <span>{{ model().uploadLabel }}</span>
+    </button>
+  </div>
+
+  <div class="sync-row">
+    <p class="sync-label">
+      <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+      <span>{{ model().syncFrequencyLabel }}</span>
+    </p>
+
+    <ion-select
+      class="frequency-select"
+      [value]="model().selectedFrequencyLabel"
+      interface="popover"
+      aria-label="Sync frequency"
+      (ionChange)="onFrequencyChange($event)"
+    >
+      @for (option of model().frequencyOptions; track option) {
+        <ion-select-option [value]="option">{{ option }}</ion-select-option>
+      }
+    </ion-select>
+  </div>
+</article>

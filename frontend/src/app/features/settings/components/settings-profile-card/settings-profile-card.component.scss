@@ -1,0 +1,127 @@
+:host {
+  display: block;
+}
+
+.profile-card {
+  background: var(--settings-card-bg, var(--app-card));
+  border: 0;
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  box-shadow: var(--settings-card-shadow);
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.profile-header {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 1fr auto;
+}
+
+.avatar {
+  align-items: center;
+  background: var(--settings-tab-active-bg, var(--app-tab-active));
+  border-radius: 999px;
+  color: #f7fbff;
+  display: inline-flex;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  height: 50px;
+  justify-content: center;
+  width: 50px;
+}
+
+.profile-identity h3 {
+  color: var(--app-text-1);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.profile-identity p {
+  color: var(--app-text-2);
+  font-size: 12px;
+  font-weight: 6400;
+  line-height: 10px;
+  margin: 4px 0 0;
+}
+
+.profile-actions {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--settings-border-color);
+  border-radius: 12px;
+  color: var(--app-text-2);
+  cursor: pointer;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.profile-actions ion-icon {
+  font-size: 17px;
+}
+
+.profile-form {
+  display: grid;
+  gap: 9px;
+}
+
+.field-grid {
+  display: grid;
+  gap: 9px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+}
+
+.field > span {
+  color: var(--app-text-2);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.field-input {
+  --background: var(--settings-input-bg, color-mix(in srgb, var(--app-bg) 74%, transparent));
+  --border-color: var(--settings-border-color);
+  --border-width: 1px;
+  --border-radius: 13px;
+  --color: var(--app-text-1);
+  --highlight-color-focused: var(--app-tab-active);
+  --input-font-size: 10px;
+  --padding-end: 14px;
+  --padding-start: 14px;
+  min-height: 35px;
+}
+
+:host-context(.theme-light) .field-input {
+  --background: #ffffff;
+  --border-color: lab(88.3915% -1.08966 -3.56903);
+  --border-width: 1px;
+}
+
+.save-button {
+  --background: var(--settings-tab-active-bg, var(--app-tab-active));
+  --border-radius: 15px;
+  --box-shadow: none;
+  --color: #f9fbff;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+@media (max-width: 420px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}

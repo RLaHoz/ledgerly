@@ -1,0 +1,156 @@
+:host {
+  display: block;
+  --new-budget-modal-bg: var(--bg-surface);
+  --new-budget-modal-border: var(--border);
+  --new-budget-title: var(--text-text-primary);
+  --new-budget-muted: var(--text-text-tertiary);
+  --new-budget-label: var(--text-text-primary);
+  --new-budget-input-bg: var(--bg-background);
+  --new-budget-input-border: var(--border);
+  --new-budget-input-text: var(--text-text-primary);
+  --new-budget-placeholder: var(--text-text-tertiary);
+  --new-budget-focus: var(--text-accent);
+  --new-budget-btn-cancel-bg: var(--bg-surface-secondary);
+  --new-budget-btn-cancel-border: var(--border);
+  --new-budget-btn-cancel-text: var(--text-text-primary);
+  --new-budget-btn-add-bg: var(--primary);
+  --new-budget-btn-add-text: var(--text-primary-foreground);
+}
+
+.new-budget-card {
+  background: var(--new-budget-modal-bg);
+  border: 1px solid var(--new-budget-modal-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: 16px;
+  margin: 0 auto;
+  max-height: 85dvh;
+  overflow: auto;
+  padding: 20px;
+  width: min(380px, calc(100vw - 12px));
+}
+
+.card-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-header h2 {
+  color: var(--new-budget-title);
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.close-btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--new-budget-muted);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 18px;
+  height: 32px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 32px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span {
+  color: var(--new-budget-label);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.field input {
+  width: 100%;
+}
+
+.field > input,
+.amount-input {
+  background: var(--new-budget-input-bg);
+  border: 1px solid var(--new-budget-input-border);
+  border-radius: 12px;
+  color: var(--new-budget-input-text);
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 1;
+  padding: 0 12px;
+}
+
+.field > input::placeholder,
+.amount-input input::placeholder {
+  color: var(--new-budget-placeholder);
+}
+
+.field > input:focus,
+.amount-input:focus-within {
+  border-color: var(--new-budget-focus);
+  outline: none;
+}
+
+.amount-input {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.amount-input strong {
+  color: var(--new-budget-placeholder);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.amount-input input {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  margin: 0;
+  min-width: 0;
+  outline: none;
+  padding: 0;
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.btn-cancel,
+.btn-add {
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  height: 40px;
+}
+
+.btn-cancel {
+  background: var(--new-budget-btn-cancel-bg);
+  border: 1px solid var(--new-budget-btn-cancel-border);
+  color: var(--new-budget-btn-cancel-text);
+}
+
+.btn-add {
+  background: var(--new-budget-btn-add-bg);
+  border: 1px solid transparent;
+  color: var(--new-budget-btn-add-text);
+}
+
+.btn-add:disabled {
+  cursor: not-allowed;
+  opacity: 0.78;
+}

@@ -1,0 +1,39 @@
+<article class="new-budget-card" aria-label="Add category budget">
+  <header class="card-header">
+    <h2>Add Category Budget</h2>
+    <button type="button" class="close-btn" aria-label="Close" (click)="closed.emit()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </header>
+
+  <label class="field">
+    <span>Category Name</span>
+    <input
+      type="text"
+      [value]="categoryName()"
+      placeholder="e.g., Dining Out"
+      autocomplete="off"
+      (input)="onCategoryNameInput($event)"
+    />
+  </label>
+
+  <label class="field">
+    <span>Monthly Budget</span>
+    <div class="amount-input">
+      <strong>$</strong>
+      <input
+        type="text"
+        inputmode="decimal"
+        [value]="monthlyBudget()"
+        placeholder="0"
+        autocomplete="off"
+        (input)="onMonthlyBudgetInput($event)"
+      />
+    </div>
+  </label>
+
+  <footer class="actions">
+    <button type="button" class="btn-cancel" (click)="canceled.emit()">Cancel</button>
+    <button type="button" class="btn-add" [disabled]="!canAdd()" (click)="addRequested.emit()">Add</button>
+  </footer>
+</article>

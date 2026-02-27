@@ -1,0 +1,14 @@
+<section class="category-section" aria-label="Category budgets">
+  <header class="section-head">
+    <h2>{{ title() }}</h2>
+    <button type="button" class="edit-btn" (click)="editRequested.emit()">{{ editLabel() }}</button>
+  </header>
+
+  <div class="category-list">
+    @for (item of items(); track item.id) {
+      <article class="category-item-card">
+        <app-budget-item [item]="item" [editable]="true" [variant]="'budget'" (itemAction)="onItemAction($event)" />
+      </article>
+    }
+  </div>
+</section>

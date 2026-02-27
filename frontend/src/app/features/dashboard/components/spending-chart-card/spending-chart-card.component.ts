@@ -60,9 +60,17 @@ export class SpendingChartCardComponent {
     return {
       chart: {
         type: 'area',
-        height: 320,
+        height: 296,
         toolbar: { show: false },
         zoom: { enabled: false },
+        dropShadow: {
+          enabled: true,
+          color: lineColor,
+          top: 12,
+          left: 0,
+          blur: 18,
+          opacity: 0.2,
+        },
         animations: {
           enabled: true,
           easing: 'easeinout',
@@ -74,7 +82,7 @@ export class SpendingChartCardComponent {
       },
       stroke: {
         curve: 'smooth',
-        width: 4,
+        width: 2.5,
         colors: [lineColor],
       },
       fill: {
@@ -106,7 +114,7 @@ export class SpendingChartCardComponent {
         labels: {
           style: {
             colors: axisTextColor,
-            fontSize: '14px',
+            fontSize: '12px',
           },
         },
       },
@@ -120,7 +128,7 @@ export class SpendingChartCardComponent {
           },
           style: {
             colors: axisTextColor,
-            fontSize: '14px',
+            fontSize: '12px',
           },
         },
       },

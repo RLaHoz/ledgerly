@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.overview-card {
+  background: var(--budget-card-bg, #eff3f8);
+  border: 1px solid var(--budget-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--budget-card-shadow, var(--shadow-sm));
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+}
+
+.overview-card h2 {
+  color: var(--budget-section-title, #4b576a);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.metrics-grid {
+  display: flex;
+  gap: 16px;
+}
+
+.metric {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.label,
+.value {
+  margin: 0;
+}
+
+.label {
+  color: var(--budget-muted, #7f8ca1);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.value {
+  color: var(--budget-strong, #111b30);
+  font-feature-settings: 'tnum';
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.08;
+  margin-top: 2px;
+}

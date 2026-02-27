@@ -1,0 +1,418 @@
+:host {
+  display: block;
+  --rules-add-card-bg: var(--bg-surface);
+  --rules-add-card-border: var(--border);
+  --rules-add-title: var(--text-text-primary);
+  --rules-add-muted: var(--text-text-tertiary);
+  --rules-add-label: var(--text-text-primary);
+  --rules-add-input-bg: var(--bg-background);
+  --rules-add-input-border: var(--border);
+  --rules-add-input-text: var(--text-text-primary);
+  --rules-add-input-placeholder: var(--text-text-tertiary);
+  --rules-add-panel-bg: var(--bg-surface-secondary);
+  --rules-add-panel-border: var(--border);
+  --rules-add-action: var(--text-accent);
+  --rules-add-cancel-bg: var(--bg-surface-secondary);
+  --rules-add-cancel-border: var(--border);
+  --rules-add-cancel-text: var(--text-text-primary);
+  --rules-add-create-bg: var(--primary);
+  --rules-add-create-text: var(--text-primary-foreground);
+  --rules-add-menu-bg: var(--bg-surface);
+  --rules-add-menu-border: var(--border);
+  --rules-add-menu-selected: var(--text-accent);
+  --rules-add-menu-selected-text: #f3fbfa;
+  --rules-add-menu-text: var(--text-text-primary);
+  --rules-add-toggle-off: var(--switch-off);
+  --rules-add-toggle-on: var(--switch-on);
+}
+
+.add-card {
+  background: var(--rules-add-card-bg);
+  border: 1px solid var(--rules-add-card-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: 0;
+  margin: 0 auto;
+  max-height: 85dvh;
+  overflow: auto;
+  padding: 0;
+  width: min(380px, calc(100vw - 12px));
+}
+
+.card-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+}
+
+.card-header h2 {
+  color: var(--rules-add-title);
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.close-btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  color: var(--rules-add-muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 32px;
+}
+
+.close-btn ion-icon {
+  font-size: 16px;
+}
+
+.field,
+.panel,
+.impact,
+.advanced-btn,
+.advanced-panel,
+.actions {
+  margin-inline: 20px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.field > span {
+  color: var(--rules-add-label);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.field small {
+  color: var(--rules-add-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.field input,
+.panel-row input,
+.select-wrap {
+  background: var(--rules-add-input-bg);
+  border: 1px solid var(--rules-add-input-border);
+  border-radius: 12px;
+}
+
+.field input,
+.panel-row input,
+.select-trigger {
+  color: var(--rules-add-input-text);
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 1;
+  outline: none;
+}
+
+.field input,
+.panel-row input {
+  padding: 0 12px;
+  width: 100%;
+}
+
+.field input::placeholder,
+.panel-row input::placeholder,
+.select-trigger.placeholder {
+  color: var(--rules-add-input-placeholder);
+}
+
+.select-wrap {
+  min-width: 0;
+  position: relative;
+}
+
+.select-wrap.compact {
+  max-width: 170px;
+}
+
+.select-trigger {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  column-gap: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.select-trigger span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select-trigger ion-icon {
+  color: var(--rules-add-muted);
+  font-size: 14px;
+  transition: transform 0.15s ease;
+}
+
+.select-wrap.open .select-trigger ion-icon {
+  transform: rotate(180deg);
+}
+
+.options-menu {
+  background: var(--rules-add-menu-bg);
+  border: 1px solid var(--rules-add-menu-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  left: 0;
+  list-style: none;
+  margin: 4px 0 0;
+  max-height: 220px;
+  min-width: 100%;
+  overflow-y: auto;
+  padding: 4px;
+  position: absolute;
+  top: 100%;
+  z-index: 12;
+}
+
+.options-menu li {
+  display: block;
+}
+
+.options-menu li.menu-footer {
+  align-items: center;
+  color: var(--rules-add-menu-text);
+  display: flex;
+  justify-content: center;
+  min-height: 20px;
+  opacity: 0.85;
+}
+
+.options-menu li.menu-footer ion-icon {
+  font-size: 13px;
+}
+
+.options-menu button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--rules-add-menu-text);
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  font-weight: 500;
+  justify-content: space-between;
+  min-height: 32px;
+  padding: 0 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.options-menu button.selected {
+  background: var(--rules-add-menu-selected);
+  color: var(--rules-add-menu-selected-text);
+}
+
+.options-menu button ion-icon {
+  font-size: 14px;
+}
+
+.panel {
+  background: var(--rules-add-panel-bg);
+  border: 1px solid var(--rules-add-panel-border);
+  border-radius: 12px;
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px;
+}
+
+.panel h3 {
+  color: var(--rules-add-muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.panel-row {
+  align-items: center;
+  column-gap: 8px;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+}
+
+.panel-row strong {
+  color: var(--rules-add-title);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.impact {
+  border-top: 1px solid var(--rules-add-panel-border);
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.impact h4 {
+  color: var(--text-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.impact p {
+  color: var(--rules-add-muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.advanced-btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--rules-add-action);
+  column-gap: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 12px;
+  padding: 0;
+  width: fit-content;
+}
+
+.advanced-btn ion-icon {
+  font-size: 14px;
+}
+
+.advanced-panel {
+  background: color-mix(in srgb, var(--rules-add-panel-bg) 96%, transparent);
+  border: 1px solid var(--rules-add-panel-border);
+  border-radius: 12px;
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 14px;
+}
+
+.advanced-field {
+  display: grid;
+  gap: 8px;
+}
+
+.advanced-field > span {
+  color: var(--text-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.range-row {
+  align-items: center;
+  column-gap: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.range-row p {
+  color: var(--rules-add-muted);
+  font-size: 13px;
+  line-height: 1;
+  margin: 0;
+}
+
+.range-row input,
+.advanced-field input {
+  background: var(--rules-add-input-bg);
+  border: 1px solid var(--rules-add-input-border);
+  border-radius: 8px;
+  color: var(--rules-add-input-text);
+  font-size: 13px;
+  height: 32px;
+  outline: none;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.toggle-row {
+  align-items: center;
+  column-gap: 10px;
+  display: inline-flex;
+}
+
+.toggle-row span {
+  color: var(--rules-add-title);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+ion-toggle {
+  --handle-background: #ffffff;
+  --handle-background-checked: #ffffff;
+  --track-background: var(--rules-add-toggle-off);
+  --track-background-checked: var(--rules-add-toggle-on);
+  --track-height: 18px;
+  --track-width: 32px;
+  --handle-height: 14px;
+  --handle-width: 14px;
+  padding: 0;
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-block: 16px 20px;
+}
+
+.btn-cancel,
+.btn-create {
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  height: 40px;
+  letter-spacing: 0;
+}
+
+.btn-cancel {
+  background: var(--rules-add-cancel-bg);
+  border: 1px solid var(--rules-add-cancel-border);
+  color: var(--rules-add-cancel-text);
+}
+
+.btn-create {
+  background: var(--rules-add-create-bg);
+  border: 1px solid transparent;
+  color: var(--rules-add-create-text);
+}
+
+.btn-create:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}

@@ -4,34 +4,34 @@
 
 .insight-card {
   align-items: flex-start;
-  background: color-mix(in srgb, var(--app-surface-2) 94%, var(--app-bg));
+  background: color-mix(in srgb, var(--app-surface-2) 72%, var(--app-bg));
   border: 1px solid var(--app-border-1);
   border-radius: var(--app-radius-lg);
   display: grid;
-  gap: 14px;
+  gap: 12px;
   grid-template-columns: auto 1fr;
-  padding: 18px;
+  padding: 16px;
 }
 
 .icon-pill {
   align-items: center;
   background: color-mix(in srgb, var(--app-tab-active) 16%, transparent);
-  border-radius: 14px;
+  border-radius: 12px;
   color: var(--app-tab-active);
   display: inline-flex;
-  height: 44px;
+  height: 40px;
   justify-content: center;
-  width: 44px;
+  width: 40px;
 }
 
 .icon-pill ion-icon {
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .text {
   color: var(--app-text-2);
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.45;
   margin: 0;
 }
 

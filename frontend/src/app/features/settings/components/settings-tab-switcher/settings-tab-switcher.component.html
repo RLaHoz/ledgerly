@@ -1,0 +1,8 @@
+<ion-segment class="settings-tab-switcher" [value]="activeTab()" (ionChange)="onSegmentChange($event)">
+  @for (tab of tabs(); track tab.id) {
+    <ion-segment-button [value]="tab.id">
+      <ion-icon [name]="tab.icon"></ion-icon>
+      <ion-label>{{ tab.label }}</ion-label>
+    </ion-segment-button>
+  }
+</ion-segment>

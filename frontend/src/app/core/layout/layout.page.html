@@ -1,30 +1,21 @@
 <ion-header>
-  <ion-toolbar class="layout-toolbar">
+  <ion-toolbar class="layout-toolbar" [class.detail-toolbar]="isDetailRoute()">
     <div class="layout-header-container">
-      <div class="layout-header-left">
-        <div class="layout-header-period">{{ headerVm().periodLabel }}</div>
-        <div class="layout-header-title">{{ headerVm().title }}</div>
-      </div>
-
-      <div class="layout-header-right">
-        <button class="icon-pill" type="button" (click)="onThemeToggle()" [attr.aria-label]="themeAriaLabel()">
-          <ion-icon [name]="themeStore.themeIcon()"></ion-icon>
+      @if (isDetailRoute()) {
+        <button class="back-button" type="button" (click)="onBackClick()" aria-label="Go back">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          <span>Back</span>
         </button>
+      } @else {
+        <h1 class="layout-header-title">{{ pageTitle() }}</h1>
+      }
 
-        <div class="notif-wrap">
-          <button class="icon-pill" type="button" (click)="onNotificationsClick()" aria-label="Notifications">
-            <ion-icon name="notifications-outline"></ion-icon>
-          </button>
-
-          @if (headerVm().hasNotifications) {
-            <span class="notif-dot"></span>
-          }
-        </div>
-
-        <button class="avatar" type="button" (click)="onAvatarClick()" aria-label="Profile">
-          {{ headerVm().avatarText }}
+      @if (!isDetailRoute()) {
+        <button class="sync-pill" type="button" aria-label="Sync status" (click)="onSyncClick()">
+          <ion-icon name="refresh-outline"></ion-icon>
+          <span>{{ syncLabel() }}</span>
         </button>
-      </div>
+      }
     </div>
   </ion-toolbar>
 </ion-header>

@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.category-section {
+  display: grid;
+  gap: 12px;
+}
+
+.section-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.section-head h2 {
+  color: var(--budget-section-title, #4b576a);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.edit-btn {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--budget-edit-btn-border, var(--border));
+  border-radius: 8px;
+  color: var(--budget-edit-btn-text, #2f394d);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 4px;
+  letter-spacing: 0;
+  line-height: 1;
+  min-height: 28px;
+  padding: 0 10px;
+}
+
+.category-list {
+  display: grid;
+  gap: 8px;
+}
+
+.category-item-card {
+  background: var(--budget-card-bg, #eff3f8);
+  border: 1px solid var(--budget-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--budget-card-shadow, var(--shadow-sm));
+}

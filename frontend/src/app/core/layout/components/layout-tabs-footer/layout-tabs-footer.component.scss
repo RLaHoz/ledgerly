@@ -1,46 +1,60 @@
-
 :host {
   bottom: 0;
   display: block;
-  left: 0;
+  left: 50%;
+  max-width: 430px;
   position: fixed;
-  right: 0;
-  z-index: 20;
+  right: auto;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 40;
 }
 
 ion-tab-bar {
-  --background: var(--app-surface-1);
-  border-top: 1px solid var(--app-border-1);
+  --background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid var(--border, #e6eaf2);
+  height: 52px;
+  padding-top: 0;
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-inline-end: max(0px, env(safe-area-inset-right, 0px));
-  padding-inline-start: max(0px, env(safe-area-inset-left, 0px));
+  padding-inline-end: max(8px, env(safe-area-inset-right, 0px));
+  padding-inline-start: max(8px, env(safe-area-inset-left, 0px));
 }
 
-/* colores oficiales de Ionic para tabs */
 ion-tab-button {
-  --color: var(--app-tab-inactive);
-  --color-selected: var(--app-tab-active);
+  --color: var(--text-text-tertiary, #8a94a6);
+  --color-selected: var(--primary, #1e3a5f);
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  min-height: 52px;
+  min-width: 60px;
 }
 
-/* fuerza icon + label */
 ion-tab-button ion-icon {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 ion-tab-button ion-label {
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-top: 2px;
 }
 
-/* tab seleccionado (Ionic aplica .tab-selected automáticamente) */
 ion-tab-button.tab-selected ion-icon,
 ion-tab-button.tab-selected ion-label {
-  color: var(--app-tab-active);
+  color: var(--primary, #1e3a5f);
+  font-weight: 700;
   opacity: 1;
 }
 
-/* inactivos */
 ion-tab-button:not(.tab-selected) ion-icon,
 ion-tab-button:not(.tab-selected) ion-label {
-  color: var(--app-tab-inactive);
-  opacity: .9;
+  color: var(--text-text-tertiary, #8a94a6);
+  opacity: 1;
+}
+
+:host-context(.theme-dark) ion-tab-bar {
+  --background: rgba(19, 32, 51, 0.95);
+  border-top-color: var(--border, #22304a);
 }

@@ -1,0 +1,33 @@
+<article class="nontifications-card" aria-label="Notifications">
+  <header class="card-header">
+    <h2>{{ title() }}</h2>
+  </header>
+
+  <section class="rows">
+    @for (item of items(); track trackById($index, item)) {
+      <article class="row" [class.is-off]="!item.enabled">
+        <div class="row-main">
+          <span class="row-icon" aria-hidden="true">
+            <ion-icon name="notifications-outline"></ion-icon>
+          </span>
+
+          <div class="row-copy">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="switch"
+          [class.is-on]="item.enabled"
+          [attr.aria-label]="item.title"
+          [attr.aria-pressed]="item.enabled"
+          (click)="onToggle(item)"
+        >
+          <span class="switch-handle"></span>
+        </button>
+      </article>
+    }
+  </section>
+</article>

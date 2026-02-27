@@ -6,50 +6,50 @@
   background: var(--app-card);
   border: 1px solid var(--app-border-1);
   border-radius: calc(var(--app-radius-lg) + 2px);
-  padding: 18px 16px 16px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  padding: 14px;
+}
+
+:host-context(.theme-dark) .category-card {
+  box-shadow: none;
 }
 
 .title {
   color: var(--app-text-1);
-  font-size: clamp(1.2rem, 3.8vw, 1.45rem);
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0;
 }
 
-.chart-wrap {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin: 8px 0 4px;
+.total-line {
+  color: var(--app-text-2);
+  font-size: 12px;
+  margin: 4px 0 0;
 }
 
-.legend-grid {
+.bars {
   display: grid;
-  gap: 8px 30px;
-  grid-template-columns: max-content max-content;
-  justify-content: center;
-  margin-inline: auto;
-  width: fit-content;
+  gap: 10px;
+  margin-top: 12px;
 }
 
-.legend-column {
+.bar-item {
   display: grid;
-  gap: 8px;
+  gap: 7px;
 }
 
-.legend-item {
-  align-items: center;
-  column-gap: 8px;
-  display: grid;
-  grid-template-columns: minmax(0, max-content) max-content;
-  justify-content: start;
-}
-
-.legend-info {
+.bar-header {
   align-items: center;
   display: flex;
   gap: 8px;
+  justify-content: space-between;
+}
+
+.bar-label-wrap {
+  align-items: center;
+  display: flex;
+  gap: 7px;
   min-width: 0;
 }
 
@@ -57,28 +57,37 @@
   border-radius: 999px;
   display: inline-flex;
   flex: 0 0 auto;
-  height: 10px;
-  width: 10px;
+  height: 8px;
+  width: 8px;
 }
 
 .label {
-  color: var(--app-text-2);
-  font-size: clamp(0.9rem, 2.55vw, 1.02rem);
+  color: var(--app-text-1);
+  font-size: 11px;
+  font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .amount {
-  color: var(--app-text-1);
-  font-size: clamp(0.95rem, 2.6vw, 1.08rem);
+  color: var(--app-text-2);
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  margin-left: 2px;
+  white-space: nowrap;
 }
 
-@media (max-width: 360px) {
-  .legend-grid {
-    grid-template-columns: 1fr;
-  }
+.bar-track {
+  background: color-mix(in srgb, var(--app-text-2) 22%, transparent);
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.bar-fill {
+  border-radius: inherit;
+  display: block;
+  height: 100%;
 }

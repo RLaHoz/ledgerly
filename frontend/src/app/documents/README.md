@@ -60,6 +60,7 @@ Benefits:
 - Each skill is a focused workflow for a specific type of task.
 - Examples in this repo:
   - `skills/angular-standalone-signalstore/SKILL.md`
+  - `skills/interface-design/SKILL.md`
   - `skills/ionic-mobile-ios-android/SKILL.md`
   - `skills/pr-strict-reviewer/SKILL.md`
 - They standardize how to execute recurring tasks (build feature, mobile UI work, strict PR review).
@@ -72,6 +73,17 @@ Benefits:
 - Reusable delivery process across projects.
 - Better predictability for outcomes and quality.
 - Clear specialization without losing project-wide standards.
+
+## UI Design Workflow (mandatory)
+For any UI/layout/theming task, follow this sequence:
+1. `skills/interface-design/SKILL.md` (visual spec + token mapping).
+2. `skills/ionic-mobile-ios-android/SKILL.md` (Ionic implementation).
+3. `skills/pr-strict-reviewer/SKILL.md` (quality gate before merge).
+
+Required checks on every UI change:
+- Light/dark parity component by component (background, card, border/ring/shadow, icons, text hierarchy, controls states).
+- Mobile-first typography scale by role (explicit size/weight/line-height).
+- Systematic visual validation against mockups (no subjective "looks close enough").
 
 ### Practical guidance for future projects
 - Keep one `AGENTS.md` at repo root as the source of truth.

@@ -1,5 +1,37 @@
 <ion-content [fullscreen]="true">
-  <section class="feature-page">
-    <h2>Budgets</h2>
+  <section class="budget-page">
+    <app-budget-overview [model]="overview()" />
+
+    <app-budget-signals [items]="store.signals()" />
+
+    <app-budget-category
+      [title]="store.categoryTitle()"
+      [editLabel]="store.editBudgetsLabel()"
+      [items]="store.categories()"
+      (editRequested)="onEditBudgets()"
+      (itemAction)="onCategoryItemAction($event)"
+    />
   </section>
+
+  <ion-modal
+    [cssClass]="'new-budget-modal'"
+    class="new-budget-modal"
+    [isOpen]="store.isNewBudgetModalOpen()"
+    [showBackdrop]="false"
+    [backdropDismiss]="true"
+    (didDismiss)="onCloseNewBudget()"
+  >
+    <ng-template>
+      <app-new-budget
+        [categoryName]="store.newBudgetNameInput()"
+        [monthlyBudget]="store.newBudgetAmountInput()"
+        [canAdd]="store.canCreateNewBudget()"
+        (closed)="onCloseNewBudget()"
+        (canceled)="onCloseNewBudget()"
+        (categoryNameChanged)="onNewBudgetNameInput($event)"
+        (monthlyBudgetChanged)="onNewBudgetAmountInput($event)"
+        (addRequested)="onAddNewBudget()"
+      />
+    </ng-template>
+  </ion-modal>
 </ion-content>
