@@ -1,50 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import {
-  IonTabs,
-  IonTabBar,
-  IonTabButton,
-  IonIcon,
-  IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { IonIcon, IonLabel, IonTabBar, IonTabButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import {
-  gridOutline,
-  swapHorizontalOutline,
-  downloadOutline,
-  funnelOutline,
-  settingsOutline
-} from 'ionicons/icons';
+import { flashOutline, gridOutline, settingsOutline, walletOutline } from 'ionicons/icons';
 
 @Component({
   standalone: true,
   selector: 'app-layout-tabs-footer',
   templateUrl: './layout-tabs-footer.component.html',
   styleUrls: ['./layout-tabs-footer.component.scss'],
-  imports: [IonRouterOutlet,
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonLabel,
-  ]
+  imports: [RouterLink, RouterLinkActive, IonTabBar, IonTabButton, IonIcon, IonLabel],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutTabsFooterComponent  implements OnInit {
+export class LayoutTabsFooterComponent {
+  private readonly router = inject(Router);
 
   constructor() {
     addIcons({
+      'flash-outline': flashOutline,
       'grid-outline': gridOutline,
-      'swap-horizontal-outline': swapHorizontalOutline,
-      'download-outline': downloadOutline,
-      'funnel-outline': funnelOutline,
       'settings-outline': settingsOutline,
+      'wallet-outline': walletOutline,
     });
   }
 
-  ngOnInit() {
-    console.log('INit');
+  navigateTo(path: '/dashboard' | '/budgets' | '/rules' | '/settings', event?: Event): void {
+    event?.preventDefault();
+    void this.router.navigateByUrl(path);
   }
-
 }

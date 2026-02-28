@@ -1,60 +1,44 @@
 import { computed } from '@angular/core';
 import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
 
-export type TabKey = 'dashboard' | 'activity' | 'import' | 'rules' | 'settings';
+export type TabKey = 'dashboard' | 'budgets' | 'rules' | 'settings';
 
 export interface LayoutUiState {
-  // Header
   title: string;
-  periodLabel: string;      // e.g. 'FEBRUARY 2026'
-  avatarText: string;       // e.g. 'AK'
+  syncLabel: string;
   hasNotifications: boolean;
   activeTab: TabKey;
 }
 
 const initialState: LayoutUiState = {
-  title: 'Dashboard',
-  periodLabel: 'FEBRUARY 2026',
-  avatarText: 'AK',
-  hasNotifications: true,
+  title: 'Home',
+  syncLabel: 'Synced 2m ago',
+  hasNotifications: false,
   activeTab: 'dashboard',
 };
 
 export const LayoutUiStore = signalStore(
   { providedIn: 'root' },
-
   withState(initialState),
-
-  withComputed((s) => ({
+  withComputed((state) => ({
     headerVm: computed(() => ({
-      title: s.title(),
-      periodLabel: s.periodLabel(),
-      avatarText: s.avatarText(),
-      hasNotifications: s.hasNotifications(),
+      title: state.title(),
+      syncLabel: state.syncLabel(),
+      hasNotifications: state.hasNotifications(),
     })),
   })),
-
-  withMethods((s) => ({
-    // Header
-    setTitle(title: string) {
-      patchState(s, { title });
+  withMethods((state) => ({
+    setTitle(title: string): void {
+      patchState(state, { title });
     },
-    setPeriodLabel(periodLabel: string) {
-      patchState(s, { periodLabel });
+    setSyncLabel(syncLabel: string): void {
+      patchState(state, { syncLabel });
     },
-    setAvatarText(avatarText: string) {
-      patchState(s, { avatarText });
+    setHasNotifications(hasNotifications: boolean): void {
+      patchState(state, { hasNotifications });
     },
-    setHasNotifications(hasNotifications: boolean) {
-      patchState(s, { hasNotifications });
+    setActiveTab(activeTab: TabKey): void {
+      patchState(state, { activeTab });
     },
-    setHeader(payload: Partial<Pick<LayoutUiState, 'title' | 'periodLabel' | 'avatarText' | 'hasNotifications'>>) {
-      patchState(s, payload);
-    },
-
-    // Tabs
-    setActiveTab(activeTab: TabKey) {
-      patchState(s, { activeTab });
-    },
-  }))
+  })),
 );

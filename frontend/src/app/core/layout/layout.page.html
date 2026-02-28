@@ -1,19 +1,25 @@
 <ion-header>
-  <app-layout-header
-    [title]="ui.headerVm().title"
-    [periodLabel]="ui.headerVm().periodLabel"
-    [avatarText]="ui.headerVm().avatarText"
-    [hasNotifications]="ui.headerVm().hasNotifications"
-    [themeIcon]="themeStore.themeIcon()"
-    (themeToggle)="onThemeToggle()"
-    (notificationsClick)="onNotificationsClick()"
-    (avatarClick)="onAvatarClick()"
-  />
+  <ion-toolbar class="layout-toolbar" [class.detail-toolbar]="isDetailRoute()">
+    <div class="layout-header-container">
+      @if (isDetailRoute()) {
+        <button class="back-button" type="button" (click)="onBackClick()" aria-label="Go back">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          <span>Back</span>
+        </button>
+      } @else {
+        <h1 class="layout-header-title">{{ pageTitle() }}</h1>
+      }
+
+      @if (!isDetailRoute()) {
+        <button class="sync-pill" type="button" aria-label="Sync status" (click)="onSyncClick()">
+          <ion-icon name="refresh-outline"></ion-icon>
+          <span>{{ syncLabel() }}</span>
+        </button>
+      }
+    </div>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
-  <ion-tabs>
-    <ion-router-outlet></ion-router-outlet>
-    <app-layout-tabs-footer />
-  </ion-tabs>
-</ion-content>
+<ion-router-outlet></ion-router-outlet>
+
+<app-layout-tabs-footer />

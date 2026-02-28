@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  padding-top: 6px;
+}
+
+.signals-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.signal-card {
+  align-items: center;
+  border: 1px solid var(--budget-card-border, var(--border));
+  border-radius: 18px;
+  display: flex;
+  gap: 2px;
+  min-height: 0;
+  padding: 12px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signal-icon {
+  font-size: 16px;
+}
+
+.signal-copy {
+  min-width: 0;
+}
+
+.count,
+.label {
+  margin: 0;
+}
+
+.count {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.label {
+  color: var(--budget-section-title, var(--text-text-secondary));
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-top: 4px;
+}
+
+.signal-on-track {
+  background: var(--budget-signal-track-bg, #d0e7e2);
+  color: var(--budget-signal-track-text, #1f9a63);
+}
+
+.signal-number {
+  display: flex;
+  gap: 3px;
+}
+
+.signal-watch {
+  background: var(--budget-signal-watch-bg, #ece4d9);
+  color: var(--budget-signal-watch-text, #d28d28);
+}
+
+.signal-over {
+  background: var(--budget-signal-over-bg, #ecdee2);
+  color: var(--budget-signal-over-text, #de5f63);
+}

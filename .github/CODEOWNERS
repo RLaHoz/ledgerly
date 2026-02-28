@@ -3,5 +3,5 @@
 
 /frontend/ @rlahoz
 /backend/ @rlahoz
-/docs/ @rlahoz
+/frontend/src/app/documents/ @rlahoz
 /.github/ @rlahoz

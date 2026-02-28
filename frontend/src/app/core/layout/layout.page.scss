@@ -1,10 +1,111 @@
-ion-content {
-  --background: var(--app-bg);
-  color: var(--app-text-1);
+:host {
+  --app-shell-header-offset: calc(env(safe-area-inset-top, 0px) + 60px);
+  --app-shell-header-offset-detail: calc(env(safe-area-inset-top, 0px) + 56px);
+  --app-shell-tabs-offset: calc(52px + env(safe-area-inset-bottom, 0px));
+  display: block;
+  min-height: 100dvh;
 }
 
-ion-toolbar,
-ion-tab-bar {
-  --background: var(--app-surface-1);
-  border-color: var(--app-border-1);
+ion-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+ion-router-outlet {
+  display: block;
+  min-height: 100%;
+}
+
+ion-toolbar {
+  --background: rgba(247, 249, 252, 0.9);
+  --border-color: transparent;
+  --min-height: 48px;
+  backdrop-filter: blur(24px);
+}
+
+.layout-toolbar {
+  --padding-start: 0;
+  --padding-end: 0;
+  border-bottom: 1px solid var(--border, #e6eaf2);
+  box-shadow: none;
+}
+
+.layout-header-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
+}
+
+.layout-toolbar.detail-toolbar {
+  --min-height: 44px;
+}
+
+.layout-toolbar.detail-toolbar .layout-header-container {
+  min-height: 44px;
+  padding: 0 max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
+}
+
+.layout-header-title {
+  color: var(--text-text-primary, #0b1220);
+  font-size: 24px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+}
+
+.sync-pill {
+  align-items: center;
+  background: var(--bg-surface-secondary, #f2f4f8);
+  border: 1px solid var(--border, #e6eaf2);
+  border-radius: 999px;
+  color: var(--text-text-tertiary, #8a94a6);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 6px;
+  line-height: 1;
+  margin: 0;
+  padding: 5px 10px;
+}
+
+.sync-pill ion-icon {
+  font-size: 12px;
+}
+
+.back-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--text-text-secondary, #4b5565);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 6px;
+  line-height: 1;
+  margin-left: -4px;
+  padding: 0;
+}
+
+.back-button ion-icon {
+  font-size: 16px;
+}
+
+:host-context(.theme-dark) ion-toolbar {
+  --background: rgba(12, 20, 32, 0.9);
+}
+
+:host-context(.theme-dark) .sync-pill {
+  background: var(--bg-surface-secondary, #162238);
+  border-color: var(--border, #22304a);
+  color: var(--text-text-tertiary, #7f8ba3);
+}
+
+:host-context(.theme-dark) .back-button {
+  color: var(--text-text-secondary, #b8c3da);
 }

@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  --rules-add-card-bg: var(--bg-surface);
+  --rules-add-card-border: var(--border);
+  --rules-add-title: var(--text-text-primary);
+  --rules-add-muted: var(--text-text-tertiary);
+  --rules-add-label: var(--text-text-primary);
+  --rules-add-input-bg: var(--bg-background);
+  --rules-add-input-border: var(--border);
+  --rules-add-input-text: var(--text-text-primary);
+  --rules-add-input-placeholder: var(--text-text-tertiary);
+  --rules-add-panel-bg: var(--bg-surface-secondary);
+  --rules-add-panel-border: var(--border);
+  --rules-add-action: var(--text-accent);
+  --rules-add-cancel-bg: var(--bg-surface-secondary);
+  --rules-add-cancel-border: var(--border);
+  --rules-add-cancel-text: var(--text-text-primary);
+  --rules-add-create-bg: var(--primary);
+  --rules-add-create-text: var(--text-primary-foreground);
+  --rules-add-toggle-off: var(--switch-off);
+  --rules-add-toggle-on: var(--switch-on);
+}

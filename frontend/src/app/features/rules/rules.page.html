@@ -1,13 +1,62 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>rules</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">rules</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <section class="rules-page">
+    <p class="rules-intro">{{ store.description() }}</p>
+
+    <app-rules-quick-template
+      [title]="store.quickTemplatesTitle()"
+      [items]="store.quickTemplates()"
+    />
+
+    <app-rules-active
+      [title]="store.activeTitle()"
+      [summary]="store.activeSummary()"
+      [addLabel]="store.addLabel()"
+      [items]="store.activeRules()"
+      (addRequested)="onOpenAddRule()"
+      (toggled)="onRuleToggle($event)"
+    />
+
+    <app-rules-triggered-alerts
+      [title]="store.triggeredTitle()"
+      [count]="store.triggeredCount()"
+      [summary]="store.triggeredSummary()"
+      [items]="store.triggeredAlerts()"
+    />
+  </section>
+
+  <ion-modal
+    [cssClass]="'rules-add-modal'"
+    class="rules-add-modal"
+    [isOpen]="store.isAddRuleModalOpen()"
+    [showBackdrop]="false"
+    [backdropDismiss]="true"
+    (didDismiss)="onCloseAddRule()"
+  >
+    <ng-template>
+      <div class="modal-center-layer">
+        <app-rules-add-item
+          [ruleName]="store.addDraft().ruleName"
+          [ruleType]="store.addDraft().ruleType"
+          [conditionField]="store.addDraft().conditionField"
+          [conditionValue]="store.addDraft().conditionValue"
+          [actionType]="store.addDraft().actionType"
+          [actionValue]="store.addDraft().actionValue"
+          [ruleTypeOptions]="store.ruleTypeOptions()"
+          [conditionFieldOptions]="store.conditionFieldOptions()"
+          [actionTypeOptions]="store.actionTypeOptions()"
+          [actionValueOptions]="store.actionValueOptions()"
+          [canCreate]="store.canCreateRule()"
+          (closed)="onCloseAddRule()"
+          (canceled)="onCloseAddRule()"
+          (created)="onCreateRule()"
+          (ruleNameChanged)="onRuleNameChanged($event)"
+          (ruleTypeChanged)="onRuleTypeChanged($event)"
+          (conditionFieldChanged)="onConditionFieldChanged($event)"
+          (conditionValueChanged)="onConditionValueChanged($event)"
+          (actionTypeChanged)="onActionTypeChanged($event)"
+          (actionValueChanged)="onActionValueChanged($event)"
+        />
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>

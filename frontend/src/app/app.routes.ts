@@ -23,6 +23,21 @@ export const routes: Routes = [
           import('./features/budget/budget.page').then((m) => m.BudgetPage),
       },
       {
+        path: 'budget/detail/:type',
+        loadComponent: () =>
+          import('./features/budget/components/budget-details/budget-details.component').then((m) => m.BudgetDetailsComponent),
+      },
+      {
+        path: 'budgets/detail/:type',
+        loadComponent: () =>
+          import('./features/budget/components/budget-details/budget-details.component').then((m) => m.BudgetDetailsComponent),
+      },
+      {
+        path: 'budget',
+        pathMatch: 'full',
+        redirectTo: 'budgets',
+      },
+      {
         path: 'rules',
         loadComponent: () =>
           import('./features/rules/rules.page').then((m) => m.RulesPage),

@@ -1,13 +1,22 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>settings</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <section class="settings-page">
+    <app-user-profile-info [model]="profileInfo()" />
+
+    <app-data-source-info
+      [model]="dataSourceInfo()"
+      (connectBankClicked)="onConnectBank()"
+      (uploadClicked)="onUploadExcel()"
+      (frequencyChanged)="onSyncFrequencyChange($event)"
+    />
+
+    <app-nontifications [items]="nontifications()" (toggled)="onNotificationToggle($event)" />
+
+    <app-preferences
+      [model]="preferencesInfo()"
+      (currencyChanged)="onCurrencyChange($event)"
+      (monthStartChanged)="onMonthStartChange($event)"
+      (familyModeChanged)="onFamilyModeToggle($event)"
+      (themeModeChanged)="onThemeModeChange($event)"
+    />
+  </section>
 </ion-content>

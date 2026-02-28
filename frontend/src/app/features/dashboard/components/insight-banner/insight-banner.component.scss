@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.insight-card {
+  align-items: flex-start;
+  background: color-mix(in srgb, var(--app-surface-2) 72%, var(--app-bg));
+  border: 1px solid var(--app-border-1);
+  border-radius: var(--app-radius-lg);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto 1fr;
+  padding: 16px;
+}
+
+.icon-pill {
+  align-items: center;
+  background: color-mix(in srgb, var(--app-tab-active) 16%, transparent);
+  border-radius: 12px;
+  color: var(--app-tab-active);
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.icon-pill ion-icon {
+  font-size: 18px;
+}
+
+.text {
+  color: var(--app-text-2);
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.text strong {
+  color: var(--app-text-1);
+  font-weight: 700;
+}

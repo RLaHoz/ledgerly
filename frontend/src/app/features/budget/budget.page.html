@@ -1,13 +1,39 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>budget</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">budget</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <section class="budget-page">
+    <app-budget-overview [model]="overview()" />
+
+    <app-budget-signals [items]="store.signals()" />
+
+    <app-budget-category
+      [title]="store.categoryTitle()"
+      [editLabel]="store.editBudgetsLabel()"
+      [items]="store.categories()"
+      (editRequested)="onEditBudgets()"
+      (itemAction)="onCategoryItemAction($event)"
+    />
+  </section>
+
+  <ion-modal
+    [cssClass]="'new-budget-modal'"
+    class="new-budget-modal"
+    [isOpen]="store.isNewBudgetModalOpen()"
+    [showBackdrop]="true"
+    [backdropDismiss]="true"
+    (didDismiss)="onCloseNewBudget()"
+  >
+    <ng-template>
+      <div class="modal-center-layer">
+        <app-new-budget
+          [categoryName]="store.newBudgetNameInput()"
+          [monthlyBudget]="store.newBudgetAmountInput()"
+          [canAdd]="store.canCreateNewBudget()"
+          (closed)="onCloseNewBudget()"
+          (canceled)="onCloseNewBudget()"
+          (categoryNameChanged)="onNewBudgetNameInput($event)"
+          (monthlyBudgetChanged)="onNewBudgetAmountInput($event)"
+          (addRequested)="onAddNewBudget()"
+        />
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>

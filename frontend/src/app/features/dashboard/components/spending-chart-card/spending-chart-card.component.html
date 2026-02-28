@@ -1,0 +1,16 @@
+<article class="chart-card">
+  <h2 class="title">{{ title() }}</h2>
+
+  <apx-chart
+    [series]="chartOptions().series"
+    [chart]="chartOptions().chart"
+    [dataLabels]="chartOptions().dataLabels"
+    [stroke]="chartOptions().stroke"
+    [fill]="chartOptions().fill"
+    [grid]="chartOptions().grid"
+    [xaxis]="chartOptions().xaxis"
+    [yaxis]="chartOptions().yaxis"
+    [legend]="chartOptions().legend"
+    [tooltip]="chartOptions().tooltip"
+  />
+</article>
