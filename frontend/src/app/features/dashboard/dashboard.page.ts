@@ -35,10 +35,16 @@ import { BudgetItemViewModel } from '../../shared/components/budget-item/budget-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPage {
-  private readonly monthOptions = ['January 2026', 'February 2026', 'March 2026'] as const;
+  private readonly monthFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
 
-  readonly monthIndex = signal<number>(1);
-  readonly monthLabel = computed(() => this.monthOptions[this.monthIndex()]);
+  readonly selectedMonthDate = signal('2026-02-01');
+  readonly minMonthDate = '2020-01-01';
+  readonly maxMonthDate = '2035-12-01';
+  readonly monthLabel = computed(() => this.formatMonthLabel(this.selectedMonthDate()));
 
   readonly budgetHealthLabel = 'Stable';
   readonly updatedLabel = 'Updated 2m ago';
@@ -158,19 +164,19 @@ export class DashboardPage {
   ];
 
   onPreviousMonth(): void {
-    if (this.monthIndex() <= 0) {
-      return;
-    }
-
-    this.monthIndex.update((currentIndex) => currentIndex - 1);
+    this.selectedMonthDate.update((currentMonth) => this.shiftMonth(currentMonth, -1));
   }
 
   onNextMonth(): void {
-    if (this.monthIndex() >= this.monthOptions.length - 1) {
+    this.selectedMonthDate.update((currentMonth) => this.shiftMonth(currentMonth, 1));
+  }
+
+  onMonthSelected(value: string): void {
+    if (!value) {
       return;
     }
 
-    this.monthIndex.update((currentIndex) => currentIndex + 1);
+    this.selectedMonthDate.set(this.normalizeToMonthDate(value));
   }
 
   onBudgetPressureItemAction(itemId: string): void {
@@ -179,5 +185,35 @@ export class DashboardPage {
 
   onBudgetPressureViewAll(): void {
     // Placeholder for navigation to the full budget pressure list.
+  }
+
+  private shiftMonth(isoMonthDate: string, delta: number): string {
+    const [year, month] = this.normalizeToMonthDate(isoMonthDate)
+      .split('-')
+      .map((part) => Number.parseInt(part, 10));
+    const shifted = new Date(Date.UTC(year, month - 1 + delta, 1));
+    return this.toMonthDate(shifted);
+  }
+
+  private formatMonthLabel(isoMonthDate: string): string {
+    const [year, month] = this.normalizeToMonthDate(isoMonthDate)
+      .split('-')
+      .map((part) => Number.parseInt(part, 10));
+    const date = new Date(Date.UTC(year, month - 1, 1));
+    return this.monthFormatter.format(date);
+  }
+
+  private normalizeToMonthDate(value: string): string {
+    if (/^\d{4}-\d{2}$/.test(value)) {
+      return `${value}-01`;
+    }
+
+    return value.slice(0, 10);
+  }
+
+  private toMonthDate(date: Date): string {
+    const year = date.getUTCFullYear();
+    const month = `${date.getUTCMonth() + 1}`.padStart(2, '0');
+    return `${year}-${month}-01`;
   }
 }

@@ -1,3 +1,9 @@
+@use './app/shared/styles/budget-details' as budgetDetailsStyles;
+@use './app/shared/styles/rules-add-item-modal' as rulesAddItemModalStyles;
+@use './app/shared/styles/budget-item' as budgetItemStyles;
+@use './app/shared/styles/data-source-info' as dataSourceInfoStyles;
+@use './app/shared/styles/preferences' as preferencesStyles;
+
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -62,25 +68,42 @@ ion-app {
 
 ion-modal.new-budget-modal {
   --background: transparent;
-  --backdrop-opacity: 0;
+  --backdrop-opacity: 0.5;
   --box-shadow: none;
   --height: 100%;
   --width: 100%;
 }
 
 ion-modal.new-budget-modal::part(backdrop) {
-  background: transparent;
-  opacity: 0;
+  background: #000;
+  opacity: 0.5;
 }
 
 ion-modal.new-budget-modal::part(content) {
   align-items: center;
   background: transparent;
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   display: flex;
   justify-content: center;
   overflow: visible;
-  padding: 0 8px;
+  padding: 0 16px;
+}
+
+ion-modal.new-budget-modal .modal-center-layer,
+ion-modal.adjust-budget-modal .modal-center-layer,
+ion-modal.rules-add-modal .modal-center-layer {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  padding:
+    max(12px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
+  width: 100%;
 }
 
 ion-modal.rules-add-modal {
@@ -103,28 +126,46 @@ ion-modal.rules-add-modal::part(content) {
   display: flex;
   justify-content: center;
   overflow: visible;
-  padding: 0 8px;
+  padding: 0;
 }
 
 ion-modal.adjust-budget-modal {
   --background: transparent;
-  --backdrop-opacity: 0;
+  --backdrop-opacity: 0.5;
   --box-shadow: none;
   --height: 100%;
   --width: 100%;
 }
 
 ion-modal.adjust-budget-modal::part(backdrop) {
-  background: transparent;
-  opacity: 0;
+  background: #000;
+  opacity: 0.5;
 }
 
 ion-modal.adjust-budget-modal::part(content) {
   align-items: center;
   background: transparent;
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   display: flex;
   justify-content: center;
   overflow: visible;
-  padding: 0 8px;
+  padding: 0 16px;
+}
+
+@include budgetDetailsStyles.styles();
+
+app-rules-add-item {
+  @include rulesAddItemModalStyles.styles();
+}
+
+app-budget-item {
+  @include budgetItemStyles.styles();
+}
+
+app-data-source-info {
+  @include dataSourceInfoStyles.styles();
+}
+
+app-preferences {
+  @include preferencesStyles.styles();
 }

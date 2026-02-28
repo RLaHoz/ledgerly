@@ -1,5 +1,6 @@
 :host {
   display: block;
+  padding-top: 6px;
 }
 
 .signals-grid {
@@ -13,9 +14,11 @@
   border: 1px solid var(--budget-card-border, var(--border));
   border-radius: 18px;
   display: flex;
-  gap: 8px;
+  gap: 2px;
   min-height: 0;
   padding: 12px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .signal-icon {
@@ -49,6 +52,11 @@
 .signal-on-track {
   background: var(--budget-signal-track-bg, #d0e7e2);
   color: var(--budget-signal-track-text, #1f9a63);
+}
+
+.signal-number {
+  display: flex;
+  gap: 3px;
 }
 
 .signal-watch {

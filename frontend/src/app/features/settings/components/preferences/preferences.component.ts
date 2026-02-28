@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { IonIcon, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { IonIcon, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   calendarOutline,
+  checkmarkOutline,
+  chevronDownOutline,
+  chevronUpOutline,
   desktopOutline,
   globeOutline,
   moonOutline,
@@ -11,6 +14,7 @@ import {
 } from 'ionicons/icons';
 
 export type PreferencesThemeMode = 'light' | 'dark' | 'auto';
+type DropdownKey = 'currency' | 'monthStart';
 
 export interface PreferencesModel {
   title: string;
@@ -25,7 +29,7 @@ export interface PreferencesModel {
 @Component({
   selector: 'app-preferences',
   standalone: true,
-  imports: [IonIcon, IonSelect, IonSelectOption],
+  imports: [IonIcon, IonItem, IonLabel, IonList],
   templateUrl: './preferences.component.html',
   styleUrl: './preferences.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,12 +41,16 @@ export class PreferencesComponent {
   readonly monthStartChanged = output<string>();
   readonly familyModeChanged = output<boolean>();
   readonly themeModeChanged = output<PreferencesThemeMode>();
+  readonly openDropdown = signal<DropdownKey | null>(null);
 
   constructor() {
     addIcons({
       'globe-outline': globeOutline,
       'calendar-outline': calendarOutline,
       'people-outline': peopleOutline,
+      'checkmark-outline': checkmarkOutline,
+      'chevron-down-outline': chevronDownOutline,
+      'chevron-up-outline': chevronUpOutline,
       'sunny-outline': sunnyOutline,
       'moon-outline': moonOutline,
       'desktop-outline': desktopOutline,
@@ -57,25 +65,21 @@ export class PreferencesComponent {
     this.familyModeChanged.emit(!this.model().familyModeEnabled);
   }
 
-  onCurrencyChange(event: Event): void {
-    const customEvent = event as CustomEvent<{ value?: string }>;
-    const value = customEvent.detail?.value;
-
-    if (typeof value !== 'string') {
-      return;
-    }
-
-    this.currencyChanged.emit(value);
+  toggleDropdown(key: DropdownKey): void {
+    this.openDropdown.set(this.openDropdown() === key ? null : key);
   }
 
-  onMonthStartChange(event: Event): void {
-    const customEvent = event as CustomEvent<{ value?: string }>;
-    const value = customEvent.detail?.value;
+  isDropdownOpen(key: DropdownKey): boolean {
+    return this.openDropdown() === key;
+  }
 
-    if (typeof value !== 'string') {
-      return;
-    }
+  onCurrencyChange(value: string): void {
+    this.currencyChanged.emit(value);
+    this.openDropdown.set(null);
+  }
 
+  onMonthStartChange(value: string): void {
     this.monthStartChanged.emit(value);
+    this.openDropdown.set(null);
   }
 }

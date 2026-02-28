@@ -24,22 +24,25 @@
     <div class="select-wrap compact" [class.open]="isDropdownOpen('ruleType')">
       <button type="button" class="select-trigger" (click)="toggleDropdown('ruleType')">
         <span>{{ ruleType() }}</span>
-        <ion-icon name="chevron-down-outline"></ion-icon>
+        <ion-icon [name]="isDropdownOpen('ruleType') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
       </button>
 
       @if (isDropdownOpen('ruleType')) {
-        <ul class="options-menu">
+        <ion-list class="options-menu" lines="none">
           @for (option of ruleTypeOptions(); track option) {
-            <li>
-              <button type="button" [class.selected]="option === ruleType()" (click)="selectRuleType(option)">
-                <span>{{ option }}</span>
-                @if (option === ruleType()) {
-                  <ion-icon name="checkmark-outline"></ion-icon>
-                }
-              </button>
-            </li>
+            <ion-item
+              button
+              detail="false"
+              [class.selected]="option === ruleType()"
+              (click)="selectRuleType(option)"
+            >
+              <ion-label>{{ option }}</ion-label>
+              @if (option === ruleType()) {
+                <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+              }
+            </ion-item>
           }
-        </ul>
+        </ion-list>
       }
     </div>
   </section>
@@ -53,22 +56,25 @@
       <div class="select-wrap compact" [class.open]="isDropdownOpen('conditionField')">
         <button type="button" class="select-trigger" (click)="toggleDropdown('conditionField')">
           <span>{{ conditionField() }}</span>
-          <ion-icon name="chevron-down-outline"></ion-icon>
+          <ion-icon [name]="isDropdownOpen('conditionField') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
         </button>
 
         @if (isDropdownOpen('conditionField')) {
-          <ul class="options-menu">
+          <ion-list class="options-menu" lines="none">
             @for (option of conditionFieldOptions(); track option) {
-              <li>
-                <button type="button" [class.selected]="option === conditionField()" (click)="selectConditionField(option)">
-                  <span>{{ option }}</span>
-                  @if (option === conditionField()) {
-                    <ion-icon name="checkmark-outline"></ion-icon>
-                  }
-                </button>
-              </li>
+              <ion-item
+                button
+                detail="false"
+                [class.selected]="option === conditionField()"
+                (click)="selectConditionField(option)"
+              >
+                <ion-label>{{ option }}</ion-label>
+                @if (option === conditionField()) {
+                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+                }
+              </ion-item>
             }
-          </ul>
+          </ion-list>
         }
       </div>
 
@@ -91,47 +97,50 @@
       <div class="select-wrap compact" [class.open]="isDropdownOpen('actionType')">
         <button type="button" class="select-trigger" (click)="toggleDropdown('actionType')">
           <span>{{ actionType() }}</span>
-          <ion-icon name="chevron-down-outline"></ion-icon>
+          <ion-icon [name]="isDropdownOpen('actionType') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
         </button>
 
         @if (isDropdownOpen('actionType')) {
-          <ul class="options-menu">
+          <ion-list class="options-menu" lines="none">
             @for (option of actionTypeOptions(); track option) {
-              <li>
-                <button type="button" [class.selected]="option === actionType()" (click)="selectActionType(option)">
-                  <span>{{ option }}</span>
-                  @if (option === actionType()) {
-                    <ion-icon name="checkmark-outline"></ion-icon>
-                  }
-                </button>
-              </li>
+              <ion-item
+                button
+                detail="false"
+                [class.selected]="option === actionType()"
+                (click)="selectActionType(option)"
+              >
+                <ion-label>{{ option }}</ion-label>
+                @if (option === actionType()) {
+                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+                }
+              </ion-item>
             }
-          </ul>
+          </ion-list>
         }
       </div>
 
       <div class="select-wrap" [class.open]="isDropdownOpen('actionValue')">
         <button type="button" class="select-trigger" (click)="toggleDropdown('actionValue')">
           <span>{{ actionValue() }}</span>
-          <ion-icon name="chevron-down-outline"></ion-icon>
+          <ion-icon [name]="isDropdownOpen('actionValue') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
         </button>
 
         @if (isDropdownOpen('actionValue')) {
-          <ul class="options-menu">
+          <ion-list class="options-menu" lines="none">
             @for (option of actionValueOptions(); track option) {
-              <li>
-                <button type="button" [class.selected]="option === actionValue()" (click)="selectActionValue(option)">
-                  <span>{{ option }}</span>
-                  @if (option === actionValue()) {
-                    <ion-icon name="checkmark-outline"></ion-icon>
-                  }
-                </button>
-              </li>
+              <ion-item
+                button
+                detail="false"
+                [class.selected]="option === actionValue()"
+                (click)="selectActionValue(option)"
+              >
+                <ion-label>{{ option }}</ion-label>
+                @if (option === actionValue()) {
+                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+                }
+              </ion-item>
             }
-            <li class="menu-footer">
-              <ion-icon name="chevron-down-outline"></ion-icon>
-            </li>
-          </ul>
+          </ion-list>
         }
       </div>
     </div>

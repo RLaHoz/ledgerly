@@ -1,4 +1,4 @@
-<article class="data-source-card" aria-label="Data sources">
+<article class="data-source-card" [class.menu-open]="isFrequencyMenuOpen()" aria-label="Data sources">
   <header class="card-header">
     <h2>{{ model().title }}</h2>
   </header>
@@ -43,16 +43,34 @@
       <span>{{ model().syncFrequencyLabel }}</span>
     </p>
 
-    <ion-select
-      class="frequency-select"
-      [value]="model().selectedFrequencyLabel"
-      interface="popover"
-      aria-label="Sync frequency"
-      (ionChange)="onFrequencyChange($event)"
-    >
-      @for (option of model().frequencyOptions; track option) {
-        <ion-select-option [value]="option">{{ option }}</ion-select-option>
+    <div class="frequency-select-wrap" [class.open]="isFrequencyMenuOpen()">
+      <button
+        type="button"
+        class="frequency-select-trigger"
+        aria-label="Sync frequency"
+        (click)="toggleFrequencyMenu()"
+      >
+        <span>{{ model().selectedFrequencyLabel }}</span>
+        <ion-icon [name]="isFrequencyMenuOpen() ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+      </button>
+
+      @if (isFrequencyMenuOpen()) {
+        <ion-list class="frequency-options-menu" lines="none">
+          @for (option of model().frequencyOptions; track option) {
+            <ion-item
+              button
+              detail="false"
+              [class.selected]="option === model().selectedFrequencyLabel"
+              (click)="onFrequencyChange(option)"
+            >
+              <ion-label>{{ option }}</ion-label>
+              @if (option === model().selectedFrequencyLabel) {
+                <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+              }
+            </ion-item>
+          }
+        </ion-list>
       }
-    </ion-select>
+    </div>
   </div>
 </article>

@@ -17,21 +17,23 @@
     [cssClass]="'new-budget-modal'"
     class="new-budget-modal"
     [isOpen]="store.isNewBudgetModalOpen()"
-    [showBackdrop]="false"
+    [showBackdrop]="true"
     [backdropDismiss]="true"
     (didDismiss)="onCloseNewBudget()"
   >
     <ng-template>
-      <app-new-budget
-        [categoryName]="store.newBudgetNameInput()"
-        [monthlyBudget]="store.newBudgetAmountInput()"
-        [canAdd]="store.canCreateNewBudget()"
-        (closed)="onCloseNewBudget()"
-        (canceled)="onCloseNewBudget()"
-        (categoryNameChanged)="onNewBudgetNameInput($event)"
-        (monthlyBudgetChanged)="onNewBudgetAmountInput($event)"
-        (addRequested)="onAddNewBudget()"
-      />
+      <div class="modal-center-layer">
+        <app-new-budget
+          [categoryName]="store.newBudgetNameInput()"
+          [monthlyBudget]="store.newBudgetAmountInput()"
+          [canAdd]="store.canCreateNewBudget()"
+          (closed)="onCloseNewBudget()"
+          (canceled)="onCloseNewBudget()"
+          (categoryNameChanged)="onNewBudgetNameInput($event)"
+          (monthlyBudgetChanged)="onNewBudgetAmountInput($event)"
+          (addRequested)="onAddNewBudget()"
+        />
+      </div>
     </ng-template>
   </ion-modal>
 </ion-content>

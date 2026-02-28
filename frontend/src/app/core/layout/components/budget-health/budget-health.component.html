@@ -4,7 +4,14 @@
       <ion-icon name="chevron-back-outline"></ion-icon>
     </button>
 
-    <h2 class="month-label">{{ monthLabel() }}</h2>
+    <button
+      class="month-label-button"
+      type="button"
+      [attr.aria-label]="'Choose month ' + monthLabel()"
+      (click)="openMonthPicker()"
+    >
+      <h2 class="month-label">{{ monthLabel() }}</h2>
+    </button>
 
     <button class="month-nav-button" type="button" aria-label="Next month" (click)="nextRequested.emit()">
       <ion-icon name="chevron-forward-outline"></ion-icon>
@@ -31,4 +38,22 @@
   </ul>
 
   <p class="trend">{{ trendLabel() }}</p>
+
+  @if (isMonthPickerOpen()) {
+    <div class="month-picker-layer" role="region" aria-label="Month picker">
+      <ion-datetime
+        class="month-datetime"
+        presentation="month-year"
+        [preferWheel]="true"
+        [value]="monthValue()"
+        [min]="minMonthDate()"
+        [max]="maxMonthDate()"
+        [showDefaultButtons]="true"
+        doneText="Apply"
+        cancelText="Cancel"
+        (ionChange)="onMonthPickerChanged($event)"
+        (ionCancel)="onMonthPickerDismissed()"
+      />
+    </div>
+  }
 </section>

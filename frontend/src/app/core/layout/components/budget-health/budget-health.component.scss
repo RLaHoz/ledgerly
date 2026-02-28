@@ -1,11 +1,15 @@
 :host {
   display: block;
+  --month-datetime-bg-rgb: 247, 249, 252;
 }
 
 .budget-health {
   display: grid;
   gap: 12px;
+  position: relative;
   padding-bottom: 10px;
+  padding-top: 5px;
+  z-index: 2;
 }
 
 .month-nav {
@@ -38,6 +42,18 @@
   line-height: 1.2;
   margin: 0;
   text-align: center;
+}
+
+.month-label-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--home-strong, var(--text-text-primary));
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .health-row {
@@ -138,10 +154,6 @@
   border-top-color: var(--home-divider, var(--border));
 }
 
-:host-context(.theme-dark) .month-label {
-  color: var(--home-strong, var(--text-text-primary));
-}
-
 :host-context(.theme-dark) .month-nav-button,
 :host-context(.theme-dark) .updated-label,
 :host-context(.theme-dark) .trend {
@@ -157,11 +169,44 @@
   color: var(--home-mute-strong, var(--text-text-secondary));
 }
 
-:host-context(.theme-dark) .stat-item strong {
-  color: var(--home-strong, var(--text-text-primary));
-}
-
 :host-context(.theme-dark) .health-pill {
   background: var(--home-success-soft, var(--bg-success-soft));
   color: var(--home-success, var(--text-success));
+}
+
+.month-picker-layer {
+  inset-inline: 0;
+  margin: 0 auto;
+  max-width: min(360px, calc(100% - 24px));
+  position: absolute;
+  top: 52px;
+  width: 100%;
+  z-index: 20;
+}
+
+.month-datetime {
+  --background: var(--home-card-bg, var(--bg-surface));
+  --background-rgb: var(--month-datetime-bg-rgb);
+  --border-color: var(--home-card-border, var(--border));
+  --border-radius: 18px;
+  --color: var(--home-strong, var(--text-text-primary));
+  --title-color: var(--home-strong, var(--text-text-primary));
+  --wheel-highlight-background: color-mix(in srgb, var(--home-accent, var(--text-accent)) 22%, transparent);
+  --wheel-highlight-border-radius: 12px;
+  --wheel-fade-background-rgb: var(--month-datetime-bg-rgb);
+  --ion-color-primary: var(--home-accent, var(--text-accent));
+  border: 1px solid var(--home-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--home-card-shadow, var(--shadow-sm));
+  color: var(--home-strong, var(--text-text-primary));
+  color-scheme: light;
+  overflow: hidden;
+}
+
+:host-context(.theme-dark) {
+  --month-datetime-bg-rgb: 19, 32, 51;
+}
+
+:host-context(.theme-dark) .month-datetime {
+  color-scheme: dark;
 }

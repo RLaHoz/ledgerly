@@ -20,7 +20,7 @@ ion-router-outlet {
 ion-toolbar {
   --background: rgba(247, 249, 252, 0.9);
   --border-color: transparent;
-  --min-height: calc(env(safe-area-inset-top, 0px) + 48px);
+  --min-height: 48px;
   backdrop-filter: blur(24px);
 }
 
@@ -35,23 +35,17 @@ ion-toolbar {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding:
-    calc(env(safe-area-inset-top, 0px) + 8px)
-    max(20px, env(safe-area-inset-right, 0px))
-    8px
-    max(20px, env(safe-area-inset-left, 0px));
+  min-height: 48px;
+  padding: 0 max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
 }
 
 .layout-toolbar.detail-toolbar {
-  --min-height: calc(env(safe-area-inset-top, 0px) + 44px);
+  --min-height: 44px;
 }
 
 .layout-toolbar.detail-toolbar .layout-header-container {
-  padding:
-    calc(env(safe-area-inset-top, 0px) + 8px)
-    max(20px, env(safe-area-inset-right, 0px))
-    8px
-    max(20px, env(safe-area-inset-left, 0px));
+  min-height: 44px;
+  padding: 0 max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
 }
 
 .layout-header-title {

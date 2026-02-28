@@ -23,6 +23,7 @@ interface BudgetDetailsHistoryVm {
   monthLabel: string;
   amountLabel: string;
   progressPercent: number;
+  tone: 'on-track' | 'watch' | 'over';
 }
 
 interface BudgetDetailsVm {
@@ -30,7 +31,7 @@ interface BudgetDetailsVm {
   title: string;
   iconName: string;
   iconTone: string;
-  status: BudgetItemStatus;
+  statusTone: 'on-track' | 'watch' | 'over';
   statusLabel: string;
   noteLabel: string;
   budgetLabel: string;
@@ -86,7 +87,7 @@ export class BudgetDetailsComponent {
       title: `${category.name} Budget`,
       iconName: category.iconName,
       iconTone: category.iconTone,
-      status: category.status,
+      statusTone: mapStatusTone(category.status),
       statusLabel: mapStatusLabel(category.status),
       noteLabel: category.noteLabel ?? 'Safe pace',
       budgetLabel: formatCurrency(budgetAmount),
@@ -100,6 +101,7 @@ export class BudgetDetailsComponent {
         monthLabel: entry.monthLabel,
         amountLabel: formatCurrency(entry.amount),
         progressPercent: budgetAmount > 0 ? clamp((entry.amount / budgetAmount) * 100, 0, 100) : 0,
+        tone: mapHistoryTone(budgetAmount > 0 ? (entry.amount / budgetAmount) * 100 : 0),
       })),
     };
   });
@@ -222,6 +224,30 @@ function mapStatusLabel(status: BudgetItemStatus): string {
   }
 
   return 'Moderate';
+}
+
+function mapStatusTone(status: BudgetItemStatus): 'on-track' | 'watch' | 'over' {
+  if (status === 'on-track') {
+    return 'on-track';
+  }
+
+  if (status === 'over' || status === 'exceeded') {
+    return 'over';
+  }
+
+  return 'watch';
+}
+
+function mapHistoryTone(percentage: number): 'on-track' | 'watch' | 'over' {
+  if (percentage >= 100) {
+    return 'over';
+  }
+
+  if (percentage >= 75) {
+    return 'watch';
+  }
+
+  return 'on-track';
 }
 
 function clamp(value: number, min: number, max: number): number {

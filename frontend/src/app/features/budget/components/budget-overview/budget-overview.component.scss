@@ -1,5 +1,6 @@
 :host {
   display: block;
+  padding-top: 15px;
 }
 
 .overview-card {
@@ -8,7 +9,7 @@
   border-radius: 18px;
   box-shadow: var(--budget-card-shadow, var(--shadow-sm));
   display: grid;
-  gap: 12px;
+  gap: 24px;
   padding: 20px;
 }
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
-import { IonIcon, IonToggle } from '@ionic/angular/standalone';
+import { IonIcon, IonItem, IonLabel, IonList, IonToggle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { checkmarkOutline, chevronDownOutline, chevronUpOutline, closeOutline } from 'ionicons/icons';
 
@@ -8,7 +8,7 @@ type DropdownKey = 'ruleType' | 'conditionField' | 'actionType' | 'actionValue';
 @Component({
   selector: 'app-rules-add-item',
   standalone: true,
-  imports: [IonIcon, IonToggle],
+  imports: [IonIcon, IonItem, IonLabel, IonList, IonToggle],
   templateUrl: './rules-add-item.component.html',
   styleUrl: './rules-add-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

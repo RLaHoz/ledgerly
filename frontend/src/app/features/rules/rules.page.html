@@ -33,28 +33,30 @@
     (didDismiss)="onCloseAddRule()"
   >
     <ng-template>
-      <app-rules-add-item
-        [ruleName]="store.addDraft().ruleName"
-        [ruleType]="store.addDraft().ruleType"
-        [conditionField]="store.addDraft().conditionField"
-        [conditionValue]="store.addDraft().conditionValue"
-        [actionType]="store.addDraft().actionType"
-        [actionValue]="store.addDraft().actionValue"
-        [ruleTypeOptions]="store.ruleTypeOptions()"
-        [conditionFieldOptions]="store.conditionFieldOptions()"
-        [actionTypeOptions]="store.actionTypeOptions()"
-        [actionValueOptions]="store.actionValueOptions()"
-        [canCreate]="store.canCreateRule()"
-        (closed)="onCloseAddRule()"
-        (canceled)="onCloseAddRule()"
-        (created)="onCreateRule()"
-        (ruleNameChanged)="onRuleNameChanged($event)"
-        (ruleTypeChanged)="onRuleTypeChanged($event)"
-        (conditionFieldChanged)="onConditionFieldChanged($event)"
-        (conditionValueChanged)="onConditionValueChanged($event)"
-        (actionTypeChanged)="onActionTypeChanged($event)"
-        (actionValueChanged)="onActionValueChanged($event)"
-      />
+      <div class="modal-center-layer">
+        <app-rules-add-item
+          [ruleName]="store.addDraft().ruleName"
+          [ruleType]="store.addDraft().ruleType"
+          [conditionField]="store.addDraft().conditionField"
+          [conditionValue]="store.addDraft().conditionValue"
+          [actionType]="store.addDraft().actionType"
+          [actionValue]="store.addDraft().actionValue"
+          [ruleTypeOptions]="store.ruleTypeOptions()"
+          [conditionFieldOptions]="store.conditionFieldOptions()"
+          [actionTypeOptions]="store.actionTypeOptions()"
+          [actionValueOptions]="store.actionValueOptions()"
+          [canCreate]="store.canCreateRule()"
+          (closed)="onCloseAddRule()"
+          (canceled)="onCloseAddRule()"
+          (created)="onCreateRule()"
+          (ruleNameChanged)="onRuleNameChanged($event)"
+          (ruleTypeChanged)="onRuleTypeChanged($event)"
+          (conditionFieldChanged)="onConditionFieldChanged($event)"
+          (conditionValueChanged)="onConditionValueChanged($event)"
+          (actionTypeChanged)="onActionTypeChanged($event)"
+          (actionValueChanged)="onActionValueChanged($event)"
+        />
+      </div>
     </ng-template>
   </ion-modal>
 </ion-content>

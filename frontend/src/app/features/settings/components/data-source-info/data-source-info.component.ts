@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { IonIcon, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { IonIcon, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   businessOutline,
   checkmarkOutline,
+  chevronDownOutline,
+  chevronUpOutline,
   documentTextOutline,
   refreshOutline,
 } from 'ionicons/icons';
@@ -29,7 +31,7 @@ export interface DataSourceInfoModel {
 @Component({
   selector: 'app-data-source-info',
   standalone: true,
-  imports: [IonIcon, IonSelect, IonSelectOption],
+  imports: [IonIcon, IonItem, IonLabel, IonList],
   templateUrl: './data-source-info.component.html',
   styleUrl: './data-source-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,24 +42,25 @@ export class DataSourceInfoComponent {
   readonly connectBankClicked = output<void>();
   readonly uploadClicked = output<void>();
   readonly frequencyChanged = output<string>();
+  readonly isFrequencyMenuOpen = signal(false);
 
   constructor() {
     addIcons({
       'business-outline': businessOutline,
       'document-text-outline': documentTextOutline,
       'checkmark-outline': checkmarkOutline,
+      'chevron-down-outline': chevronDownOutline,
+      'chevron-up-outline': chevronUpOutline,
       'refresh-outline': refreshOutline,
     });
   }
 
-  onFrequencyChange(event: Event): void {
-    const customEvent = event as CustomEvent<{ value?: string }>;
-    const value = customEvent.detail?.value;
+  toggleFrequencyMenu(): void {
+    this.isFrequencyMenuOpen.update((value) => !value);
+  }
 
-    if (typeof value !== 'string') {
-      return;
-    }
-
+  onFrequencyChange(value: string): void {
     this.frequencyChanged.emit(value);
+    this.isFrequencyMenuOpen.set(false);
   }
 }

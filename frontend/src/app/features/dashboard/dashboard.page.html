@@ -2,12 +2,16 @@
   <section class="home-layout-page">
     <app-budget-health
       [monthLabel]="monthLabel()"
+      [monthValue]="selectedMonthDate()"
+      [minMonthDate]="minMonthDate"
+      [maxMonthDate]="maxMonthDate"
       [healthLabel]="budgetHealthLabel"
       [updatedLabel]="updatedLabel"
       [trendLabel]="trendLabel"
       [stats]="budgetHealthStats"
       (previousRequested)="onPreviousMonth()"
       (nextRequested)="onNextMonth()"
+      (monthSelected)="onMonthSelected($event)"
     />
 
     <app-main-budget-info [model]="mainBudgetInfo()" />

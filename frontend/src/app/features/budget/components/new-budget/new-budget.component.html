@@ -9,6 +9,7 @@
   <label class="field">
     <span>Category Name</span>
     <input
+      class="text-input"
       type="text"
       [value]="categoryName()"
       placeholder="e.g., Dining Out"
@@ -20,10 +21,12 @@
   <label class="field">
     <span>Monthly Budget</span>
     <div class="amount-input">
-      <strong>$</strong>
+      <span class="prefix">$</span>
       <input
-        type="text"
+        class="text-input"
+        type="number"
         inputmode="decimal"
+        step="any"
         [value]="monthlyBudget()"
         placeholder="0"
         autocomplete="off"
