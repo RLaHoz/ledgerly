@@ -1,0 +1,519 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
+  runtime = "nodejs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+enum BudgetMonthStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+}
+
+enum TransactionSourceType {
+  CSV
+  MANUAL
+  BANK_API
+}
+
+enum RuleType {
+  AUTO_CLASSIFICATION
+  THRESHOLD_ALERT
+  ANOMALY_DETECTION
+}
+
+enum RuleOutcome {
+  APPLIED
+  SKIPPED
+  ERROR
+}
+
+enum RuleCreatedBy {
+  USER
+  SYSTEM
+}
+
+enum AlertSeverity {
+  WARNING
+  CRITICAL
+  INFO
+}
+
+enum AlertStatus {
+  OPEN
+  READ
+  DISMISSED
+}
+
+enum SyncSource {
+  CSV_UPLOAD
+  BANK_PULL
+  WEBHOOK_REPLAY
+}
+
+enum SyncStatus {
+  RUNNING
+  SUCCESS
+  PARTIAL
+  FAILED
+}
+
+enum BankProviderStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum BankConnectionStatus {
+  CONNECTED
+  REVOKED
+  ERROR
+  SYNCING
+}
+
+enum BankAccountType {
+  CHECKING
+  SAVINGS
+  CREDIT
+  LOAN
+  OTHER
+}
+
+enum WebhookEventStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
+}
+
+// Tracks status of classification per transaction.
+enum ClassificationStatus {
+  AUTO
+  MANUAL
+  UNCLASSIFIED
+}
+
+// Tracks import job lifecycle.
+enum ImportRunStatus {
+  RUNNING
+  SUCCESS
+  PARTIAL
+  FAILED
+}
+
+// Tracks category suggestion lifecycle.
+enum SuggestionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// Track import executions.
+model ImportRun {
+  id                String          @id @default(uuid()) @db.Uuid
+  userId            String          @map("user_id") @db.Uuid
+  source            String          @default("csv") @db.VarChar(20)
+  status            ImportRunStatus
+  receivedCount     Int             @default(0) @map("received_count")
+  insertedCount     Int             @default(0) @map("inserted_count")
+  duplicatedCount   Int             @default(0) @map("duplicated_count")
+  classifiedCount   Int             @default(0) @map("classified_count")
+  unclassifiedCount Int             @default(0) @map("unclassified_count")
+  startedAt         DateTime        @default(now()) @map("started_at") @db.Timestamptz(6)
+  finishedAt        DateTime?       @map("finished_at") @db.Timestamptz(6)
+  errorSummary      String?         @map("error_summary") @db.Text
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId, startedAt])
+  @@map("import_runs")
+}
+
+// Suggestions created when no confident category match exists.
+model CategorySuggestion {
+  id              String           @id @default(uuid()) @db.Uuid
+  userId          String           @map("user_id") @db.Uuid
+  transactionId   String           @map("transaction_id") @db.Uuid
+  suggestedName   String           @map("suggested_name") @db.VarChar(100)
+  suggestedSlug   String           @map("suggested_slug") @db.VarChar(120)
+  ionIcon         String           @map("ion_icon") @db.VarChar(64)
+  colorHex        String           @map("color_hex") @db.VarChar(7)
+  reason          String           @db.Text
+  confidenceScore Decimal          @map("confidence_score") @db.Decimal(5, 4)
+  status          SuggestionStatus @default(PENDING)
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, createdAt])
+  @@index([transactionId])
+  @@map("category_suggestions")
+}
+
+model User {
+  id                    String               @id @default(uuid()) @db.Uuid
+  email                 String               @unique @db.VarChar(254)
+  fullName              String               @map("full_name") @db.VarChar(120)
+  baseCurrency          String               @default("USD") @map("base_currency") @db.Char(3)
+  timeZone              String               @default("UTC") @map("time_zone") @db.VarChar(64)
+  createdAt             DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  onboardingCompletedAt DateTime?            @map("onboarding_completed_at") @db.Timestamptz(6)
+  updatedAt             DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  preferences           UserPreferences?
+  importRuns            ImportRun[]
+  categorySuggestions   CategorySuggestion[]
+
+  budgetMonths     BudgetMonth[]
+  budgetCategories BudgetCategory[]
+  transactions     Transaction[]
+  rules            Rule[]
+  alerts           RuleAlert[]
+  syncRuns         SyncRun[]
+  bankConnections  BankConnection[]
+
+  @@map("users")
+}
+
+model AppCategoryList {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique @db.VarChar(120)
+  name      String   @db.VarChar(100)
+  ionIcon   String   @map("ion_icon") @db.VarChar(64)
+  colorHex  String   @map("color_hex") @db.VarChar(7)
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  userCategories BudgetCategory[]
+
+  @@index([isActive, sortOrder])
+  @@map("app_category_list")
+}
+
+model UserPreferences {
+  userId                String   @id @map("user_id") @db.Uuid
+  theme                 Theme    @default(SYSTEM)
+  monthStartDay         Int      @default(1) @map("month_start_day")
+  syncFrequencyMinutes  Int      @default(15) @map("sync_frequency_minutes")
+  notifyBudgetWarnings  Boolean  @default(true) @map("notify_budget_warnings")
+  notifyCriticalOnly    Boolean  @default(false) @map("notify_critical_only")
+  notifyWeeklyReport    Boolean  @default(true) @map("notify_weekly_report")
+  notifyUnusualSpending Boolean  @default(false) @map("notify_unusual_spending")
+  updatedAt             DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model BudgetMonth {
+  id             String            @id @default(uuid()) @db.Uuid
+  userId         String            @map("user_id") @db.Uuid
+  monthYm        String            @map("month_ym") @db.Char(7)
+  plannedTotal   Decimal           @map("planned_total") @db.Decimal(14, 2)
+  expectedIncome Decimal?          @map("expected_income") @db.Decimal(14, 2)
+  currency       String            @db.Char(3)
+  status         BudgetMonthStatus @default(ACTIVE)
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryBudgets CategoryBudget[]
+  alerts          RuleAlert[]
+
+  @@unique([userId, monthYm])
+  @@index([userId, monthYm])
+  @@map("budget_months")
+}
+
+model BudgetCategory {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  appCategoryId String?  @map("app_category_id") @db.Uuid
+  name          String   @db.VarChar(100)
+  slug          String   @db.VarChar(120)
+  ionIcon       String   @map("ion_icon") @db.VarChar(64)
+  colorHex      String   @map("color_hex") @db.VarChar(7)
+  sortOrder     Int      @default(0) @map("sort_order")
+  isArchived    Boolean  @default(false) @map("is_archived")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appCategory     AppCategoryList? @relation(fields: [appCategoryId], references: [id], onDelete: SetNull)
+  categoryBudgets CategoryBudget[]
+  transactions    Transaction[]
+  alerts          RuleAlert[]
+
+  @@unique([userId, slug])
+  @@index([userId, sortOrder])
+  @@index([appCategoryId])
+  @@map("budget_categories")
+}
+
+model CategoryBudget {
+  id            String   @id @default(uuid()) @db.Uuid
+  budgetMonthId String   @map("budget_month_id") @db.Uuid
+  categoryId    String   @map("category_id") @db.Uuid
+  plannedAmount Decimal  @map("planned_amount") @db.Decimal(14, 2)
+  alert75       Int      @default(75) @map("alert_75")
+  alert90       Int      @default(90) @map("alert_90")
+  alert100      Int      @default(100) @map("alert_100")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  budgetMonth BudgetMonth    @relation(fields: [budgetMonthId], references: [id], onDelete: Cascade)
+  category    BudgetCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@unique([budgetMonthId, categoryId])
+  @@index([categoryId])
+  @@map("category_budgets")
+}
+
+model Transaction {
+  id                   String                @id @default(uuid()) @db.Uuid
+  userId               String                @map("user_id") @db.Uuid
+  bankAccountId        String?               @map("bank_account_id") @db.Uuid
+  sourceType           TransactionSourceType @map("source_type")
+  classificationStatus ClassificationStatus  @default(UNCLASSIFIED) @map("classification_status")
+  confidenceScore      Decimal?              @map("confidence_score") @db.Decimal(5, 4)
+  suggestions          CategorySuggestion[]
+  importRun            ImportRun?            @relation(fields: [importRunId], references: [id], onDelete: SetNull)
+  importRunId          String?               @map("import_run_id") @db.Uuid
+  externalTxId         String?               @map("external_tx_id") @db.VarChar(255)
+  occurredAt           DateTime              @map("occurred_at") @db.Timestamptz(6)
+  bookingDate          DateTime?             @map("booking_date") @db.Date
+  amountSigned         Decimal               @map("amount_signed") @db.Decimal(14, 2)
+  currency             String                @db.Char(3)
+  merchant             String?               @db.VarChar(255)
+  description          String                @db.Text
+  categoryId           String?               @map("category_id") @db.Uuid
+  isTransfer           Boolean               @default(false) @map("is_transfer")
+  isPending            Boolean               @default(false) @map("is_pending")
+  dedupeHash           String                @map("dedupe_hash") @db.VarChar(255)
+  rawRefId             String?               @map("raw_ref_id") @db.Uuid
+  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankAccount    BankAccount?        @relation(fields: [bankAccountId], references: [id], onDelete: SetNull)
+  category       BudgetCategory?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  rawRef         BankTransactionRaw? @relation(fields: [rawRefId], references: [id], onDelete: SetNull)
+  ruleExecutions RuleExecution[]
+
+  @@unique([userId, dedupeHash])
+  @@index([userId, occurredAt])
+  @@index([userId, categoryId, occurredAt])
+  @@index([bankAccountId, occurredAt])
+  @@map("transactions")
+}
+
+model Rule {
+  id            String        @id @default(uuid()) @db.Uuid
+  userId        String        @map("user_id") @db.Uuid
+  name          String        @db.VarChar(120)
+  type          RuleType
+  enabled       Boolean       @default(true)
+  priority      Int           @default(100)
+  conditionJson Json          @map("condition_json")
+  actionJson    Json          @map("action_json")
+  createdBy     RuleCreatedBy @default(USER) @map("created_by")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  executions RuleExecution[]
+  alerts     RuleAlert[]
+
+  @@index([userId, enabled, priority])
+  @@map("rules")
+}
+
+model RuleExecution {
+  id            String      @id @default(uuid()) @db.Uuid
+  ruleId        String      @map("rule_id") @db.Uuid
+  transactionId String      @map("transaction_id") @db.Uuid
+  outcome       RuleOutcome
+  message       String?     @db.VarChar(255)
+  triggeredAt   DateTime    @default(now()) @map("triggered_at") @db.Timestamptz(6)
+
+  rule        Rule        @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@unique([ruleId, transactionId])
+  @@index([transactionId])
+  @@map("rule_executions")
+}
+
+model RuleAlert {
+  id            String        @id @default(uuid()) @db.Uuid
+  userId        String        @map("user_id") @db.Uuid
+  ruleId        String?       @map("rule_id") @db.Uuid
+  budgetMonthId String?       @map("budget_month_id") @db.Uuid
+  categoryId    String?       @map("category_id") @db.Uuid
+  severity      AlertSeverity
+  title         String        @db.VarChar(140)
+  message       String        @db.Text
+  status        AlertStatus   @default(OPEN)
+  triggeredAt   DateTime      @default(now()) @map("triggered_at") @db.Timestamptz(6)
+  readAt        DateTime?     @map("read_at") @db.Timestamptz(6)
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rule        Rule?           @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+  budgetMonth BudgetMonth?    @relation(fields: [budgetMonthId], references: [id], onDelete: SetNull)
+  category    BudgetCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status, triggeredAt])
+  @@index([budgetMonthId, categoryId])
+  @@map("rule_alerts")
+}
+
+model SyncRun {
+  id               String     @id @default(uuid()) @db.Uuid
+  userId           String     @map("user_id") @db.Uuid
+  source           SyncSource
+  bankConnectionId String?    @map("bank_connection_id") @db.Uuid
+  status           SyncStatus
+  startedAt        DateTime   @default(now()) @map("started_at") @db.Timestamptz(6)
+  finishedAt       DateTime?  @map("finished_at") @db.Timestamptz(6)
+  fetchedCount     Int        @default(0) @map("fetched_count")
+  insertedCount    Int        @default(0) @map("inserted_count")
+  updatedCount     Int        @default(0) @map("updated_count")
+  duplicateCount   Int        @default(0) @map("duplicate_count")
+  skippedCount     Int        @default(0) @map("skipped_count")
+  errorSummary     String?    @map("error_summary") @db.Text
+  metadataJson     Json?      @map("metadata_json")
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankConnection BankConnection? @relation(fields: [bankConnectionId], references: [id], onDelete: SetNull)
+
+  @@index([userId, startedAt])
+  @@index([bankConnectionId, startedAt])
+  @@map("sync_runs")
+}
+
+model BankProvider {
+  id        String             @id @default(uuid()) @db.Uuid
+  code      String             @unique @db.VarChar(50)
+  name      String             @db.VarChar(100)
+  status    BankProviderStatus @default(ACTIVE)
+  createdAt DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  connections   BankConnection[]
+  webhookEvents WebhookEvent[]
+
+  @@map("bank_providers")
+}
+
+model BankConnection {
+  id                    String               @id @default(uuid()) @db.Uuid
+  userId                String               @map("user_id") @db.Uuid
+  providerId            String               @map("provider_id") @db.Uuid
+  providerConnectionId  String               @map("provider_connection_id") @db.VarChar(255)
+  encryptedAccessToken  String               @map("encrypted_access_token") @db.Text
+  encryptedRefreshToken String?              @map("encrypted_refresh_token") @db.Text
+  tokenExpiresAt        DateTime?            @map("token_expires_at") @db.Timestamptz(6)
+  consentScopesJson     Json                 @map("consent_scopes_json")
+  status                BankConnectionStatus @default(CONNECTED)
+  lastSyncedAt          DateTime?            @map("last_synced_at") @db.Timestamptz(6)
+  createdAt             DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider        BankProvider         @relation(fields: [providerId], references: [id], onDelete: Restrict)
+  accounts        BankAccount[]
+  rawTransactions BankTransactionRaw[]
+  syncRuns        SyncRun[]
+  syncCursor      BankSyncCursor?
+
+  @@unique([providerId, providerConnectionId])
+  @@index([userId, status])
+  @@map("bank_connections")
+}
+
+model BankAccount {
+  id                String          @id @default(uuid()) @db.Uuid
+  bankConnectionId  String          @map("bank_connection_id") @db.Uuid
+  providerAccountId String          @map("provider_account_id") @db.VarChar(255)
+  name              String          @db.VarChar(120)
+  mask              String?         @db.VarChar(16)
+  type              BankAccountType
+  currency          String          @db.Char(3)
+  isActive          Boolean         @default(true) @map("is_active")
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  bankConnection  BankConnection       @relation(fields: [bankConnectionId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+  rawTransactions BankTransactionRaw[]
+
+  @@unique([bankConnectionId, providerAccountId])
+  @@index([bankConnectionId, isActive])
+  @@map("bank_accounts")
+}
+
+model BankTransactionRaw {
+  id               String    @id @default(uuid()) @db.Uuid
+  bankConnectionId String    @map("bank_connection_id") @db.Uuid
+  bankAccountId    String    @map("bank_account_id") @db.Uuid
+  providerTxId     String    @map("provider_tx_id") @db.VarChar(255)
+  payloadJson      Json      @map("payload_json")
+  bookedAt         DateTime? @map("booked_at") @db.Timestamptz(6)
+  amountSigned     Decimal   @map("amount_signed") @db.Decimal(14, 2)
+  currency         String    @db.Char(3)
+  merchantName     String?   @map("merchant_name") @db.VarChar(255)
+  description      String?   @db.Text
+  isPending        Boolean   @default(false) @map("is_pending")
+  ingestedAt       DateTime  @default(now()) @map("ingested_at") @db.Timestamptz(6)
+
+  bankConnection BankConnection @relation(fields: [bankConnectionId], references: [id], onDelete: Cascade)
+  bankAccount    BankAccount    @relation(fields: [bankAccountId], references: [id], onDelete: Cascade)
+  normalizedTxs  Transaction[]
+
+  @@unique([bankConnectionId, providerTxId])
+  @@index([bankAccountId, bookedAt])
+  @@map("bank_transactions_raw")
+}
+
+model BankSyncCursor {
+  id               String   @id @default(uuid()) @db.Uuid
+  bankConnectionId String   @unique @map("bank_connection_id") @db.Uuid
+  cursorValue      String   @map("cursor_value") @db.Text
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  bankConnection BankConnection @relation(fields: [bankConnectionId], references: [id], onDelete: Cascade)
+
+  @@map("bank_sync_cursors")
+}
+
+model WebhookEvent {
+  id              String             @id @default(uuid()) @db.Uuid
+  providerId      String             @map("provider_id") @db.Uuid
+  externalEventId String             @map("external_event_id") @db.VarChar(255)
+  signatureValid  Boolean            @default(false) @map("signature_valid")
+  payloadJson     Json               @map("payload_json")
+  receivedAt      DateTime           @default(now()) @map("received_at") @db.Timestamptz(6)
+  processedAt     DateTime?          @map("processed_at") @db.Timestamptz(6)
+  status          WebhookEventStatus @default(RECEIVED)
+  errorText       String?            @map("error_text") @db.Text
+
+  provider BankProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, externalEventId])
+  @@index([status, receivedAt])
+  @@map("webhook_events")
+}

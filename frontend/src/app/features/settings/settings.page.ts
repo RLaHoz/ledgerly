@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 import { ThemeService } from '../../core/services/theme/theme.service';
 import { ThemeStore } from '../../core/store/theme/theme.store';
@@ -19,6 +20,7 @@ import { SettingsStore } from './store/settings.store';
 })
 export class SettingsPage {
   readonly store = inject(SettingsStore);
+  private readonly router = inject(Router);
   private readonly themeStore = inject(ThemeStore);
   private readonly themeService = inject(ThemeService);
 
@@ -106,7 +108,7 @@ export class SettingsPage {
   }
 
   onUploadExcel(): void {
-    // Placeholder until file picker flow is connected.
+    void this.router.navigate(['/onboarding/import']);
   }
 
   onSyncFrequencyChange(value: string): void {

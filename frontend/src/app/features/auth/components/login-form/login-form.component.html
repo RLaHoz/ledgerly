@@ -1,0 +1,185 @@
+<ion-content [fullscreen]="true" class="auth-content">
+  <div class="auth-shell">
+    <div class="auth-phone-frame" [class.success-state]="status() === 'success'">
+      <header class="auth-topbar">
+        <ion-button fill="clear" class="topbar-button back-button" (click)="onBackClick()">
+          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+          <span>Back</span>
+        </ion-button>
+
+        <ion-button
+          fill="clear"
+          class="topbar-button theme-toggle-button"
+          aria-label="Toggle theme"
+          (click)="onThemeToggle()"
+        >
+          <ion-icon [name]="themeStore.themeIcon()"></ion-icon>
+        </ion-button>
+      </header>
+
+      <div class="auth-scroll-content">
+        <section class="brand-header">
+          <svg class="ledgerly-logo" viewBox="0 0 52 52" aria-hidden="true">
+            <rect x="0" y="0" width="52" height="52" rx="12" class="logo-bg"></rect>
+            <path d="M18 14h6v18h10v6H18V14Z" class="logo-main"></path>
+            <rect x="34" y="14" width="8" height="6" rx="2" class="logo-accent"></rect>
+          </svg>
+
+          <h1>{{ title() }}</h1>
+          <p>{{ subtitle() }}</p>
+        </section>
+
+        @if (isSignInMode()) {
+          <section class="biometric-section">
+            <ion-button
+              type="button"
+              class="biometric-button"
+              fill="clear"
+              expand="block"
+              (click)="onBiometricClick()"
+            >
+              <ion-icon name="finger-print-outline"></ion-icon>
+              <span>Sign in with Face ID</span>
+            </ion-button>
+
+            <div class="section-divider with-text">
+              <span></span>
+              <small>or continue with email</small>
+              <span></span>
+            </div>
+          </section>
+        }
+
+        @if (statusBanner(); as banner) {
+          <div class="status-banner" [class]="'status-' + banner.type" role="alert">
+            <ion-icon [name]="banner.icon"></ion-icon>
+            <p>{{ banner.message }}</p>
+          </div>
+        }
+
+        <form class="auth-form" [class.shake]="isShaking()" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="field-group">
+            <label for="auth-email">Email</label>
+            <div class="input-shell" [class.is-error]="hasControlError('email')">
+              <ion-input
+                id="auth-email"
+                formControlName="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="jordan@example.com"
+              ></ion-input>
+            </div>
+            @if (hasControlError('email')) {
+              <p class="inline-error" role="alert">{{ errorMessage('email') }}</p>
+            }
+          </div>
+
+          <div class="field-group">
+            <div class="field-label-row">
+              <label for="auth-password">Password</label>
+              <ion-button type="button" fill="clear" class="forgot-button" (click)="onForgotPasswordClick()">
+                Forgot password?
+              </ion-button>
+            </div>
+
+            <div class="input-shell password-shell" [class.is-error]="hasControlError('password')">
+              <ion-input
+                id="auth-password"
+                formControlName="password"
+                [type]="isPasswordVisible() ? 'text' : 'password'"
+                autocomplete="current-password"
+                placeholder="Enter password"
+              ></ion-input>
+
+              <ion-button
+                type="button"
+                fill="clear"
+                class="password-toggle"
+                [attr.aria-label]="isPasswordVisible() ? 'Hide password' : 'Show password'"
+                (click)="togglePasswordVisibility()"
+              >
+                <ion-icon [name]="isPasswordVisible() ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+              </ion-button>
+            </div>
+
+            @if (hasControlError('password')) {
+              <p class="inline-error" role="alert">{{ errorMessage('password') }}</p>
+            }
+          </div>
+
+          @if (isSignInMode()) {
+            <label class="remember-row">
+              <ion-checkbox
+                [checked]="rememberDevice()"
+                labelPlacement="end"
+                (ionChange)="onRememberChanged($any($event).detail?.checked === true)"
+              >
+                <ion-label>Remember this device</ion-label>
+              </ion-checkbox>
+            </label>
+          }
+
+          <div class="cta-row">
+            <ion-button type="submit" class="cta-button cta-button-primary" [disabled]="isSubmitting()">
+              @if (isSubmitting()) {
+                <ion-icon class="spinning" name="refresh-outline"></ion-icon>
+                <span>{{ loadingLabel() }}</span>
+              } @else {
+                <span>{{ primaryCta() }}</span>
+              }
+            </ion-button>
+
+            <ion-button
+              type="button"
+              fill="clear"
+              class="cta-button cta-button-secondary"
+              (click)="setMode(isSignInMode() ? 'signup' : 'signin')"
+            >
+              {{ secondaryCta() }}
+            </ion-button>
+          </div>
+        </form>
+
+        <div class="section-divider social-divider">
+          <span></span>
+          <small>or</small>
+          <span></span>
+        </div>
+
+        <div class="social-buttons">
+          <ion-button type="button" fill="clear" class="social-button" (click)="onSocialClick('google')">
+            <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M21.805 10.023h-9.776v4.083h5.608c-.242 1.311-1.635 3.845-5.608 3.845-3.375 0-6.121-2.792-6.121-6.236s2.746-6.236 6.121-6.236c1.922 0 3.207.818 3.944 1.524l2.688-2.588C16.94 2.8 14.716 1.8 12.029 1.8 6.813 1.8 2.584 6.095 2.584 11.715s4.229 9.915 9.445 9.915c5.449 0 9.057-3.828 9.057-9.216 0-.619-.068-1.09-.281-2.391Z"
+                fill="#4285F4"
+              ></path>
+              <path d="M5.93 14.737 4.94 15.493 1.44 12.789l-.12-.396a9.921 9.921 0 0 1 0-1.356l4.61 3.7Z" fill="#34A853"></path>
+              <path d="M12.03 21.63c2.686 0 4.91-.882 6.546-2.403l-3.11-2.456c-.833.584-1.95.993-3.436.993-2.958 0-5.468-1.95-6.364-4.642l-3.61 2.784c1.623 3.206 4.92 5.724 9.974 5.724Z" fill="#FBBC05"></path>
+              <path d="M12.03 5.667c1.758 0 2.97.758 3.652 1.393l2.665-2.6C16.925 3.13 14.715 1.8 12.03 1.8 6.976 1.8 3.679 4.317 2.056 7.523l3.73 2.786c.896-2.694 3.406-4.642 6.244-4.642Z" fill="#EA4335"></path>
+            </svg>
+            <span>Google</span>
+          </ion-button>
+
+          <ion-button type="button" fill="clear" class="social-button" (click)="onSocialClick('facebook')">
+            <ion-icon class="facebook-icon" name="logo-facebook"></ion-icon>
+            <span>Facebook</span>
+          </ion-button>
+        </div>
+
+        <footer class="legal-footer">
+          <p>
+            By continuing, you agree to our
+            <button type="button">Terms</button>
+            and
+            <button type="button">Privacy Policy</button>.
+          </p>
+          <span class="security-badge">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            256-bit encrypted connection
+          </span>
+        </footer>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -3,6 +3,9 @@
 @use './app/shared/styles/budget-item' as budgetItemStyles;
 @use './app/shared/styles/data-source-info' as dataSourceInfoStyles;
 @use './app/shared/styles/preferences' as preferencesStyles;
+@use './app/shared/styles/login-form' as loginFormStyles;
+@use './app/shared/styles/backing-authentication' as backingAuthenticationStyles;
+@use './app/shared/styles/onboarding-wizard' as onboardingWizardStyles;
 
 /*
  * App Global CSS
@@ -169,3 +172,7 @@ app-data-source-info {
 app-preferences {
   @include preferencesStyles.styles();
 }
+
+@include loginFormStyles.styles();
+@include backingAuthenticationStyles.styles();
+@include onboardingWizardStyles.styles();

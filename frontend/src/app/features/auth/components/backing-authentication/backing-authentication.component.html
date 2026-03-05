@@ -1,0 +1,97 @@
+<ion-content [fullscreen]="true" class="backing-auth-content">
+  <div class="backing-auth-shell">
+    <div class="backing-auth-phone-frame" [class.success-state]="isSuccess()">
+      <header class="backing-auth-top-bar">
+        <ion-button fill="clear" class="back-btn" (click)="onBack()">
+          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+          <span>Back</span>
+        </ion-button>
+
+        <ion-button
+          fill="clear"
+          class="theme-btn"
+          aria-label="Toggle theme"
+          (click)="onToggleTheme()"
+        >
+          <ion-icon [name]="themeIcon()"></ion-icon>
+        </ion-button>
+      </header>
+
+      <main class="backing-auth-main">
+        <section class="brand-center">
+          <div class="logo-wrap">
+            <span class="logo-halo"></span>
+            <svg class="logo-svg" viewBox="0 0 60 60" aria-hidden="true">
+              <rect x="0" y="0" width="60" height="60" rx="12" class="logo-bg"></rect>
+              <path d="M20 16h7v20h12v7H20V16Z" class="logo-main"></path>
+              <rect x="39" y="16" width="9" height="7" rx="2" class="logo-accent"></rect>
+            </svg>
+          </div>
+
+          <h1>Ledgerly</h1>
+          <p>Your spending intelligence, secured.</p>
+        </section>
+
+        <section class="cta-area">
+          <ion-button
+            fill="clear"
+            expand="block"
+            class="connect-btn"
+            [class.is-success]="isSuccess()"
+            [class.is-error]="isError()"
+            [disabled]="isLoading() || isSuccess()"
+            (click)="onConnectWithBank()"
+          >
+            @if (isIdle()) {
+              <span class="cta-hover-overlay"></span>
+              <ion-icon name="business-outline"></ion-icon>
+              <span class="cta-label">Sign in with Bank</span>
+              <span class="cta-sandbox">(Sandbox)</span>
+            }
+
+            @if (isLoading()) {
+              <ion-icon class="spinning" name="refresh-outline"></ion-icon>
+              <span class="cta-label">Connecting</span>
+              <span class="dots" aria-hidden="true">
+                <i></i><i></i><i></i>
+              </span>
+            }
+
+            @if (isSuccess()) {
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span class="cta-label">Connected</span>
+            }
+
+            @if (isError()) {
+              <ion-icon name="refresh-outline"></ion-icon>
+              <span class="cta-label">Try again</span>
+            }
+          </ion-button>
+
+          <p class="hint-text">
+            Securely connect via Open Banking protocol.<br />
+            No credentials are stored.
+          </p>
+
+          @if (isError() && errorMessage()) {
+            <p class="error-text">{{ errorMessage() }}</p>
+          }
+        </section>
+      </main>
+
+      <footer class="backing-auth-footer">
+        <p class="legal-text">
+          By continuing, you agree to our
+          <button type="button">Terms</button>
+          and
+          <button type="button">Privacy Policy</button>.
+        </p>
+
+        <span class="security-badge">
+          <ion-icon name="shield-outline"></ion-icon>
+          256-BIT ENCRYPTED
+        </span>
+      </footer>
+    </div>
+  </div>
+</ion-content>

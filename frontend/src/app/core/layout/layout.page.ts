@@ -46,12 +46,13 @@ export class LayoutPage {
   }
 
   onSyncClick(): void {
-    // Placeholder for sync workflow.
+    void this.router.navigateByUrl('/auth');
   }
 
   onBackClick(): void {
     this.location.back();
   }
+
 }
 
 function resolvePageTitle(url: string): string {
