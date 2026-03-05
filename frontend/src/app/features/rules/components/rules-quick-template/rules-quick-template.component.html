@@ -1,0 +1,16 @@
+<section class="quick-section">
+  <h2>{{ title() }}</h2>
+
+  <article class="quick-card">
+    @for (item of items(); track item.id) {
+      <button type="button" class="quick-row" (click)="onSelect(item.id)">
+        <div class="copy">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.subtitle }}</p>
+        </div>
+
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    }
+  </article>
+</section>

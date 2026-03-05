@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.settings-tab-switcher {
+  --background: transparent;
+  --border-radius: 5px;
+  --indicator-box-shadow: none;
+  --indicator-height: 100%;
+  background: transparent;
+  gap: 12px;
+}
+
+ion-segment-button {
+  --background: var(--settings-tab-inactive-bg, #e6eaee);
+  --background-checked: var(--settings-tab-active-bg, #213f66);
+  --border-radius: 999px;
+  --color: var(--settings-tab-inactive-text, #606876);
+  --color-checked: var(--settings-tab-active-text, #f3f7ff);
+  --indicator-color: transparent;
+  border: 0;
+  box-shadow: none;
+  min-height: 40px;
+}
+
+ion-segment-button::part(native) {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: center;
+  padding-inline: 12px;
+}
+
+ion-segment-button ion-icon {
+  font-size: 13px;
+  padding-right: 5px;
+}
+
+ion-segment-button ion-label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}

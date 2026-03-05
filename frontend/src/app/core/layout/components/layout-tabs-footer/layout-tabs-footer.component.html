@@ -1,0 +1,41 @@
+<ion-tab-bar>
+  <ion-tab-button
+    [routerLink]="['/dashboard']"
+    routerLinkActive="tab-selected"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="navigateTo('/dashboard', $event)"
+  >
+    <ion-icon name="grid-outline"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button
+    [routerLink]="['/budgets']"
+    routerLinkActive="tab-selected"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="navigateTo('/budgets', $event)"
+  >
+    <ion-icon name="wallet-outline"></ion-icon>
+    <ion-label>Budgets</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button
+    [routerLink]="['/rules']"
+    routerLinkActive="tab-selected"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="navigateTo('/rules', $event)"
+  >
+    <ion-icon name="flash-outline"></ion-icon>
+    <ion-label>Rules</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button
+    [routerLink]="['/settings']"
+    routerLinkActive="tab-selected"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="navigateTo('/settings', $event)"
+  >
+    <ion-icon name="settings-outline"></ion-icon>
+    <ion-label>Settings</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

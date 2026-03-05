@@ -1,0 +1,25 @@
+<section class="triggered-section">
+  <header class="section-header">
+    <h2>{{ title() }}</h2>
+    <span class="count-pill">{{ count() }}</span>
+  </header>
+
+  <p class="summary">{{ summary() }}</p>
+
+  <article class="alerts-card">
+    @for (item of items(); track item.id) {
+      <button type="button" class="alert-row" [class.warning]="item.severity === 'warning'" [class.critical]="item.severity === 'critical'" (click)="onSelect(item.id)">
+        <div class="copy">
+          <h3>{{ item.title }}</h3>
+
+          <p class="meta-row">
+            <span class="severity-pill" [class.warning]="item.severity === 'warning'" [class.critical]="item.severity === 'critical'">{{ item.severityLabel }}</span>
+            <span class="age">{{ item.ageLabel }}</span>
+          </p>
+        </div>
+
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    }
+  </article>
+</section>

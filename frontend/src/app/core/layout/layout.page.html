@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar class="layout-toolbar" [class.detail-toolbar]="isDetailRoute()">
+    <div class="layout-header-container">
+      @if (isDetailRoute()) {
+        <button class="back-button" type="button" (click)="onBackClick()" aria-label="Go back">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          <span>Back</span>
+        </button>
+      } @else {
+
+          <h1 class="layout-header-title">{{ pageTitle() }}</h1>
+
+      }
+
+      @if (!isDetailRoute()) {
+        <button class="sync-pill" type="button" aria-label="Sync status" (click)="onSyncClick()">
+          <ion-icon name="refresh-outline"></ion-icon>
+          <span>{{ syncLabel() }}</span>
+        </button>
+      }
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-router-outlet></ion-router-outlet>
+
+<app-layout-tabs-footer />

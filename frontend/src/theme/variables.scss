@@ -1,0 +1,40 @@
+@use './light';
+@use './dark';
+
+// For information on how to create your own theme, please refer to:
+// https://ionicframework.com/docs/theming/
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ion-font-family: var(--font-sans);
+
+  --radius-card: 18px;
+  --radius-input: 12px;
+  --radius-control: 8px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 6px 18px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 14px 28px rgba(15, 23, 42, 0.16);
+
+  /* Aliases to keep existing feature styles compatible while migrating to design tokens. */
+  --app-bg: var(--bg-background);
+  --app-surface: var(--bg-surface);
+  --app-surface-1: var(--bg-background);
+  --app-surface-2: var(--bg-surface-secondary);
+  --app-card: var(--bg-surface);
+  --app-text-1: var(--text-text-primary);
+  --app-text-2: var(--text-text-tertiary);
+  --app-text-primary: var(--text-text-primary);
+  --app-text-secondary: var(--text-text-secondary);
+  --app-border: var(--border);
+  --app-border-1: var(--border);
+  --app-tab-inactive: var(--text-text-tertiary);
+  --app-tab-active: var(--primary);
+  --app-success: var(--text-success);
+  --app-accent: var(--text-accent);
+  --app-avatar-bg: var(--primary);
+  --app-link: var(--text-accent);
+  --app-radius-xs: var(--radius-input);
+  --app-radius-md: 14px;
+  --app-radius-lg: var(--radius-card);
+}

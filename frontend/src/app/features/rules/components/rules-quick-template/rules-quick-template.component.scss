@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.quick-section {
+  display: grid;
+  gap: 10px;
+}
+
+.quick-section h2 {
+  color: var(--rules-section-title, #4b576a);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.quick-card {
+  background: var(--rules-card-bg, #eff3f8);
+  border: 1px solid var(--rules-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--rules-card-shadow, var(--shadow-sm));
+  overflow: hidden;
+}
+
+.quick-row {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--rules-divider, rgba(201, 210, 223, 0.84));
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin: 0;
+  padding: 14px 20px;
+  text-align: left;
+  width: 100%;
+}
+
+.quick-row:first-child {
+  border-top: 0;
+}
+
+.copy h3 {
+  color: var(--rules-title, #121b30);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.copy p {
+  color: var(--rules-muted, #7f8ca1);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 2px 0 0;
+}
+
+.quick-row ion-icon {
+  color: var(--rules-row-chevron, #a2afc1);
+  font-size: 16px;
+}

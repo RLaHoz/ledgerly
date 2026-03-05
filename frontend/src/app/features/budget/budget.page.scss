@@ -1,0 +1,91 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--budget-page-bg, var(--bg-background));
+  color: var(--budget-strong, var(--text-text-primary));
+}
+
+.budget-page {
+  --budget-page-bg: var(--bg-background);
+  --budget-card-bg: var(--bg-surface);
+  --budget-card-border: var(--border);
+  --budget-card-shadow: var(--shadow-sm);
+  --budget-section-title: var(--text-text-secondary);
+  --budget-strong: var(--text-text-primary);
+  --budget-muted: var(--text-text-tertiary);
+  --budget-divider: var(--border);
+  --budget-edit-btn-bg: var(--bg-surface-secondary);
+  --budget-edit-btn-border: var(--border);
+  --budget-edit-btn-text: var(--text-text-primary);
+  --budget-signal-track-bg: var(--bg-success-soft);
+  --budget-signal-track-text: var(--text-success);
+  --budget-signal-watch-bg: var(--bg-warning-soft);
+  --budget-signal-watch-text: var(--text-warning);
+  --budget-signal-over-bg: var(--bg-critical-soft);
+  --budget-signal-over-text: var(--text-critical);
+
+  /* Shared budget-item tokens for this feature */
+  --home-item-title: var(--text-text-primary);
+  --home-item-value: var(--text-text-secondary);
+  --home-item-mute: var(--text-text-tertiary);
+  --home-progress-track: var(--border);
+  --home-success: var(--text-success);
+  --home-success-soft: var(--bg-success-soft);
+  --home-warning: var(--text-warning);
+  --home-warning-soft: var(--bg-warning-soft);
+  --home-danger: var(--text-critical);
+  --home-danger-soft: var(--bg-critical-soft);
+  --home-moderate: var(--text-neutral-semantic);
+  --home-moderate-soft: var(--bg-muted);
+  --home-moderate-bar: #2e3a4d;
+  --home-icon-home-bg: #dde7f8;
+  --home-icon-home: #3f83ef;
+  --home-icon-gym-bg: #dfdef1;
+  --home-icon-gym: #6060ff;
+  --home-icon-shopping-bg: #efe0eb;
+  --home-icon-shopping: #ef4aa8;
+  --home-icon-transport-bg: #f0e9e0;
+  --home-icon-transport: #eb9d12;
+  --home-icon-baby-bg: #ece1ea;
+  --home-icon-baby: #e57ab1;
+  --home-icon-groceries-bg: #dbe9e2;
+  --home-icon-groceries: #29bf68;
+  --home-icon-entertainment-bg: #eee6df;
+  --home-icon-entertainment: #ff810f;
+  --home-icon-health-bg: #efe3e7;
+  --home-icon-health: #f45f66;
+
+  display: grid;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 430px;
+  padding:
+    var(--app-shell-header-offset, 112px)
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 52px) + 44px)
+    max(20px, env(safe-area-inset-left, 0px));
+}
+
+:host-context(.theme-dark) .budget-page {
+  --budget-page-bg: var(--bg-background);
+  --home-moderate-soft: #1b2d47;
+  --home-moderate-bar: #2e3a4d;
+  --home-icon-home-bg: rgba(18, 42, 86, 0.9);
+  --home-icon-home: #3f8fff;
+  --home-icon-gym-bg: rgba(29, 38, 86, 0.9);
+  --home-icon-gym: #706fff;
+  --home-icon-shopping-bg: rgba(72, 33, 83, 0.86);
+  --home-icon-shopping: #ff48b1;
+  --home-icon-transport-bg: rgba(78, 63, 38, 0.86);
+  --home-icon-transport: #ffb218;
+  --home-icon-baby-bg: rgba(70, 45, 86, 0.86);
+  --home-icon-baby: #f07fbe;
+  --home-icon-groceries-bg: rgba(15, 66, 53, 0.86);
+  --home-icon-groceries: #2ec96c;
+  --home-icon-entertainment-bg: rgba(74, 52, 30, 0.86);
+  --home-icon-entertainment: #ff9d2a;
+  --home-icon-health-bg: rgba(81, 42, 61, 0.86);
+  --home-icon-health: #ff7d84;
+}

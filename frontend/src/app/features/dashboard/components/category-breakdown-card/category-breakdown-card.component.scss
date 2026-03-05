@@ -1,0 +1,93 @@
+:host {
+  display: block;
+}
+
+.category-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border-1);
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  padding: 14px;
+}
+
+:host-context(.theme-dark) .category-card {
+  box-shadow: none;
+}
+
+.title {
+  color: var(--app-text-1);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.total-line {
+  color: var(--app-text-2);
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.bars {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.bar-item {
+  display: grid;
+  gap: 7px;
+}
+
+.bar-header {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.bar-label-wrap {
+  align-items: center;
+  display: flex;
+  gap: 7px;
+  min-width: 0;
+}
+
+.dot {
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 8px;
+  width: 8px;
+}
+
+.label {
+  color: var(--app-text-1);
+  font-size: 11px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amount {
+  color: var(--app-text-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.bar-track {
+  background: color-mix(in srgb, var(--app-text-2) 22%, transparent);
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.bar-fill {
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+}
