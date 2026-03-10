@@ -1,0 +1,39 @@
+<section class="active-section">
+  <header class="section-header">
+    <h2>{{ title() }}</h2>
+    <button type="button" class="add-btn" (click)="addRequested.emit()">
+      <ion-icon name="add-outline"></ion-icon>
+      <span>{{ addLabel() }}</span>
+    </button>
+  </header>
+
+  <p class="summary">{{ summary() }}</p>
+
+  <article class="active-card">
+    @for (item of items(); track item.id) {
+      <section class="rule-row" [class.is-disabled]="!item.enabled">
+        <div class="icon-box" [class.icon-tag]="item.icon === 'tag'" [class.icon-warning]="item.icon === 'warning'">
+          <ion-icon [name]="iconName(item.icon)"></ion-icon>
+        </div>
+
+        <div class="copy">
+          <div class="title-line">
+            <h3>{{ item.title }}</h3>
+            <span class="status-pill" [class.tone-auto]="item.tone === 'auto'" [class.tone-alert]="item.tone === 'alert'" [class.tone-anomaly]="item.tone === 'anomaly'">
+              {{ item.statusLabel }}
+            </span>
+          </div>
+
+          <p class="condition">{{ item.condition }}</p>
+          <p class="activity">{{ item.activity }}</p>
+
+          @if (item.stateLabel) {
+            <p class="state-label">{{ item.stateLabel }}</p>
+          }
+        </div>
+
+        <ion-toggle [checked]="item.enabled" (ionChange)="onToggle(item.id, $event)"></ion-toggle>
+      </section>
+    }
+  </article>
+</section>

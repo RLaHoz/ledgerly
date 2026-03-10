@@ -1,0 +1,48 @@
+<div class="month-nav">
+  <ion-button class="nav-button" fill="clear" aria-label="Previous month" (click)="onPreviousClick()">
+    <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+  </ion-button>
+
+  <div class="month-center">
+    <ion-button
+      class="month-trigger"
+      fill="clear"
+      [attr.aria-label]="accessibilityLabel()"
+      (click)="openDatePicker($event)"
+    >
+      <span class="month-label">{{ label() }}</span>
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <ion-button class="nav-button" fill="clear" aria-label="Next month" (click)="onNextClick()">
+    <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</div>
+
+<ion-popover
+  class="picker-popover"
+  [isOpen]="isPickerOpen()"
+  [event]="pickerEvent()"
+  reference="event"
+  side="bottom"
+  alignment="center"
+  [showBackdrop]="true"
+  [backdropDismiss]="true"
+  (didDismiss)="closeDatePicker()"
+>
+  <ng-template>
+    <ion-datetime
+      class="picker-datetime"
+      presentation="date"
+      [value]="selectedDate()"
+      [min]="minDate()"
+      [max]="maxDate()"
+      [showDefaultButtons]="true"
+      doneText="Apply"
+      cancelText="Cancel"
+      (ionChange)="onDateChange($event)"
+      (ionCancel)="closeDatePicker()"
+    />
+  </ng-template>
+</ion-popover>

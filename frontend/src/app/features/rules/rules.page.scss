@@ -1,0 +1,59 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--rules-page-bg, var(--bg-background));
+  color: var(--rules-title, var(--text-text-primary));
+}
+
+.rules-page {
+  --rules-page-bg: var(--bg-background);
+  --rules-card-bg: var(--bg-surface);
+  --rules-card-border: var(--border);
+  --rules-card-shadow: var(--shadow-sm);
+  --rules-title: var(--text-text-primary);
+  --rules-muted: var(--text-text-tertiary);
+  --rules-section-title: var(--text-text-secondary);
+  --rules-divider: var(--border);
+  --rules-row-chevron: var(--text-text-disabled);
+  --rules-add-btn-bg: var(--bg-surface-secondary);
+  --rules-add-btn-border: var(--border);
+  --rules-add-btn-text: var(--text-text-primary);
+  --rules-icon-bg: var(--bg-surface-secondary);
+  --rules-icon: var(--text-text-tertiary);
+  --rules-icon-tag: var(--text-text-tertiary);
+  --rules-icon-warning: var(--text-text-tertiary);
+  --rules-type-bg: var(--bg-surface-secondary);
+  --rules-type-border: var(--border);
+  --rules-type-text: var(--text-text-secondary);
+  --rules-disabled: var(--text-text-disabled);
+  --rules-toggle-off: var(--switch-off);
+  --rules-toggle-on: var(--switch-on);
+  --rules-count-bg: var(--bg-surface-secondary);
+  --rules-count-border: var(--border);
+  --rules-count-text: var(--text-text-secondary);
+  --rules-warning: var(--text-warning);
+  --rules-warning-soft: var(--bg-warning-soft);
+  --rules-critical: var(--text-critical);
+  --rules-critical-soft: var(--bg-critical-soft);
+
+  display: grid;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 430px;
+  padding:
+    var(--app-shell-header-offset, 112px)
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 52px) + 44px)
+    max(20px, env(safe-area-inset-left, 0px));
+}
+
+.rules-intro {
+  color: var(--rules-muted, var(--text-text-tertiary));
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0;
+  margin-top: 10px;
+}

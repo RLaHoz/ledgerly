@@ -1,0 +1,186 @@
+@use './app/shared/styles/budget-details' as budgetDetailsStyles;
+@use './app/shared/styles/rules-add-item-modal' as rulesAddItemModalStyles;
+@use './app/shared/styles/budget-item' as budgetItemStyles;
+@use './app/shared/styles/data-source-info' as dataSourceInfoStyles;
+@use './app/shared/styles/preferences' as preferencesStyles;
+@use './app/shared/styles/login-form' as loginFormStyles;
+@use './app/shared/styles/backing-authentication' as backingAuthenticationStyles;
+@use './app/shared/styles/onboarding-wizard' as onboardingWizardStyles;
+
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* App theme is controlled with `theme-light` / `theme-dark` classes in ThemeService. */
+
+html,
+body {
+  background: var(--bg-muted);
+  color: var(--text-text-primary);
+  font-family: var(--font-sans);
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  inset: 0;
+  position: fixed;
+  width: 100%;
+}
+
+app-root,
+ion-app {
+  background: var(--bg-background);
+  display: block;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 430px;
+  min-height: 100dvh;
+  overflow: hidden;
+  width: 100%;
+}
+
+* {
+  font-family: var(--font-sans);
+}
+
+ion-modal.new-budget-modal {
+  --background: transparent;
+  --backdrop-opacity: 0.5;
+  --box-shadow: none;
+  --height: 100%;
+  --width: 100%;
+}
+
+ion-modal.new-budget-modal::part(backdrop) {
+  background: #000;
+  opacity: 0.5;
+}
+
+ion-modal.new-budget-modal::part(content) {
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 16px;
+}
+
+ion-modal.new-budget-modal .modal-center-layer,
+ion-modal.adjust-budget-modal .modal-center-layer,
+ion-modal.rules-add-modal .modal-center-layer {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  padding:
+    max(12px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
+  width: 100%;
+}
+
+ion-modal.rules-add-modal {
+  --background: transparent;
+  --backdrop-opacity: 0;
+  --box-shadow: none;
+  --height: 100%;
+  --width: 100%;
+}
+
+ion-modal.rules-add-modal::part(backdrop) {
+  background: transparent;
+  opacity: 0;
+}
+
+ion-modal.rules-add-modal::part(content) {
+  align-items: center;
+  background: transparent;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  padding: 0;
+}
+
+ion-modal.adjust-budget-modal {
+  --background: transparent;
+  --backdrop-opacity: 0.5;
+  --box-shadow: none;
+  --height: 100%;
+  --width: 100%;
+}
+
+ion-modal.adjust-budget-modal::part(backdrop) {
+  background: #000;
+  opacity: 0.5;
+}
+
+ion-modal.adjust-budget-modal::part(content) {
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 16px;
+}
+
+@include budgetDetailsStyles.styles();
+
+app-rules-add-item {
+  @include rulesAddItemModalStyles.styles();
+}
+
+app-budget-item {
+  @include budgetItemStyles.styles();
+}
+
+app-data-source-info {
+  @include dataSourceInfoStyles.styles();
+}
+
+app-preferences {
+  @include preferencesStyles.styles();
+}
+
+@include loginFormStyles.styles();
+@include backingAuthenticationStyles.styles();
+@include onboardingWizardStyles.styles();

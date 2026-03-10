@@ -1,0 +1,22 @@
+<ion-content [fullscreen]="true">
+  <section class="settings-page">
+    <app-user-profile-info [model]="profileInfo()" />
+
+    <app-data-source-info
+      [model]="dataSourceInfo()"
+      (connectBankClicked)="onConnectBank()"
+      (uploadClicked)="onUploadExcel()"
+      (frequencyChanged)="onSyncFrequencyChange($event)"
+    />
+
+    <app-nontifications [items]="nontifications()" (toggled)="onNotificationToggle($event)" />
+
+    <app-preferences
+      [model]="preferencesInfo()"
+      (currencyChanged)="onCurrencyChange($event)"
+      (monthStartChanged)="onMonthStartChange($event)"
+      (familyModeChanged)="onFamilyModeToggle($event)"
+      (themeModeChanged)="onThemeModeChange($event)"
+    />
+  </section>
+</ion-content>

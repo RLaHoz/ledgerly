@@ -1,0 +1,103 @@
+<ion-content [fullscreen]="true" [scrollY]="false" class="onboarding-content">
+  <div class="onboarding-shell">
+    <header class="onboarding-top-header">
+      <ion-button fill="clear" class="top-back-btn" (click)="onHeaderBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Setup</span>
+      </ion-button>
+    </header>
+
+    <section class="wizard-shell">
+      <div class="step-header">
+        <div class="step-row">
+          <p class="step-count">Step {{ stepIndex() }} of 4</p>
+          <p class="step-label">{{ stepLabel() }}</p>
+        </div>
+
+        <div class="segments-row">
+          @for (segment of [1, 2, 3, 4]; track segment) {
+            <span class="segment-track">
+              <span class="segment-fill" [class.active]="segment <= stepIndex()"></span>
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="step-content">
+        @if (currentStep() === 'import') {
+          <app-onboarding-wizard-import [fileInputId]="fileInputId" />
+        }
+
+        @if (currentStep() === 'categories') {
+          <app-onboarding-wizard-category />
+        }
+
+        @if (currentStep() === 'budgets') {
+          <app-onboarding-wizard-budget />
+        }
+
+        @if (currentStep() === 'confirm') {
+          <app-onboarding-wizard-confirm />
+        }
+      </div>
+
+      <footer class="wizard-bottom-bar">
+        @if (canGoBack()) {
+          <ion-button fill="clear" class="wizard-btn back" (click)="onBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+            Back
+          </ion-button>
+        }
+
+        <ion-button
+          fill="clear"
+          class="wizard-btn continue"
+          [class.finish]="isFinishStep()"
+          [disabled]="isContinueDisabled()"
+          (click)="onContinue()"
+        >
+          {{ continueLabel() }}
+          <ion-icon [name]="isFinishStep() ? 'checkmark-outline' : 'chevron-forward-outline'"></ion-icon>
+        </ion-button>
+      </footer>
+
+      @if (currentStep() === 'confirm' && wizard.saveClassificationsError(); as saveError) {
+        <article class="warning-banner save-error-banner">
+          <ion-icon name="warning-outline"></ion-icon>
+          <p>{{ saveError }}</p>
+        </article>
+      }
+
+      @if (currentStep() === 'confirm' && authStore.onboardingCompletionError(); as completionError) {
+        <article class="warning-banner save-error-banner">
+          <ion-icon name="warning-outline"></ion-icon>
+          <p>{{ completionError }}</p>
+        </article>
+      }
+    </section>
+  </div>
+</ion-content>
+
+<ion-modal
+  [isOpen]="isUnassignedWarningModalOpen()"
+  [cssClass]="'onboarding-unassigned-modal'"
+  class="onboarding-unassigned-modal"
+  [showBackdrop]="true"
+  [backdropDismiss]="true"
+  (didDismiss)="onDismissUnassignedWarningModal()"
+>
+  <ng-template>
+    <div class="modal-center-layer">
+      <app-onboarding-unassigned-modal
+        (assignMissing)="onAssignMissingFromModal()"
+        (saveAsIs)="onSaveAsIsFromModal()"
+      />
+    </div>
+  </ng-template>
+</ion-modal>
+
+<ion-loading
+  [isOpen]="wizard.isSavingClassifications() || authStore.isCompletingOnboarding()"
+  message="Actualizando preferencias..."
+  spinner="crescent"
+></ion-loading>

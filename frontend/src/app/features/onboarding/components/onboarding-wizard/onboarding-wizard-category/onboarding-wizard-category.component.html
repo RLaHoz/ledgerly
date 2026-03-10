@@ -1,0 +1,167 @@
+<section class="step-block">
+  <div class="section-intro">
+    <h1 class="section-title">Review categories</h1>
+    <p class="section-description">
+      Verify auto-assigned categories and fix any that need attention.
+    </p>
+  </div>
+
+  <div class="filter-chips">
+    <button
+      type="button"
+      class="filter-chip"
+      [class.active]="wizard.activeFilter() === 'auto'"
+      (click)="onFilterChange('auto')"
+    >
+      <span class="chip-count chip-auto">{{ wizard.autoAssignedCount() }}</span>
+      Auto-assigned
+    </button>
+    <button
+      type="button"
+      class="filter-chip"
+      [class.active]="wizard.activeFilter() === 'manual'"
+      (click)="onFilterChange('manual')"
+    >
+      <span class="chip-count chip-manual">{{ wizard.manualAssignedCount() }}</span>
+      Manual
+    </button>
+    <button
+      type="button"
+      class="filter-chip"
+      [class.active]="wizard.activeFilter() === 'uncategorized'"
+      (click)="onFilterChange('uncategorized')"
+    >
+      <span class="chip-count chip-uncat">{{ wizard.uncategorizedCount() }}</span>
+      Uncategorized
+    </button>
+  </div>
+
+  @if (wizard.selectedCount() > 0) {
+    <div class="bulk-selection-bar">
+      <p>{{ wizard.selectedCount() }} selected</p>
+      <div class="bulk-actions">
+        <ion-button fill="clear" class="bulk-btn outline" (click)="wizard.clearSelection()">
+          Clear
+        </ion-button>
+        <ion-button fill="clear" class="bulk-btn solid" (click)="wizard.openCategorySheetForSelected()">
+          Assign All
+        </ion-button>
+      </div>
+    </div>
+  }
+
+  @if (wizard.filteredTransactions().length > 0) {
+    <article class="surface-card transactions-card">
+      @for (tx of wizard.filteredTransactions(); track tx.id) {
+        <div class="transaction-row">
+          <ion-checkbox
+            [checked]="tx.isSelected"
+            (ionChange)="wizard.toggleTransactionSelection(tx.id, $any($event).detail?.checked === true)"
+          ></ion-checkbox>
+
+          <div class="tx-main">
+            <p class="tx-description">{{ tx.description }}</p>
+            <div class="tx-meta">
+              <span class="tx-date">{{ formatDate(tx.occurredAt) }}</span>
+              <span class="tx-category-chip" [class.uncat]="tx.assignment === 'uncategorized'">
+                <ion-icon [name]="categoryIcon(tx)"></ion-icon>
+                {{ categoryName(tx) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="tx-side">
+            <p class="tx-amount">{{ formatMoney(tx.amount) }}</p>
+            <button type="button" class="tx-change-link" (click)="wizard.openCategorySheetForTransaction(tx.id)">
+              Change
+            </button>
+          </div>
+        </div>
+      }
+    </article>
+  } @else {
+    <article class="surface-card empty-card">
+      <span class="empty-icon">
+        <ion-icon name="checkmark-outline"></ion-icon>
+      </span>
+      <p class="empty-title">All clear</p>
+      <p class="empty-sub">No manually assigned rows yet.</p>
+    </article>
+  }
+</section>
+
+@if (wizard.isCategorySheetOpen()) {
+  <div class="assign-sheet-overlay" (click)="wizard.closeCategorySheet()">
+    <div class="assign-sheet" (click)="$event.stopPropagation()">
+      <header class="assign-sheet-header">
+        <h3>Assign subcategory</h3>
+        <ion-button fill="clear" class="sheet-close" (click)="wizard.closeCategorySheet()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </header>
+
+      <div class="sheet-search-wrap">
+        <ion-icon name="search-outline"></ion-icon>
+        <ion-input
+          type="text"
+          placeholder="Search category or subcategory"
+          [value]="wizard.categorySearch()"
+          (ionInput)="onCategorySearchInput($any($event).detail?.value)"
+        ></ion-input>
+      </div>
+
+      <ion-list class="sheet-list" lines="none">
+        @for (category of wizard.availableCategories(); track category.id) {
+          <ion-item
+            button
+            detail="false"
+            class="sheet-category-item"
+            [class.active]="isCategoryExpanded(category.id)"
+            (click)="onCategoryTap(category.id)"
+          >
+            <span slot="start" class="cat-icon tiny" [style.background]="category.colorHex + '18'">
+              <ion-icon [name]="category.iconName" [style.color]="category.colorHex"></ion-icon>
+            </span>
+            <p>{{ category.name }}</p>
+            <ion-icon
+              slot="end"
+              name="chevron-forward-outline"
+              class="sheet-chevron"
+              [class.expanded]="isCategoryExpanded(category.id)"
+            ></ion-icon>
+          </ion-item>
+
+          @if (isCategoryExpanded(category.id)) {
+            <ion-list class="sheet-subcategory-list" lines="none">
+              @for (subcategory of wizard.availableSubcategoriesForSheet(); track subcategory.id) {
+                <ion-item
+                  button
+                  detail="false"
+                  class="sheet-subcategory-item"
+                  (click)="wizard.assignSubcategoryToSheetSelection(subcategory.id)"
+                >
+                  <span slot="start" class="cat-icon tiny" [style.background]="subcategory.colorHex + '18'">
+                    <ion-icon [name]="subcategory.iconName" [style.color]="subcategory.colorHex"></ion-icon>
+                  </span>
+                  <p>{{ subcategory.name }}</p>
+                </ion-item>
+              }
+
+              @if (wizard.availableSubcategoriesForSheet().length === 0) {
+                <ion-item class="sheet-empty-subcategories" detail="false">
+                  <p>No subcategories found for this filter.</p>
+                </ion-item>
+              }
+            </ion-list>
+          }
+        }
+
+        @if (wizard.availableCategories().length === 0) {
+          <ion-item class="sheet-empty-subcategories" detail="false">
+            <p>No categories available for this user.</p>
+          </ion-item>
+        }
+      </ion-list>
+    </div>
+  </div>
+}

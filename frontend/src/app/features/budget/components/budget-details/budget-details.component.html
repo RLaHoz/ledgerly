@@ -1,0 +1,130 @@
+<ion-content [fullscreen]="true">
+  <section class="budget-detail-page">
+    @if (details(); as detail) {
+      <header class="detail-header">
+        <div class="title-wrap">
+          <span class="icon-badge" [class]="'tone-' + detail.iconTone">
+            <ion-icon [name]="detail.iconName"></ion-icon>
+          </span>
+
+          <div class="title-copy">
+            <h2>{{ detail.title }}</h2>
+            <div class="status-row">
+              <span class="status-pill" [class]="'status-' + detail.statusTone">{{ detail.statusLabel }}</span>
+              <span>{{ detail.noteLabel }}</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="adjust-btn" type="button" (click)="openAdjustModal()">
+          <ion-icon name="create-outline"></ion-icon>
+          <span>Adjust</span>
+        </button>
+      </header>
+
+      <article class="summary-card">
+        <div class="summary-grid">
+          <div>
+            <p>Budget</p>
+            <strong>{{ detail.budgetLabel }}</strong>
+          </div>
+          <div>
+            <p>Spent</p>
+            <strong>{{ detail.spentLabel }}</strong>
+          </div>
+          <div>
+            <p>Remaining</p>
+            <strong>{{ detail.remainingLabel }}</strong>
+          </div>
+        </div>
+
+        <span class="usage-track" aria-hidden="true">
+          <span class="usage-fill" [style.width.%]="detail.usedPercent" [class]="'status-' + detail.statusTone"></span>
+        </span>
+
+        <footer>
+          <p>{{ detail.usedPercent | number: '1.0-0' }}% used</p>
+          <p>{{ detail.thresholdsLabel }}</p>
+        </footer>
+      </article>
+
+      <article class="suggest-card">
+        <p>
+          <ion-icon name="bulb-outline"></ion-icon>
+          <span>{{ detail.recommendation }}</span>
+        </p>
+
+        <button type="button" (click)="onApplySuggestion()">Apply suggestion</button>
+      </article>
+
+      <article class="history-card">
+        <h3>Last 3 Months</h3>
+
+        <div class="history-list">
+          @for (item of detail.history; track item.monthLabel) {
+            <section class="history-row">
+              <p>{{ item.monthLabel }}</p>
+              <span class="history-track" aria-hidden="true">
+                <span
+                  class="history-fill"
+                  [class]="'history-fill tone-' + item.tone"
+                  [style.width.%]="item.progressPercent"
+                ></span>
+              </span>
+              <strong>{{ item.amountLabel }}</strong>
+            </section>
+          }
+        </div>
+      </article>
+    } @else {
+      <article class="missing-card">
+        <h2>Budget not found</h2>
+        <p>That category does not exist.</p>
+        <button type="button" (click)="onBackToBudgets()">Back to budgets</button>
+      </article>
+    }
+  </section>
+
+  <ion-modal
+    [cssClass]="'adjust-budget-modal'"
+    class="adjust-budget-modal"
+    [isOpen]="isAdjustModalOpen()"
+    [showBackdrop]="true"
+    [backdropDismiss]="true"
+    (didDismiss)="closeAdjustModal()"
+  >
+    <ng-template>
+      <div class="modal-center-layer">
+        @if (details(); as detail) {
+          <article class="adjust-modal-card" aria-label="Adjust budget">
+            <header>
+              <h3>Adjust {{ detail.title }}</h3>
+              <button type="button" aria-label="Close" (click)="closeAdjustModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </header>
+
+            <label class="adjust-field">
+              <span>Monthly Budget</span>
+              <div class="amount-input">
+                <strong>$</strong>
+                <input
+                  type="text"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  [value]="adjustAmountInput()"
+                  (input)="onAdjustAmountInput($event)"
+                />
+              </div>
+            </label>
+
+            <footer>
+              <button type="button" class="btn-cancel" (click)="closeAdjustModal()">Cancel</button>
+              <button type="button" class="btn-save" [disabled]="!canSaveAdjust()" (click)="onSaveAdjust()">Save</button>
+            </footer>
+          </article>
+        }
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

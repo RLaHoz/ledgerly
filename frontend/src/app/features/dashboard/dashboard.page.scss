@@ -1,0 +1,76 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--home-page-bg, var(--bg-background));
+  color: var(--home-strong, var(--text-text-primary));
+}
+
+.home-layout-page {
+  --home-page-bg: var(--bg-background);
+  --home-card-bg: var(--bg-surface);
+  --home-card-border: var(--border);
+  --home-card-shadow: var(--shadow-sm);
+  --home-strong: var(--text-text-primary);
+  --home-item-title: var(--text-text-primary);
+  --home-item-value: var(--text-text-secondary);
+  --home-mute: var(--text-text-tertiary);
+  --home-mute-strong: var(--text-text-secondary);
+  --home-section: var(--text-text-secondary);
+  --home-divider: var(--border);
+  --home-accent: var(--text-accent);
+  --home-success: var(--text-success);
+  --home-success-soft: var(--bg-success-soft);
+  --home-danger: var(--text-critical);
+  --home-danger-soft: var(--bg-critical-soft);
+  --home-danger-dot: var(--text-critical);
+  --home-warning: var(--text-warning);
+  --home-warning-soft: var(--bg-warning-soft);
+  --home-warning-dot: var(--text-warning);
+  --home-moderate: var(--text-neutral-semantic);
+  --home-moderate-soft: var(--bg-muted);
+  --home-moderate-dot: var(--text-neutral-semantic);
+  --home-moderate-bar: #2e3a4d;
+  --home-progress-track: var(--border);
+  --home-icon-home-bg: #dde7f8;
+  --home-icon-home: #3f83ef;
+  --home-icon-gym-bg: #dfdef1;
+  --home-icon-gym: #6060ff;
+  --home-icon-shopping-bg: #efe0eb;
+  --home-icon-shopping: #ef4aa8;
+  --home-icon-transport-bg: #f0e9e0;
+  --home-icon-transport: #eb9d12;
+  --home-icon-baby-bg: #ece1ea;
+  --home-icon-baby: #e57ab1;
+  --home-icon-groceries-bg: #dbe9e2;
+  --home-icon-groceries: #29bf68;
+
+  display: grid;
+  gap: 18px;
+  margin: 0 auto;
+  max-width: 430px;
+  padding:
+    var(--app-shell-header-offset, 112px)
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 52px) + 44px)
+    max(20px, env(safe-area-inset-left, 0px));
+}
+
+:host-context(.theme-dark) .home-layout-page {
+  --home-moderate-soft: #1b2d47;
+  --home-moderate-bar: #2e3a4d;
+  --home-progress-track: var(--border);
+  --home-icon-home-bg: rgba(18, 42, 86, 0.9);
+  --home-icon-home: #3f8fff;
+  --home-icon-gym-bg: rgba(29, 38, 86, 0.9);
+  --home-icon-gym: #706fff;
+  --home-icon-shopping-bg: rgba(72, 33, 83, 0.86);
+  --home-icon-shopping: #ff48b1;
+  --home-icon-transport-bg: rgba(78, 63, 38, 0.86);
+  --home-icon-transport: #ffb218;
+  --home-icon-baby-bg: rgba(70, 45, 86, 0.86);
+  --home-icon-baby: #f07fbe;
+  --home-icon-groceries-bg: rgba(15, 66, 53, 0.86);
+  --home-icon-groceries: #2ec96c;
+}

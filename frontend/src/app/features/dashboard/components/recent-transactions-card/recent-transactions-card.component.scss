@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+.transactions-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border-1);
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+:host-context(.theme-dark) .transactions-card {
+  box-shadow: none;
+}
+
+.transactions-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+}
+
+.title {
+  color: var(--app-text-1);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.view-all {
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--app-tab-active);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 14px;
+  gap: 4px;
+  padding: 0;
+}
+
+.view-all ion-icon {
+  font-size: 14px;
+}
+
+.transactions-list {
+  display: grid;
+}
+
+.row {
+  align-items: center;
+  border-top: 1px solid var(--app-border-1);
+  column-gap: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: 11px 16px;
+}
+
+.transactions-list > .row:first-child {
+  border-top: none;
+}
+
+.icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--app-text-2) 18%, transparent);
+  border-radius: 14px;
+  display: inline-flex;
+  font-size: 18px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.merchant {
+  color: var(--app-text-1);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  background: color-mix(in srgb, var(--app-text-2) 16%, transparent);
+  border-radius: 999px;
+  color: var(--app-text-1);
+  font-size: 10px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+
+.chip.owner {
+  background: color-mix(in srgb, var(--owner-color) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--owner-color) 44%, transparent);
+  color: var(--owner-color);
+}
+
+.date {
+  color: var(--app-text-2);
+  font-size: 11px;
+}
+
+.amount {
+  color: var(--app-text-1);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.amount.income {
+  color: var(--app-success);
+}

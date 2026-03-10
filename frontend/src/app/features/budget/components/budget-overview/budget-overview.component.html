@@ -1,0 +1,12 @@
+<article class="overview-card" aria-label="Monthly overview">
+  <h2>{{ model().title }}</h2>
+
+  <div class="metrics-grid">
+    @for (metric of model().metrics; track trackById($index, metric)) {
+      <section class="metric">
+        <p class="label">{{ metric.label }}</p>
+        <p class="value">{{ metric.value }}</p>
+      </section>
+    }
+  </div>
+</article>

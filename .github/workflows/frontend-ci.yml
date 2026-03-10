@@ -2,6 +2,7 @@ name: Frontend CI
 
 on:
   pull_request:
+    branches: [ main, dev ]
     paths:
       - "frontend/**"
       - ".github/**"
@@ -9,13 +10,16 @@ on:
       - "DECISIONS.md"
       - "skills/**"
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths:
       - "frontend/**"
       - ".github/**"
       - "AGENTS.md"
       - "DECISIONS.md"
       - "skills/**"
+
+permissions:
+  contents: read
 
 jobs:
   ci:
@@ -28,12 +32,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+          lfs: false
+
+      - name: Debug workspace (temporary)
+        run: |
+          echo "ROOT:"
+          pwd
+          echo "LIST ROOT:"
+          ls -la ..
+          echo "LIST FRONTEND:"
+          ls -la .
+          echo "LOCKFILE:"
+          ls -la package-lock.json
+        working-directory: frontend
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: "npm"
+          node-version: 22
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install

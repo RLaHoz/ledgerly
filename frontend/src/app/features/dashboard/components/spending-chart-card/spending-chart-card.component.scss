@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.chart-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border-1);
+  border-radius: calc(var(--app-radius-lg) + 2px);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  padding: 16px 16px 10px;
+}
+
+:host-context(.theme-dark) .chart-card {
+  box-shadow: none;
+}
+
+.title {
+  color: var(--app-text-1);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.chart-card apx-chart {
+  display: block;
+  min-height: 270px;
+  width: 100%;
+}

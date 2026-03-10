@@ -1,0 +1,59 @@
+<section class="budget-health" aria-label="Budget health overview">
+  <header class="month-nav">
+    <button class="month-nav-button" type="button" aria-label="Previous month" (click)="previousRequested.emit()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+
+    <button
+      class="month-label-button"
+      type="button"
+      [attr.aria-label]="'Choose month ' + monthLabel()"
+      (click)="openMonthPicker()"
+    >
+      <h2 class="month-label">{{ monthLabel() }}</h2>
+    </button>
+
+    <button class="month-nav-button" type="button" aria-label="Next month" (click)="nextRequested.emit()">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+  </header>
+
+  <div class="health-row">
+    <div class="health-left">
+      <span class="health-title">Budget health:</span>
+      <span class="health-pill">{{ healthLabel() }}</span>
+    </div>
+
+    <!-- <p class="updated-label">{{ updatedLabel() }}</p> -->
+  </div>
+
+  <ul class="stat-list" aria-label="Budget risk counters">
+    @for (stat of stats(); track stat.id) {
+      <li class="stat-item">
+        <span class="dot" [class]="'dot-' + stat.tone"></span>
+        <strong>{{ stat.count }}</strong>
+        <span>{{ stat.label }}</span>
+      </li>
+    }
+  </ul>
+
+  <p class="trend">{{ trendLabel() }}</p>
+
+  @if (isMonthPickerOpen()) {
+    <div class="month-picker-layer" role="region" aria-label="Month picker">
+      <ion-datetime
+        class="month-datetime"
+        presentation="month-year"
+        [preferWheel]="true"
+        [value]="monthValue()"
+        [min]="minMonthDate()"
+        [max]="maxMonthDate()"
+        [showDefaultButtons]="true"
+        doneText="Apply"
+        cancelText="Cancel"
+        (ionChange)="onMonthPickerChanged($event)"
+        (ionCancel)="onMonthPickerDismissed()"
+      />
+    </div>
+  }
+</section>

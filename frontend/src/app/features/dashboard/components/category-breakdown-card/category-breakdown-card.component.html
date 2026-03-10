@@ -1,0 +1,22 @@
+<article class="category-card">
+  <h2 class="title">{{ title() }}</h2>
+  <p class="total-line">{{ totalLabel() }} {{ totalAmountLabel() }}</p>
+
+  <section class="bars" aria-label="Category breakdown">
+    @for (category of categoryBars(); track category.id) {
+      <article class="bar-item">
+        <header class="bar-header">
+          <div class="bar-label-wrap">
+            <span class="dot" [style.background]="category.color"></span>
+            <span class="label">{{ category.label }}</span>
+          </div>
+          <span class="amount">{{ category.percent }}% — {{ category.amountLabel }}</span>
+        </header>
+
+        <div class="bar-track">
+          <span class="bar-fill" [style.width.%]="category.percent" [style.background]="category.color"></span>
+        </div>
+      </article>
+    }
+  </section>
+</article>

@@ -1,0 +1,40 @@
+<article
+  class="budget-item"
+  [class.is-editable]="editable()"
+  [class.variant-budget]="variant() === 'budget'"
+  [attr.role]="editable() ? 'button' : null"
+  [attr.tabindex]="editable() ? 0 : null"
+  (click)="onItemContainerAction()"
+  (keydown.enter)="onItemContainerAction($event)"
+  (keydown.space)="onItemContainerAction($event)"
+>
+  <span class="item-icon" [class]="'tone-' + item().iconTone">
+    <ion-icon [name]="item().iconName"></ion-icon>
+  </span>
+
+  <div class="item-main">
+    <div class="item-head">
+      <h3 class="item-title">{{ item().name }}</h3>
+      <span class="status-pill" [class]="statusClass()">{{ statusLabel() }}</span>
+    </div>
+
+    <div class="item-values">
+      <p class="item-amount">{{ amountLabel() }}</p>
+      <p class="item-left">{{ item().leftLabel }}</p>
+    </div>
+
+    <span class="progress-track" aria-hidden="true">
+      <span class="progress-fill" [class]="statusClass()" [style.width.%]="progressPercent()"></span>
+    </span>
+
+    @if (item().noteLabel) {
+      <p class="item-note" [class]="noteClass()">{{ item().noteLabel }}</p>
+    }
+  </div>
+
+  @if (editable()) {
+    <button class="item-action" type="button" (click)="onItemAction($event)" [attr.aria-label]="'Open ' + item().name">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+  }
+</article>

@@ -1,0 +1,77 @@
+:root.theme-dark {
+  color-scheme: dark;
+
+  /* Master semantic tokens */
+  --background: #0c1420;
+  --foreground: #e2e9f2;
+  --card: #132033;
+  --surface: #132033;
+  --primary: #6b8db5;
+  --primary-foreground: #0c1420;
+  --secondary: #1b2d47;
+  --surface-secondary: #1b2d47;
+  --muted: #1b2d47;
+  --muted-foreground: #9daec5;
+  --accent: #3cc9ba;
+  --accent-foreground: #0c1420;
+  --accent-strong: #2ebaa8;
+  --destructive: #e86363;
+  --critical: #e86363;
+  --critical-foreground: #0c1420;
+  --critical-soft: rgba(232, 99, 99, 0.12);
+  --border: #243856;
+  --input: #243856;
+  --ring: #3cc9ba;
+  --text-primary: #e2e9f2;
+  --text-secondary: #9daec5;
+  --text-tertiary: #6e819a;
+  --text-disabled: #4e6180;
+  --success: #3db874;
+  --success-foreground: #0c1420;
+  --success-soft: rgba(61, 184, 116, 0.14);
+  --warning: #f0b255;
+  --warning-foreground: #0c1420;
+  --warning-soft: rgba(240, 178, 85, 0.14);
+  --neutral-semantic: #6e819a;
+  --switch-on: #6b8db5;
+  --switch-off: #344d6b;
+  --focus-ring: rgba(60, 201, 186, 0.22);
+  --chart-1: #3cc9ba;
+  --chart-2: #6b8db5;
+  --chart-3: #f0b255;
+  --chart-4: #e86363;
+  --chart-5: #6e819a;
+  --sidebar: #0f1928;
+  --sidebar-foreground: #e2e9f2;
+  --sidebar-primary: #6b8db5;
+  --sidebar-accent: #1b2d47;
+  --sidebar-border: #243856;
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.38);
+
+  /* App aliases used by current components */
+  --bg-muted: var(--muted);
+  --bg-background: var(--background);
+  --bg-surface: var(--surface);
+  --bg-surface-secondary: var(--surface-secondary);
+  --text-text-primary: var(--text-primary);
+  --text-text-secondary: var(--text-secondary);
+  --text-text-tertiary: var(--text-tertiary);
+  --text-text-disabled: var(--text-disabled);
+  --text-primary-foreground: var(--primary-foreground);
+  --text-accent: var(--accent);
+  --text-success: var(--success);
+  --text-warning: var(--warning);
+  --text-critical: var(--critical);
+  --text-neutral-semantic: var(--neutral-semantic);
+  --bg-success-soft: var(--success-soft);
+  --bg-warning-soft: var(--warning-soft);
+  --bg-critical-soft: var(--critical-soft);
+
+  --ion-background-color: var(--background);
+  --ion-text-color: var(--foreground);
+  --ion-border-color: var(--border);
+  --ion-toolbar-background: var(--background);
+  --ion-tab-bar-background: var(--surface);
+  --ion-item-background: var(--surface);
+}
