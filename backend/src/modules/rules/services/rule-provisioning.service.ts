@@ -43,46 +43,48 @@ export class RuleProvisioningService {
       return { templatesFound: 0, createdRules: 0, skippedRules: 0 };
     }
 
-    const [existingRules, userCategories, userSubcategories] = await Promise.all([
-      this.prisma.rule.findMany({
-        where: {
-          userId,
-          sourceTemplateId: { not: null },
-          deletedAt: null,
-        },
-        select: {
-          sourceTemplateId: true,
-          sourceTemplateVersion: true,
-        },
-      }),
-      this.prisma.budgetCategory.findMany({
-        where: {
-          userId,
-          isArchived: false,
-          appCategoryId: { not: null },
-        },
-        select: {
-          id: true,
-          appCategoryId: true,
-        },
-      }),
-      this.prisma.budgetSubcategory.findMany({
-        where: {
-          userId,
-          isArchived: false,
-          appSubcategoryId: { not: null },
-        },
-        select: {
-          id: true,
-          categoryId: true,
-          appSubcategoryId: true,
-        },
-      }),
-    ]);
+    const [existingRules, userCategories, userSubcategories] =
+      await Promise.all([
+        this.prisma.rule.findMany({
+          where: {
+            userId,
+            sourceTemplateId: { not: null },
+            deletedAt: null,
+          },
+          select: {
+            sourceTemplateId: true,
+            sourceTemplateVersion: true,
+          },
+        }),
+        this.prisma.budgetCategory.findMany({
+          where: {
+            userId,
+            isArchived: false,
+            appCategoryId: { not: null },
+          },
+          select: {
+            id: true,
+            appCategoryId: true,
+          },
+        }),
+        this.prisma.budgetSubcategory.findMany({
+          where: {
+            userId,
+            isArchived: false,
+            appSubcategoryId: { not: null },
+          },
+          select: {
+            id: true,
+            categoryId: true,
+            appSubcategoryId: true,
+          },
+        }),
+      ]);
 
     const existingTemplateKeys = new Set(
       existingRules.map(
-        (rule) => `${rule.sourceTemplateId ?? 'none'}::${rule.sourceTemplateVersion ?? 0}`,
+        (rule) =>
+          `${rule.sourceTemplateId ?? 'none'}::${rule.sourceTemplateVersion ?? 0}`,
       ),
     );
 
@@ -138,7 +140,9 @@ export class RuleProvisioningService {
         }
 
         const mappedSubcategory = template.targetAppSubcategoryId
-          ? userSubcategoryByAppSubcategoryId.get(template.targetAppSubcategoryId)
+          ? userSubcategoryByAppSubcategoryId.get(
+              template.targetAppSubcategoryId,
+            )
           : undefined;
 
         const mappedSubcategoryId = mappedSubcategory?.id;

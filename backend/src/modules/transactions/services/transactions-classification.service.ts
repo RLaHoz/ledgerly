@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import type { CompiledRule, RuleTransactionCandidate } from '../../rules/types/rule-condition.types';
+import type {
+  CompiledRule,
+  RuleTransactionCandidate,
+} from '../../rules/types/rule-condition.types';
 import { RuleEvaluatorService } from '../../rules/services/rule-evaluator.service';
 import { PrismaService } from '../../../sourceDB/database/prisma.service';
 

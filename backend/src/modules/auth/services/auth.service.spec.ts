@@ -42,7 +42,11 @@ describe('AuthService.bootstrapUserDefaults', () => {
     };
     const ruleProvisioningService = {
       installDefaultTemplatesForUser: jest.fn<
-        Promise<{ templatesFound: number; createdRules: number; skippedRules: number }>,
+        Promise<{
+          templatesFound: number;
+          createdRules: number;
+          skippedRules: number;
+        }>,
         [string]
       >(),
     };
@@ -82,12 +86,12 @@ describe('AuthService.bootstrapUserDefaults', () => {
 
     await (service as any).bootstrapUserDefaults('user-1');
 
-    expect(categoryManagementService.bootstrapUserCategoriesFromApp).toHaveBeenCalledWith(
-      'user-1',
-    );
-    expect(ruleProvisioningService.installDefaultTemplatesForUser).toHaveBeenCalledWith(
-      'user-1',
-    );
+    expect(
+      categoryManagementService.bootstrapUserCategoriesFromApp,
+    ).toHaveBeenCalledWith('user-1');
+    expect(
+      ruleProvisioningService.installDefaultTemplatesForUser,
+    ).toHaveBeenCalledWith('user-1');
     expect(logSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -130,7 +134,9 @@ describe('AuthService.bootstrapUserDefaults', () => {
       (service as any).bootstrapUserDefaults('user-3'),
     ).resolves.toBeUndefined();
 
-    expect(ruleProvisioningService.installDefaultTemplatesForUser).not.toHaveBeenCalled();
+    expect(
+      ruleProvisioningService.installDefaultTemplatesForUser,
+    ).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(1);
   });
 });
@@ -182,7 +188,9 @@ describe('AuthService.completeOnboarding', () => {
     const { service, prisma } = makeService();
     const completedAt = new Date('2026-03-10T00:00:00.000Z');
 
-    prisma.user.findUnique.mockResolvedValue({ onboardingCompletedAt: completedAt });
+    prisma.user.findUnique.mockResolvedValue({
+      onboardingCompletedAt: completedAt,
+    });
 
     const result = await service.completeOnboarding('user-2');
 

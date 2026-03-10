@@ -1,5 +1,5 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { catchError, map, Observable, of, shareReplay } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LS_ACCESS_TOKEN_KEY, LS_REFRESH_TOKEN_KEY } from '../store/auth.state';
@@ -9,13 +9,12 @@ import { SessionResponse } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class SessionTokenService {
+  private readonly httpBackend = inject(HttpBackend);
   private readonly refreshTokenHttpInstance = new HttpClient(this.httpBackend);
   private refreshInFlight$: Observable<string | null> | null = null;
 
   readonly accessToken = signal<string | null>(localStorage.getItem(LS_ACCESS_TOKEN_KEY));
   readonly refreshToken = signal<string | null>(localStorage.getItem(LS_REFRESH_TOKEN_KEY));
-
-  constructor(private readonly httpBackend: HttpBackend) {}
 
   setTokens(session: SessionResponse): void {
     this.accessToken.set(session.accessToken);

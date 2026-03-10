@@ -211,10 +211,15 @@ export class CategoryManagementService {
     const userSubcategoryByAppSubcategoryId = new Map(
       userSubcategories
         .filter((subcategory) => subcategory.appSubcategoryId !== null)
-        .map((subcategory) => [subcategory.appSubcategoryId as string, subcategory]),
+        .map((subcategory) => [
+          subcategory.appSubcategoryId as string,
+          subcategory,
+        ]),
     );
 
-    const usedCategorySlugs = new Set(userCategories.map((category) => category.slug));
+    const usedCategorySlugs = new Set(
+      userCategories.map((category) => category.slug),
+    );
     const usedSubcategorySlugsByCategoryId = new Map<string, Set<string>>();
 
     for (const subcategory of userSubcategories) {
@@ -253,7 +258,10 @@ export class CategoryManagementService {
         let userCategory = userCategoryByAppCategoryId.get(appCategory.id);
 
         if (!userCategory) {
-          const baseSlug = this.slugify(appCategory.slug || appCategory.name, 'category');
+          const baseSlug = this.slugify(
+            appCategory.slug || appCategory.name,
+            'category',
+          );
           const uniqueCategorySlug = this.buildUniqueSlugFromSet(
             usedCategorySlugs,
             baseSlug,
@@ -296,7 +304,8 @@ export class CategoryManagementService {
           }
 
           const usedSubcategorySlugs =
-            usedSubcategorySlugsByCategoryId.get(categoryId) ?? new Set<string>();
+            usedSubcategorySlugsByCategoryId.get(categoryId) ??
+            new Set<string>();
 
           const baseSubcategorySlug = this.slugify(
             appSubcategory.slug || appSubcategory.name,
@@ -310,7 +319,10 @@ export class CategoryManagementService {
           );
 
           usedSubcategorySlugs.add(uniqueSubcategorySlug);
-          usedSubcategorySlugsByCategoryId.set(categoryId, usedSubcategorySlugs);
+          usedSubcategorySlugsByCategoryId.set(
+            categoryId,
+            usedSubcategorySlugs,
+          );
 
           const createdSubcategory = await tx.budgetSubcategory.create({
             data: {
@@ -520,10 +532,12 @@ export class CategoryManagementService {
         throw new BadRequestException('Invalid appCategoryId');
       }
 
-      const existingMappedCategory = await this.prisma.budgetCategory.findFirst({
-        where: { userId, appCategoryId: dto.appCategoryId },
-        select: { id: true },
-      });
+      const existingMappedCategory = await this.prisma.budgetCategory.findFirst(
+        {
+          where: { userId, appCategoryId: dto.appCategoryId },
+          select: { id: true },
+        },
+      );
 
       if (existingMappedCategory) {
         throw new BadRequestException(
@@ -720,7 +734,10 @@ export class CategoryManagementService {
     categoryId: string,
     dto: CreateUserSubcategoryDto,
   ): Promise<UserCategoryView['subcategories'][number]> {
-    const parentCategory = await this.ensureCategoryOwnership(userId, categoryId);
+    const parentCategory = await this.ensureCategoryOwnership(
+      userId,
+      categoryId,
+    );
 
     if (parentCategory.isArchived) {
       throw new BadRequestException(
@@ -761,11 +778,12 @@ export class CategoryManagementService {
     }
 
     const baseSlug = this.slugify(dto.slug ?? dto.name, 'subcategory');
-    const uniqueSubcategorySlug = await this.resolveUniqueSubcategorySlugInMemory(
-      userId,
-      categoryId,
-      baseSlug,
-    );
+    const uniqueSubcategorySlug =
+      await this.resolveUniqueSubcategorySlugInMemory(
+        userId,
+        categoryId,
+        baseSlug,
+      );
 
     const lastUserSubcategory = await this.prisma.budgetSubcategory.findFirst({
       where: { userId, categoryId },
@@ -844,7 +862,8 @@ export class CategoryManagementService {
     const nextName = dto.name?.trim() ?? existingSubcategory.name;
 
     const shouldRecomputeSlug =
-      Boolean(dto.slug || dto.name) || targetCategoryId !== existingSubcategory.categoryId;
+      Boolean(dto.slug || dto.name) ||
+      targetCategoryId !== existingSubcategory.categoryId;
 
     const nextSlug = shouldRecomputeSlug
       ? await this.resolveUniqueSubcategorySlugInMemory(
@@ -965,16 +984,20 @@ export class CategoryManagementService {
     transactionId: string,
     patch: UpdateTransactionClassificationDto,
   ): Promise<TransactionClassificationView> {
-    const result = await this.executeTransactionClassificationAssignment(userId, [
+    const result = await this.executeTransactionClassificationAssignment(
+      userId,
+      [
+        {
+          transactionId,
+          categoryId: patch.categoryId,
+          subcategoryId: patch.subcategoryId,
+        },
+      ],
       {
-        transactionId,
-        categoryId: patch.categoryId,
-        subcategoryId: patch.subcategoryId,
+        atomic: false,
+        requireSubcategory: false,
       },
-    ], {
-      atomic: false,
-      requireSubcategory: false,
-    });
+    );
 
     if (result.failedCount > 0) {
       const errorMessage =
@@ -1037,14 +1060,10 @@ export class CategoryManagementService {
     userId: string,
     dto: BulkUpdateTransactionClassificationDto,
   ): Promise<ClassificationBulkResult> {
-    return this.executeTransactionClassificationAssignment(
-      userId,
-      dto.items,
-      {
-        atomic: false,
-        requireSubcategory: false,
-      },
-    );
+    return this.executeTransactionClassificationAssignment(userId, dto.items, {
+      atomic: false,
+      requireSubcategory: false,
+    });
   }
 
   private async executeTransactionClassificationAssignment(
@@ -1105,7 +1124,9 @@ export class CategoryManagementService {
         : [];
 
     const transactionIdSet = new Set(existingTransactions.map((tx) => tx.id));
-    const categoryIdSet = new Set(userCategories.map((category) => category.id));
+    const categoryIdSet = new Set(
+      userCategories.map((category) => category.id),
+    );
     const subcategoryById = new Map<string, { id: string; categoryId: string }>(
       userSubcategories.map((subcategory) => [subcategory.id, subcategory]),
     );
@@ -1188,7 +1209,10 @@ export class CategoryManagementService {
         offset < validUpdates.length;
         offset += BULK_UPDATE_CHUNK_SIZE
       ) {
-        const chunk = validUpdates.slice(offset, offset + BULK_UPDATE_CHUNK_SIZE);
+        const chunk = validUpdates.slice(
+          offset,
+          offset + BULK_UPDATE_CHUNK_SIZE,
+        );
 
         try {
           const chunkResult = await this.prisma.$transaction(
@@ -1264,22 +1288,25 @@ export class CategoryManagementService {
       updatedTransactions.map((tx) => [tx.id, tx]),
     );
 
-    const updated: TransactionClassificationView[] = successfullyUpdatedTransactionIds
-      .map((transactionId) => {
-        const transaction = updatedTransactionById.get(transactionId);
-        if (!transaction) return null;
+    const updated: TransactionClassificationView[] =
+      successfullyUpdatedTransactionIds
+        .map((transactionId) => {
+          const transaction = updatedTransactionById.get(transactionId);
+          if (!transaction) return null;
 
-        return {
-          transactionId: transaction.id,
-          categoryId: transaction.categoryId,
-          categoryName: transaction.category?.name ?? null,
-          subcategoryId: transaction.subcategoryId,
-          subcategoryName: transaction.subcategory?.name ?? null,
-          classificationStatus: transaction.classificationStatus,
-          updatedAt: transaction.updatedAt.toISOString(),
-        };
-      })
-      .filter((value): value is TransactionClassificationView => value !== null);
+          return {
+            transactionId: transaction.id,
+            categoryId: transaction.categoryId,
+            categoryName: transaction.category?.name ?? null,
+            subcategoryId: transaction.subcategoryId,
+            subcategoryName: transaction.subcategory?.name ?? null,
+            classificationStatus: transaction.classificationStatus,
+            updatedAt: transaction.updatedAt.toISOString(),
+          };
+        })
+        .filter(
+          (value): value is TransactionClassificationView => value !== null,
+        );
 
     return {
       updatedCount: updated.length,
@@ -1394,22 +1421,28 @@ export class CategoryManagementService {
       );
     }
 
-    const categoryIds = normalizedCategoryBudgets.map((item) => item.categoryId);
+    const categoryIds = normalizedCategoryBudgets.map(
+      (item) => item.categoryId,
+    );
     const subcategoryIds = normalizedSubcategoryBudgets.map(
       (item) => item.subcategoryId,
     );
 
-    const [categories, subcategories] = await Promise.all([
-      categoryIds.length
-        ? this.prisma.budgetCategory.findMany({
-            where: {
-              userId,
-              isArchived: false,
-              id: { in: categoryIds },
-            },
-            select: { id: true },
-          })
-        : [],
+    type CategoryIdRow = { id: string };
+    type SubcategoryRow = { id: string; categoryId: string };
+
+    const categoriesPromise: Promise<CategoryIdRow[]> = categoryIds.length
+      ? this.prisma.budgetCategory.findMany({
+          where: {
+            userId,
+            isArchived: false,
+            id: { in: categoryIds },
+          },
+          select: { id: true },
+        })
+      : Promise.resolve([]);
+
+    const subcategoriesPromise: Promise<SubcategoryRow[]> =
       subcategoryIds.length
         ? this.prisma.budgetSubcategory.findMany({
             where: {
@@ -1419,19 +1452,27 @@ export class CategoryManagementService {
             },
             select: { id: true, categoryId: true },
           })
-        : [],
+        : Promise.resolve([]);
+
+    const [categories, subcategories] = await Promise.all([
+      categoriesPromise,
+      subcategoriesPromise,
     ]);
 
-    const categoryIdSet = new Set(categories.map((item) => item.id));
+    const categoryIdSet = new Set<string>(categories.map((item) => item.id));
     for (const categoryId of categoryIds) {
       if (!categoryIdSet.has(categoryId)) {
-        throw new BadRequestException(`Invalid categoryId in budgetPlan: ${categoryId}`);
+        throw new BadRequestException(
+          `Invalid categoryId in budgetPlan: ${categoryId}`,
+        );
       }
     }
 
     const subcategoryById = new Map<string, { id: string; categoryId: string }>(
       subcategories.map(
-        (item): [string, { id: string; categoryId: string }] => [
+        (
+          item: SubcategoryRow,
+        ): [string, { id: string; categoryId: string }] => [
           item.id,
           { id: item.id, categoryId: item.categoryId },
         ],
@@ -1446,7 +1487,8 @@ export class CategoryManagementService {
     }
 
     const monthYm =
-      budgetPlan.monthYm ?? this.resolveCurrentMonthYmForTimeZone(user.timeZone);
+      budgetPlan.monthYm ??
+      this.resolveCurrentMonthYmForTimeZone(user.timeZone);
 
     const categoryTotal = normalizedCategoryBudgets.reduce(
       (sum, item) => sum + item.plannedAmount,
@@ -1587,7 +1629,9 @@ export class CategoryManagementService {
     const year = parts.find((part) => part.type === 'year')?.value;
     const month = parts.find((part) => part.type === 'month')?.value;
     if (!year || !month) {
-      throw new BadRequestException('Unable to resolve monthYm from user time zone');
+      throw new BadRequestException(
+        'Unable to resolve monthYm from user time zone',
+      );
     }
 
     return `${year}-${month}`;
@@ -1637,7 +1681,9 @@ export class CategoryManagementService {
     }
 
     if (to < from) {
-      throw new BadRequestException('"to" must be greater than or equal to "from"');
+      throw new BadRequestException(
+        '"to" must be greater than or equal to "from"',
+      );
     }
 
     return { from, to };

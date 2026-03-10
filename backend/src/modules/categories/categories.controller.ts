@@ -175,16 +175,13 @@ export class CategoriesController {
     @CurrentUserId() userId: string,
     @Body() dto: BulkUpdateTransactionClassificationDto,
   ) {
-    return this.categoryManagementService.assignTransactions(
-      userId,
-      {
-        items: dto.items,
-        options: {
-          atomic: false,
-          requireSubcategory: false,
-        },
+    return this.categoryManagementService.assignTransactions(userId, {
+      items: dto.items,
+      options: {
+        atomic: false,
+        requireSubcategory: false,
       },
-    );
+    });
   }
 
   @Patch('transactions/assign')

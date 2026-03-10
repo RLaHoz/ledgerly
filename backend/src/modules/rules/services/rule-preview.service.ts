@@ -16,7 +16,10 @@ export class RulePreviewService {
   ) {}
 
   async previewRule(userId: string, dto: PreviewRuleDto) {
-    const condition = this.ruleEvaluator.parseAndValidateCondition(dto.condition, true);
+    const condition = this.ruleEvaluator.parseAndValidateCondition(
+      dto.condition,
+      true,
+    );
     const action = this.ruleEvaluator.parseAndValidateAction(
       {
         ...dto.action,
@@ -121,7 +124,10 @@ export class RulePreviewService {
   }
 
   testRule(dto: TestRuleDto) {
-    const condition = this.ruleEvaluator.parseAndValidateCondition(dto.condition, true);
+    const condition = this.ruleEvaluator.parseAndValidateCondition(
+      dto.condition,
+      true,
+    );
     const action = this.ruleEvaluator.parseAndValidateAction(
       {
         ...dto.action,
@@ -156,18 +162,25 @@ export class RulePreviewService {
     };
   }
 
-  private resolveDateRange(from?: string, to?: string): { from: Date; to: Date } {
+  private resolveDateRange(
+    from?: string,
+    to?: string,
+  ): { from: Date; to: Date } {
     const now = new Date();
     const resolvedTo = to ? new Date(to) : now;
     const resolvedFrom =
       from ??
       new Date(
-        now.getTime() - RulePreviewService.DEFAULT_RANGE_DAYS * 24 * 60 * 60 * 1000,
+        now.getTime() -
+          RulePreviewService.DEFAULT_RANGE_DAYS * 24 * 60 * 60 * 1000,
       ).toISOString();
 
     const parsedFrom = new Date(resolvedFrom);
 
-    if (Number.isNaN(parsedFrom.getTime()) || Number.isNaN(resolvedTo.getTime())) {
+    if (
+      Number.isNaN(parsedFrom.getTime()) ||
+      Number.isNaN(resolvedTo.getTime())
+    ) {
       throw new BadRequestException('Invalid date range');
     }
 

@@ -111,7 +111,10 @@ export class RuleEvaluatorService {
     this.validateCondition(input.condition, true);
     this.validateAction(input.action, true);
 
-    const conditionResult = this.evaluateCondition(input.candidate, input.condition);
+    const conditionResult = this.evaluateCondition(
+      input.candidate,
+      input.condition,
+    );
 
     if (!conditionResult.matched) {
       return {
@@ -156,9 +159,13 @@ export class RuleEvaluatorService {
           ? Math.trunc(value.minKeywordHits)
           : undefined,
       amountMin:
-        typeof value.amountMin === 'number' ? Number(value.amountMin) : undefined,
+        typeof value.amountMin === 'number'
+          ? Number(value.amountMin)
+          : undefined,
       amountMax:
-        typeof value.amountMax === 'number' ? Number(value.amountMax) : undefined,
+        typeof value.amountMax === 'number'
+          ? Number(value.amountMax)
+          : undefined,
       excludeMerchants: this.normalizeExclusions(value.excludeMerchants ?? []),
       recurringOnly: Boolean(value.recurringOnly),
     };
@@ -191,7 +198,10 @@ export class RuleEvaluatorService {
 
     for (const rule of rules) {
       try {
-        const condition = this.parseAndValidateCondition(rule.conditionJson, false);
+        const condition = this.parseAndValidateCondition(
+          rule.conditionJson,
+          false,
+        );
         const action = this.parseAndValidateAction(rule.actionJson, false);
 
         compiled.push({
@@ -214,7 +224,12 @@ export class RuleEvaluatorService {
   private evaluateCondition(
     candidate: RuleTransactionCandidate,
     condition: RuleConditionAutoClassification,
-  ): { matched: boolean; keywordHits: number; regexMatched: boolean; reason: string } {
+  ): {
+    matched: boolean;
+    keywordHits: number;
+    regexMatched: boolean;
+    reason: string;
+  } {
     const candidateDirection = this.resolveDirection(candidate.amountSigned);
     if (candidateDirection !== condition.direction) {
       return {
@@ -277,7 +292,10 @@ export class RuleEvaluatorService {
       `${candidate.merchant ?? ''} ${candidate.description}`,
     );
 
-    const keywordHits = this.countKeywordHits(searchableText, condition.keywords);
+    const keywordHits = this.countKeywordHits(
+      searchableText,
+      condition.keywords,
+    );
     const regexMatched =
       typeof condition.regex === 'string' && condition.regex.length > 0
         ? new RegExp(condition.regex, 'i').test(searchableText)
@@ -357,7 +375,11 @@ export class RuleEvaluatorService {
       throw new BadRequestException('Unsupported condition kind');
     }
 
-    if (!['KEYWORD_ONLY', 'REGEX_ONLY', 'KEYWORD_REGEX_HYBRID'].includes(condition.matchMode)) {
+    if (
+      !['KEYWORD_ONLY', 'REGEX_ONLY', 'KEYWORD_REGEX_HYBRID'].includes(
+        condition.matchMode,
+      )
+    ) {
       throw new BadRequestException('Invalid matchMode');
     }
 
@@ -365,13 +387,18 @@ export class RuleEvaluatorService {
       throw new BadRequestException('Invalid direction');
     }
 
-    if (condition.matchMode !== 'REGEX_ONLY' && condition.keywords.length === 0) {
+    if (
+      condition.matchMode !== 'REGEX_ONLY' &&
+      condition.keywords.length === 0
+    ) {
       throw new BadRequestException('At least one keyword is required');
     }
 
     if (condition.matchMode !== 'KEYWORD_ONLY' && !condition.regex) {
       if (strict) {
-        throw new BadRequestException('Regex is required for current match mode');
+        throw new BadRequestException(
+          'Regex is required for current match mode',
+        );
       }
     }
 
@@ -382,7 +409,7 @@ export class RuleEvaluatorService {
 
       try {
         // Compile once to fail fast on invalid syntax.
-        // eslint-disable-next-line no-new
+
         new RegExp(condition.regex, 'i');
       } catch {
         throw new BadRequestException('Invalid regex syntax');
@@ -394,7 +421,9 @@ export class RuleEvaluatorService {
       typeof condition.amountMax === 'number' &&
       condition.amountMin > condition.amountMax
     ) {
-      throw new BadRequestException('amountMin cannot be greater than amountMax');
+      throw new BadRequestException(
+        'amountMin cannot be greater than amountMax',
+      );
     }
   }
 

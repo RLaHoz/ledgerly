@@ -55,7 +55,10 @@ function normalizeTimeZone(timeZone?: string): string {
   }
 }
 
-function getZonedDateParts(date: Date, timeZone: string): {
+function getZonedDateParts(
+  date: Date,
+  timeZone: string,
+): {
   year: number;
   month: number;
   day: number;
@@ -72,7 +75,11 @@ function getZonedDateParts(date: Date, timeZone: string): {
   const month = Number(parts.find((p) => p.type === 'month')?.value);
   const day = Number(parts.find((p) => p.type === 'day')?.value);
 
-  if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) {
+  if (
+    !Number.isFinite(year) ||
+    !Number.isFinite(month) ||
+    !Number.isFinite(day)
+  ) {
     throw new BadRequestException('Unable to parse date parts for time zone');
   }
 

@@ -22,7 +22,6 @@ export const CurrentUserId = createParamDecorator(
     const request = ctx.switchToHttp().getRequest<RequestWithUser>();
 
     if (request.user?.id) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return request.user.id;
     }
 

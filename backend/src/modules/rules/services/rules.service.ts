@@ -21,7 +21,10 @@ export class RulesService {
   ) {}
 
   async createRule(userId: string, dto: CreateRuleDto) {
-    const condition = this.ruleEvaluator.parseAndValidateCondition(dto.condition, true);
+    const condition = this.ruleEvaluator.parseAndValidateCondition(
+      dto.condition,
+      true,
+    );
     const action = this.ruleEvaluator.parseAndValidateAction(
       {
         ...dto.action,
@@ -68,7 +71,9 @@ export class RulesService {
       type: 'AUTO_CLASSIFICATION',
       ...(query.enabled !== undefined ? { enabled: query.enabled } : {}),
       ...(query.categoryId ? { targetCategoryId: query.categoryId } : {}),
-      ...(query.subcategoryId ? { targetSubcategoryId: query.subcategoryId } : {}),
+      ...(query.subcategoryId
+        ? { targetSubcategoryId: query.subcategoryId }
+        : {}),
       ...(query.q
         ? {
             name: {
@@ -151,11 +156,16 @@ export class RulesService {
         ...(dto.priority !== undefined ? { priority: dto.priority } : {}),
         ...(conditionJson ? { conditionJson } : {}),
         ...(actionJson ? { actionJson } : {}),
-        ...(matchMode ? { matchMode: matchMode as 'KEYWORD_ONLY' | 'REGEX_ONLY' | 'KEYWORD_REGEX_HYBRID' } : {}),
-        ...(targetCategoryId !== undefined ? { targetCategoryId } : {}),
-        ...(targetSubcategoryId !== undefined
-          ? { targetSubcategoryId }
+        ...(matchMode
+          ? {
+              matchMode: matchMode as
+                | 'KEYWORD_ONLY'
+                | 'REGEX_ONLY'
+                | 'KEYWORD_REGEX_HYBRID',
+            }
           : {}),
+        ...(targetCategoryId !== undefined ? { targetCategoryId } : {}),
+        ...(targetSubcategoryId !== undefined ? { targetSubcategoryId } : {}),
       },
     });
 

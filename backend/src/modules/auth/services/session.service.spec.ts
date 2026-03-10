@@ -112,13 +112,10 @@ describe('SessionService.getUserSessionFlags', () => {
     const prisma = {
       user: {
         findUnique: jest.fn<
-          Promise<
-            | {
-                onboardingCompletedAt: Date | null;
-                _count: { bankConnections: number };
-              }
-            | null
-          >,
+          Promise<{
+            onboardingCompletedAt: Date | null;
+            _count: { bankConnections: number };
+          } | null>,
           [unknown]
         >(),
       },

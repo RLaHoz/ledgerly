@@ -169,67 +169,74 @@ const createFixture = () => {
 
   const prisma = {
     transaction: {
-      findMany: jest.fn(async (args: {
-        where?: { userId?: string; id?: { in?: string[] } };
-        select?: {
-          id?: boolean;
-          categoryId?: boolean;
-          subcategoryId?: boolean;
-          classificationStatus?: boolean;
-          updatedAt?: boolean;
-          category?: { select: { id: boolean; name: boolean } };
-          subcategory?: { select: { id: boolean; name: boolean } };
-        };
-      }) => {
-        const scopedUserId = args.where?.userId;
-        const ids = args.where?.id?.in ?? [];
-
-        const rows = state.transactions.filter((transaction) => {
-          const userMatches = scopedUserId ? transaction.userId === scopedUserId : true;
-          const idMatches = ids.length > 0 ? ids.includes(transaction.id) : true;
-          return userMatches && idMatches;
-        });
-
-        const idOnlySelection =
-          args.select?.id === true &&
-          !args.select?.categoryId &&
-          !args.select?.subcategoryId &&
-          !args.select?.classificationStatus &&
-          !args.select?.updatedAt;
-
-        if (idOnlySelection) {
-          return rows.map((row) => ({ id: row.id }));
-        }
-
-        return rows.map((row) => {
-          const category = row.categoryId
-            ? state.categories.find((item) => item.id === row.categoryId)
-            : null;
-          const subcategory = row.subcategoryId
-            ? state.subcategories.find((item) => item.id === row.subcategoryId)
-            : null;
-
-          return {
-            id: row.id,
-            categoryId: row.categoryId,
-            subcategoryId: row.subcategoryId,
-            classificationStatus: row.classificationStatus,
-            updatedAt: row.updatedAt,
-            category: category
-              ? {
-                  id: category.id,
-                  name: category.name,
-                }
-              : null,
-            subcategory: subcategory
-              ? {
-                  id: subcategory.id,
-                  name: subcategory.name,
-                }
-              : null,
+      findMany: jest.fn(
+        (args: {
+          where?: { userId?: string; id?: { in?: string[] } };
+          select?: {
+            id?: boolean;
+            categoryId?: boolean;
+            subcategoryId?: boolean;
+            classificationStatus?: boolean;
+            updatedAt?: boolean;
+            category?: { select: { id: boolean; name: boolean } };
+            subcategory?: { select: { id: boolean; name: boolean } };
           };
-        });
-      }),
+        }) => {
+          const scopedUserId = args.where?.userId;
+          const ids = args.where?.id?.in ?? [];
+
+          const rows = state.transactions.filter((transaction) => {
+            const userMatches = scopedUserId
+              ? transaction.userId === scopedUserId
+              : true;
+            const idMatches =
+              ids.length > 0 ? ids.includes(transaction.id) : true;
+            return userMatches && idMatches;
+          });
+
+          const idOnlySelection =
+            args.select?.id === true &&
+            !args.select?.categoryId &&
+            !args.select?.subcategoryId &&
+            !args.select?.classificationStatus &&
+            !args.select?.updatedAt;
+
+          if (idOnlySelection) {
+            return rows.map((row) => ({ id: row.id }));
+          }
+
+          return rows.map((row) => {
+            const category = row.categoryId
+              ? state.categories.find((item) => item.id === row.categoryId)
+              : null;
+            const subcategory = row.subcategoryId
+              ? state.subcategories.find(
+                  (item) => item.id === row.subcategoryId,
+                )
+              : null;
+
+            return {
+              id: row.id,
+              categoryId: row.categoryId,
+              subcategoryId: row.subcategoryId,
+              classificationStatus: row.classificationStatus,
+              updatedAt: row.updatedAt,
+              category: category
+                ? {
+                    id: category.id,
+                    name: category.name,
+                  }
+                : null,
+              subcategory: subcategory
+                ? {
+                    id: subcategory.id,
+                    name: subcategory.name,
+                  }
+                : null,
+            };
+          });
+        },
+      ),
       update: jest.fn(
         (args: {
           where: { id: string };
@@ -241,7 +248,7 @@ const createFixture = () => {
           };
           select: { id: true };
         }) =>
-          new PrismaOperation(async () => {
+          new PrismaOperation(() => {
             const transaction = state.transactions.find(
               (item) => item.id === args.where.id,
             );
@@ -263,174 +270,184 @@ const createFixture = () => {
       ),
     },
     budgetCategory: {
-      findMany: jest.fn(async (args: {
-        where: {
-          userId: string;
-          isArchived: boolean;
-          id: { in: string[] };
-        };
-        select: { id: true };
-      }) =>
-        state.categories
-          .filter(
-            (category) =>
-              category.userId === args.where.userId &&
-              category.isArchived === args.where.isArchived &&
-              args.where.id.in.includes(category.id),
-          )
-          .map((category) => ({ id: category.id })),
+      findMany: jest.fn(
+        (args: {
+          where: {
+            userId: string;
+            isArchived: boolean;
+            id: { in: string[] };
+          };
+          select: { id: true };
+        }) =>
+          state.categories
+            .filter(
+              (category) =>
+                category.userId === args.where.userId &&
+                category.isArchived === args.where.isArchived &&
+                args.where.id.in.includes(category.id),
+            )
+            .map((category) => ({ id: category.id })),
       ),
     },
     budgetSubcategory: {
-      findMany: jest.fn(async (args: {
-        where: {
-          userId: string;
-          isArchived: boolean;
-          id: { in: string[] };
-        };
-        select: { id: true; categoryId: true };
-      }) =>
-        state.subcategories
-          .filter(
-            (subcategory) =>
-              subcategory.userId === args.where.userId &&
-              subcategory.isArchived === args.where.isArchived &&
-              args.where.id.in.includes(subcategory.id),
-          )
-          .map((subcategory) => ({
-            id: subcategory.id,
-            categoryId: subcategory.categoryId,
-          })),
+      findMany: jest.fn(
+        (args: {
+          where: {
+            userId: string;
+            isArchived: boolean;
+            id: { in: string[] };
+          };
+          select: { id: true; categoryId: true };
+        }) =>
+          state.subcategories
+            .filter(
+              (subcategory) =>
+                subcategory.userId === args.where.userId &&
+                subcategory.isArchived === args.where.isArchived &&
+                args.where.id.in.includes(subcategory.id),
+            )
+            .map((subcategory) => ({
+              id: subcategory.id,
+              categoryId: subcategory.categoryId,
+            })),
       ),
     },
     categoryBudget: {
-      upsert: jest.fn(async (args: {
-        where: {
-          budgetMonthId_categoryId: {
+      upsert: jest.fn(
+        (args: {
+          where: {
+            budgetMonthId_categoryId: {
+              budgetMonthId: string;
+              categoryId: string;
+            };
+          };
+          create: {
             budgetMonthId: string;
             categoryId: string;
+            plannedAmount: number;
           };
-        };
-        create: {
-          budgetMonthId: string;
-          categoryId: string;
-          plannedAmount: number;
-        };
-        update: {
-          plannedAmount: number;
-        };
-      }) => {
-        const key = args.where.budgetMonthId_categoryId;
-        const existing = state.categoryBudgets.find(
-          (item) =>
-            item.budgetMonthId === key.budgetMonthId &&
-            item.categoryId === key.categoryId,
-        );
+          update: {
+            plannedAmount: number;
+          };
+        }) => {
+          const key = args.where.budgetMonthId_categoryId;
+          const existing = state.categoryBudgets.find(
+            (item) =>
+              item.budgetMonthId === key.budgetMonthId &&
+              item.categoryId === key.categoryId,
+          );
 
-        if (existing) {
-          existing.plannedAmount = args.update.plannedAmount;
-          return existing;
-        }
+          if (existing) {
+            existing.plannedAmount = args.update.plannedAmount;
+            return existing;
+          }
 
-        const created = {
-          budgetMonthId: args.create.budgetMonthId,
-          categoryId: args.create.categoryId,
-          plannedAmount: args.create.plannedAmount,
-        };
-        state.categoryBudgets.push(created);
-        return created;
-      }),
+          const created = {
+            budgetMonthId: args.create.budgetMonthId,
+            categoryId: args.create.categoryId,
+            plannedAmount: args.create.plannedAmount,
+          };
+          state.categoryBudgets.push(created);
+          return created;
+        },
+      ),
     },
     subcategoryBudget: {
-      upsert: jest.fn(async (args: {
-        where: {
-          budgetMonthId_subcategoryId: {
+      upsert: jest.fn(
+        (args: {
+          where: {
+            budgetMonthId_subcategoryId: {
+              budgetMonthId: string;
+              subcategoryId: string;
+            };
+          };
+          create: {
             budgetMonthId: string;
             subcategoryId: string;
+            plannedAmount: number;
           };
-        };
-        create: {
-          budgetMonthId: string;
-          subcategoryId: string;
-          plannedAmount: number;
-        };
-        update: {
-          plannedAmount: number;
-        };
-      }) => {
-        const key = args.where.budgetMonthId_subcategoryId;
-        const existing = state.subcategoryBudgets.find(
-          (item) =>
-            item.budgetMonthId === key.budgetMonthId &&
-            item.subcategoryId === key.subcategoryId,
-        );
+          update: {
+            plannedAmount: number;
+          };
+        }) => {
+          const key = args.where.budgetMonthId_subcategoryId;
+          const existing = state.subcategoryBudgets.find(
+            (item) =>
+              item.budgetMonthId === key.budgetMonthId &&
+              item.subcategoryId === key.subcategoryId,
+          );
 
-        if (existing) {
-          existing.plannedAmount = args.update.plannedAmount;
-          return existing;
-        }
+          if (existing) {
+            existing.plannedAmount = args.update.plannedAmount;
+            return existing;
+          }
 
-        const created = {
-          budgetMonthId: args.create.budgetMonthId,
-          subcategoryId: args.create.subcategoryId,
-          plannedAmount: args.create.plannedAmount,
-        };
-        state.subcategoryBudgets.push(created);
-        return created;
-      }),
+          const created = {
+            budgetMonthId: args.create.budgetMonthId,
+            subcategoryId: args.create.subcategoryId,
+            plannedAmount: args.create.plannedAmount,
+          };
+          state.subcategoryBudgets.push(created);
+          return created;
+        },
+      ),
     },
     budgetMonth: {
-      upsert: jest.fn(async (args: {
-        where: { userId_monthYm: { userId: string; monthYm: string } };
-        create: {
-          userId: string;
-          monthYm: string;
-          plannedTotal: number;
-          currency: string;
-        };
-        update: {
-          plannedTotal: number;
-          currency: string;
-        };
-        select: {
-          id: true;
-          monthYm: true;
-          plannedTotal: true;
-        };
-      }) => {
-        const key = args.where.userId_monthYm;
-        const existing = state.budgetMonths.find(
-          (item) => item.userId === key.userId && item.monthYm === key.monthYm,
-        );
-
-        if (existing) {
-          existing.plannedTotal = args.update.plannedTotal;
-          existing.currency = args.update.currency;
-          return {
-            id: existing.id,
-            monthYm: existing.monthYm,
-            plannedTotal: existing.plannedTotal,
+      upsert: jest.fn(
+        (args: {
+          where: { userId_monthYm: { userId: string; monthYm: string } };
+          create: {
+            userId: string;
+            monthYm: string;
+            plannedTotal: number;
+            currency: string;
           };
-        }
+          update: {
+            plannedTotal: number;
+            currency: string;
+          };
+          select: {
+            id: true;
+            monthYm: true;
+            plannedTotal: true;
+          };
+        }) => {
+          const key = args.where.userId_monthYm;
+          const existing = state.budgetMonths.find(
+            (item) =>
+              item.userId === key.userId && item.monthYm === key.monthYm,
+          );
 
-        const created = {
-          id: `bm-${state.budgetMonths.length + 1}`,
-          userId: args.create.userId,
-          monthYm: args.create.monthYm,
-          plannedTotal: args.create.plannedTotal,
-          currency: args.create.currency,
-        };
-        state.budgetMonths.push(created);
-        return {
-          id: created.id,
-          monthYm: created.monthYm,
-          plannedTotal: created.plannedTotal,
-        };
-      }),
+          if (existing) {
+            existing.plannedTotal = args.update.plannedTotal;
+            existing.currency = args.update.currency;
+            return {
+              id: existing.id,
+              monthYm: existing.monthYm,
+              plannedTotal: existing.plannedTotal,
+            };
+          }
+
+          const created = {
+            id: `bm-${state.budgetMonths.length + 1}`,
+            userId: args.create.userId,
+            monthYm: args.create.monthYm,
+            plannedTotal: args.create.plannedTotal,
+            currency: args.create.currency,
+          };
+          state.budgetMonths.push(created);
+          return {
+            id: created.id,
+            monthYm: created.monthYm,
+            plannedTotal: created.plannedTotal,
+          };
+        },
+      ),
     },
     user: {
-      findUnique: jest.fn(async (args: { where: { id: string } }) => {
-        const user = state.users.find((item) => item.id === args.where.id) ?? null;
+      findUnique: jest.fn((args: { where: { id: string } }) => {
+        const user =
+          state.users.find((item) => item.id === args.where.id) ?? null;
         if (!user) {
           return null;
         }
@@ -448,24 +465,36 @@ const createFixture = () => {
           ...prisma,
           $transaction: prisma.$transaction,
         };
-        return (operationsOrCallback as (tx: typeof txClient) => Promise<unknown>)(
-          txClient,
-        );
+        return (
+          operationsOrCallback as (tx: typeof txClient) => Promise<unknown>
+        )(txClient);
       }
 
       const operations = operationsOrCallback as unknown[];
-      const snapshot = state.transactions.map((transaction) => ({ ...transaction }));
-      const categoryBudgetSnapshot = state.categoryBudgets.map((item) => ({ ...item }));
-      const subcategoryBudgetSnapshot = state.subcategoryBudgets.map((item) => ({
+      const snapshot = state.transactions.map((transaction) => ({
+        ...transaction,
+      }));
+      const categoryBudgetSnapshot = state.categoryBudgets.map((item) => ({
         ...item,
       }));
-      const budgetMonthSnapshot = state.budgetMonths.map((item) => ({ ...item }));
+      const subcategoryBudgetSnapshot = state.subcategoryBudgets.map(
+        (item) => ({
+          ...item,
+        }),
+      );
+      const budgetMonthSnapshot = state.budgetMonths.map((item) => ({
+        ...item,
+      }));
 
       try {
         const results: unknown[] = [];
 
         for (const operation of operations) {
-          if (operation && typeof operation === 'object' && 'run' in operation) {
+          if (
+            operation &&
+            typeof operation === 'object' &&
+            'run' in operation
+          ) {
             results.push(
               await (operation as { run: () => Promise<unknown> }).run(),
             );
@@ -522,7 +551,9 @@ describe('CategoryManagementService.assignTransactions', () => {
       classificationStatus: 'MANUAL',
     });
 
-    const updatedTx = state.transactions.find((transaction) => transaction.id === 'tx-1');
+    const updatedTx = state.transactions.find(
+      (transaction) => transaction.id === 'tx-1',
+    );
     expect(updatedTx?.categoryId).toBe('cat-food');
     expect(updatedTx?.subcategoryId).toBe('sub-groceries');
     expect(updatedTx?.classificationStatus).toBe('MANUAL');
@@ -553,8 +584,12 @@ describe('CategoryManagementService.assignTransactions', () => {
       }),
     ).rejects.toBeInstanceOf(BadRequestException);
 
-    const tx1 = state.transactions.find((transaction) => transaction.id === 'tx-1');
-    const tx2 = state.transactions.find((transaction) => transaction.id === 'tx-2');
+    const tx1 = state.transactions.find(
+      (transaction) => transaction.id === 'tx-1',
+    );
+    const tx2 = state.transactions.find(
+      (transaction) => transaction.id === 'tx-2',
+    );
 
     expect(tx1).toMatchObject({
       categoryId: null,

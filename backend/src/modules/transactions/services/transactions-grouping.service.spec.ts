@@ -14,9 +14,7 @@ describe('TransactionsGroupingService', () => {
         syncRunIds: ['run_1'],
         syncedAt: '2026-03-07T00:00:00.000Z',
       },
-      categoryById: new Map([
-        ['cat_1', { name: 'Groceries', sortOrder: 1 }],
-      ]),
+      categoryById: new Map([['cat_1', { name: 'Groceries', sortOrder: 1 }]]),
       subcategoryById: new Map([
         ['sub_1', { name: 'Supermarket', sortOrder: 1 }],
       ]),
@@ -54,8 +52,8 @@ describe('TransactionsGroupingService', () => {
 
     expect(response.totals.txCount).toBe(2);
     expect(response.categories).toHaveLength(2);
-    expect(response.categories.some((item) => item.name === 'Uncategorized')).toBe(
-      true,
-    );
+    expect(
+      response.categories.some((item) => item.name === 'Uncategorized'),
+    ).toBe(true);
   });
 });

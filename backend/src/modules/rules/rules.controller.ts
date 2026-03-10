@@ -33,7 +33,10 @@ export class RulesController {
   }
 
   @Get()
-  listRules(@CurrentUserId() userId: string, @Query() query: ListRulesQueryDto) {
+  listRules(
+    @CurrentUserId() userId: string,
+    @Query() query: ListRulesQueryDto,
+  ) {
     return this.rulesService.listRules(userId, query);
   }
 

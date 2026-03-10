@@ -8,10 +8,7 @@ import {
   type BankAuthClient,
   resolveCdrMode,
 } from './bank-auth.types';
-import {
-  BANK_DATA_CLIENT,
-  type BankDataClient,
-} from './bank-data.types';
+import { BANK_DATA_CLIENT, type BankDataClient } from './bank-data.types';
 import { MockCdrClient } from './mock-cdr.client';
 import { BasiqClient } from './basiq.client';
 
@@ -53,14 +50,18 @@ import { BasiqClient } from './basiq.client';
         }
 
         return {
-          async listConnectionAccounts() {
-            throw new Error(
-              'Bank data sync is available only when CDR_MODE=basiq.',
+          listConnectionAccounts() {
+            return Promise.reject(
+              new Error(
+                'Bank data sync is available only when CDR_MODE=basiq.',
+              ),
             );
           },
-          async listConnectionTransactions() {
-            throw new Error(
-              'Bank data sync is available only when CDR_MODE=basiq.',
+          listConnectionTransactions() {
+            return Promise.reject(
+              new Error(
+                'Bank data sync is available only when CDR_MODE=basiq.',
+              ),
             );
           },
         };

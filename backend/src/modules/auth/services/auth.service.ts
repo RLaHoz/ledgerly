@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   BadRequestException,
   Inject,
@@ -58,7 +57,9 @@ export class AuthService {
     return this.sessionService.revokeSession(refreshToken);
   }
 
-  async completeOnboarding(userId: string): Promise<CompleteOnboardingResponse> {
+  async completeOnboarding(
+    userId: string,
+  ): Promise<CompleteOnboardingResponse> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { onboardingCompletedAt: true },
