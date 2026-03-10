@@ -84,27 +84,42 @@ export class BasiqConsentUiService {
 
   private parseCallbackUrl(url: string): BasiqConsentCallbackEvent | null {
     const parsed = new URL(url);
+    const normalizedPath = this.normalizePathname(parsed.pathname);
 
     const isNativeCallback =
       parsed.protocol === 'ledgerly:' &&
       parsed.hostname === 'auth' &&
-      parsed.pathname === '/callback';
+      normalizedPath === '/callback';
 
     const isWebCallback =
       parsed.origin === window.location.origin &&
-      parsed.pathname === '/auth/callback';
+      normalizedPath === '/auth/callback';
 
     if (!isNativeCallback && !isWebCallback) return null;
 
-    const jobIdsRaw = parsed.searchParams.get('jobIds');
+    const jobIdsRaw = parsed.searchParams.getAll('jobIds');
+    const parsedJobIds = jobIdsRaw
+      .reduce<string[]>((acc, value: string) => {
+        acc.push(...value.split(','));
+        return acc;
+      }, [])
+      .map((value: string) =>
+        value.trim().replace(/^[\[\]"']+|[\[\]"']+$/g, ''),
+      )
+      .filter(Boolean);
 
     return {
       rawUrl: url,
       state: parsed.searchParams.get('state'),
       jobId: parsed.searchParams.get('jobId'),
-      jobIds: jobIdsRaw
-        ? jobIdsRaw.split(',').map((v) => v.trim()).filter(Boolean)
-        : [],
+      jobIds: parsedJobIds,
     };
+  }
+
+  private normalizePathname(pathname: string): string {
+    if (!pathname) return '/';
+    return pathname.endsWith('/') && pathname.length > 1
+      ? pathname.slice(0, -1)
+      : pathname;
   }
 }

@@ -40,6 +40,8 @@ export type CategorySuggestionMinAggregateOutputType = {
   transactionId: string | null
   suggestedName: string | null
   suggestedSlug: string | null
+  suggestedSubcategoryName: string | null
+  suggestedSubcategorySlug: string | null
   ionIcon: string | null
   colorHex: string | null
   reason: string | null
@@ -55,6 +57,8 @@ export type CategorySuggestionMaxAggregateOutputType = {
   transactionId: string | null
   suggestedName: string | null
   suggestedSlug: string | null
+  suggestedSubcategoryName: string | null
+  suggestedSubcategorySlug: string | null
   ionIcon: string | null
   colorHex: string | null
   reason: string | null
@@ -70,6 +74,8 @@ export type CategorySuggestionCountAggregateOutputType = {
   transactionId: number
   suggestedName: number
   suggestedSlug: number
+  suggestedSubcategoryName: number
+  suggestedSubcategorySlug: number
   ionIcon: number
   colorHex: number
   reason: number
@@ -95,6 +101,8 @@ export type CategorySuggestionMinAggregateInputType = {
   transactionId?: true
   suggestedName?: true
   suggestedSlug?: true
+  suggestedSubcategoryName?: true
+  suggestedSubcategorySlug?: true
   ionIcon?: true
   colorHex?: true
   reason?: true
@@ -110,6 +118,8 @@ export type CategorySuggestionMaxAggregateInputType = {
   transactionId?: true
   suggestedName?: true
   suggestedSlug?: true
+  suggestedSubcategoryName?: true
+  suggestedSubcategorySlug?: true
   ionIcon?: true
   colorHex?: true
   reason?: true
@@ -125,6 +135,8 @@ export type CategorySuggestionCountAggregateInputType = {
   transactionId?: true
   suggestedName?: true
   suggestedSlug?: true
+  suggestedSubcategoryName?: true
+  suggestedSubcategorySlug?: true
   ionIcon?: true
   colorHex?: true
   reason?: true
@@ -227,6 +239,8 @@ export type CategorySuggestionGroupByOutputType = {
   transactionId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName: string | null
+  suggestedSubcategorySlug: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -265,6 +279,8 @@ export type CategorySuggestionWhereInput = {
   transactionId?: Prisma.UuidFilter<"CategorySuggestion"> | string
   suggestedName?: Prisma.StringFilter<"CategorySuggestion"> | string
   suggestedSlug?: Prisma.StringFilter<"CategorySuggestion"> | string
+  suggestedSubcategoryName?: Prisma.StringNullableFilter<"CategorySuggestion"> | string | null
+  suggestedSubcategorySlug?: Prisma.StringNullableFilter<"CategorySuggestion"> | string | null
   ionIcon?: Prisma.StringFilter<"CategorySuggestion"> | string
   colorHex?: Prisma.StringFilter<"CategorySuggestion"> | string
   reason?: Prisma.StringFilter<"CategorySuggestion"> | string
@@ -282,6 +298,8 @@ export type CategorySuggestionOrderByWithRelationInput = {
   transactionId?: Prisma.SortOrder
   suggestedName?: Prisma.SortOrder
   suggestedSlug?: Prisma.SortOrder
+  suggestedSubcategoryName?: Prisma.SortOrderInput | Prisma.SortOrder
+  suggestedSubcategorySlug?: Prisma.SortOrderInput | Prisma.SortOrder
   ionIcon?: Prisma.SortOrder
   colorHex?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -302,6 +320,8 @@ export type CategorySuggestionWhereUniqueInput = Prisma.AtLeast<{
   transactionId?: Prisma.UuidFilter<"CategorySuggestion"> | string
   suggestedName?: Prisma.StringFilter<"CategorySuggestion"> | string
   suggestedSlug?: Prisma.StringFilter<"CategorySuggestion"> | string
+  suggestedSubcategoryName?: Prisma.StringNullableFilter<"CategorySuggestion"> | string | null
+  suggestedSubcategorySlug?: Prisma.StringNullableFilter<"CategorySuggestion"> | string | null
   ionIcon?: Prisma.StringFilter<"CategorySuggestion"> | string
   colorHex?: Prisma.StringFilter<"CategorySuggestion"> | string
   reason?: Prisma.StringFilter<"CategorySuggestion"> | string
@@ -319,6 +339,8 @@ export type CategorySuggestionOrderByWithAggregationInput = {
   transactionId?: Prisma.SortOrder
   suggestedName?: Prisma.SortOrder
   suggestedSlug?: Prisma.SortOrder
+  suggestedSubcategoryName?: Prisma.SortOrderInput | Prisma.SortOrder
+  suggestedSubcategorySlug?: Prisma.SortOrderInput | Prisma.SortOrder
   ionIcon?: Prisma.SortOrder
   colorHex?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -342,6 +364,8 @@ export type CategorySuggestionScalarWhereWithAggregatesInput = {
   transactionId?: Prisma.UuidWithAggregatesFilter<"CategorySuggestion"> | string
   suggestedName?: Prisma.StringWithAggregatesFilter<"CategorySuggestion"> | string
   suggestedSlug?: Prisma.StringWithAggregatesFilter<"CategorySuggestion"> | string
+  suggestedSubcategoryName?: Prisma.StringNullableWithAggregatesFilter<"CategorySuggestion"> | string | null
+  suggestedSubcategorySlug?: Prisma.StringNullableWithAggregatesFilter<"CategorySuggestion"> | string | null
   ionIcon?: Prisma.StringWithAggregatesFilter<"CategorySuggestion"> | string
   colorHex?: Prisma.StringWithAggregatesFilter<"CategorySuggestion"> | string
   reason?: Prisma.StringWithAggregatesFilter<"CategorySuggestion"> | string
@@ -355,6 +379,8 @@ export type CategorySuggestionCreateInput = {
   id?: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -372,6 +398,8 @@ export type CategorySuggestionUncheckedCreateInput = {
   transactionId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -385,6 +413,8 @@ export type CategorySuggestionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -402,6 +432,8 @@ export type CategorySuggestionUncheckedUpdateInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -417,6 +449,8 @@ export type CategorySuggestionCreateManyInput = {
   transactionId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -430,6 +464,8 @@ export type CategorySuggestionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -445,6 +481,8 @@ export type CategorySuggestionUncheckedUpdateManyInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -460,6 +498,8 @@ export type CategorySuggestionCountOrderByAggregateInput = {
   transactionId?: Prisma.SortOrder
   suggestedName?: Prisma.SortOrder
   suggestedSlug?: Prisma.SortOrder
+  suggestedSubcategoryName?: Prisma.SortOrder
+  suggestedSubcategorySlug?: Prisma.SortOrder
   ionIcon?: Prisma.SortOrder
   colorHex?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -479,6 +519,8 @@ export type CategorySuggestionMaxOrderByAggregateInput = {
   transactionId?: Prisma.SortOrder
   suggestedName?: Prisma.SortOrder
   suggestedSlug?: Prisma.SortOrder
+  suggestedSubcategoryName?: Prisma.SortOrder
+  suggestedSubcategorySlug?: Prisma.SortOrder
   ionIcon?: Prisma.SortOrder
   colorHex?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -494,6 +536,8 @@ export type CategorySuggestionMinOrderByAggregateInput = {
   transactionId?: Prisma.SortOrder
   suggestedName?: Prisma.SortOrder
   suggestedSlug?: Prisma.SortOrder
+  suggestedSubcategoryName?: Prisma.SortOrder
+  suggestedSubcategorySlug?: Prisma.SortOrder
   ionIcon?: Prisma.SortOrder
   colorHex?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -617,6 +661,8 @@ export type CategorySuggestionCreateWithoutUserInput = {
   id?: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -632,6 +678,8 @@ export type CategorySuggestionUncheckedCreateWithoutUserInput = {
   transactionId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -676,6 +724,8 @@ export type CategorySuggestionScalarWhereInput = {
   transactionId?: Prisma.UuidFilter<"CategorySuggestion"> | string
   suggestedName?: Prisma.StringFilter<"CategorySuggestion"> | string
   suggestedSlug?: Prisma.StringFilter<"CategorySuggestion"> | string
+  suggestedSubcategoryName?: Prisma.StringNullableFilter<"CategorySuggestion"> | string | null
+  suggestedSubcategorySlug?: Prisma.StringNullableFilter<"CategorySuggestion"> | string | null
   ionIcon?: Prisma.StringFilter<"CategorySuggestion"> | string
   colorHex?: Prisma.StringFilter<"CategorySuggestion"> | string
   reason?: Prisma.StringFilter<"CategorySuggestion"> | string
@@ -689,6 +739,8 @@ export type CategorySuggestionCreateWithoutTransactionInput = {
   id?: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -704,6 +756,8 @@ export type CategorySuggestionUncheckedCreateWithoutTransactionInput = {
   userId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -744,6 +798,8 @@ export type CategorySuggestionCreateManyUserInput = {
   transactionId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -757,6 +813,8 @@ export type CategorySuggestionUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -772,6 +830,8 @@ export type CategorySuggestionUncheckedUpdateWithoutUserInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -786,6 +846,8 @@ export type CategorySuggestionUncheckedUpdateManyWithoutUserInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -800,6 +862,8 @@ export type CategorySuggestionCreateManyTransactionInput = {
   userId: string
   suggestedName: string
   suggestedSlug: string
+  suggestedSubcategoryName?: string | null
+  suggestedSubcategorySlug?: string | null
   ionIcon: string
   colorHex: string
   reason: string
@@ -813,6 +877,8 @@ export type CategorySuggestionUpdateWithoutTransactionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -828,6 +894,8 @@ export type CategorySuggestionUncheckedUpdateWithoutTransactionInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -842,6 +910,8 @@ export type CategorySuggestionUncheckedUpdateManyWithoutTransactionInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedName?: Prisma.StringFieldUpdateOperationsInput | string
   suggestedSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  suggestedSubcategoryName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suggestedSubcategorySlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
   colorHex?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -859,6 +929,8 @@ export type CategorySuggestionSelect<ExtArgs extends runtime.Types.Extensions.In
   transactionId?: boolean
   suggestedName?: boolean
   suggestedSlug?: boolean
+  suggestedSubcategoryName?: boolean
+  suggestedSubcategorySlug?: boolean
   ionIcon?: boolean
   colorHex?: boolean
   reason?: boolean
@@ -876,6 +948,8 @@ export type CategorySuggestionSelectCreateManyAndReturn<ExtArgs extends runtime.
   transactionId?: boolean
   suggestedName?: boolean
   suggestedSlug?: boolean
+  suggestedSubcategoryName?: boolean
+  suggestedSubcategorySlug?: boolean
   ionIcon?: boolean
   colorHex?: boolean
   reason?: boolean
@@ -893,6 +967,8 @@ export type CategorySuggestionSelectUpdateManyAndReturn<ExtArgs extends runtime.
   transactionId?: boolean
   suggestedName?: boolean
   suggestedSlug?: boolean
+  suggestedSubcategoryName?: boolean
+  suggestedSubcategorySlug?: boolean
   ionIcon?: boolean
   colorHex?: boolean
   reason?: boolean
@@ -910,6 +986,8 @@ export type CategorySuggestionSelectScalar = {
   transactionId?: boolean
   suggestedName?: boolean
   suggestedSlug?: boolean
+  suggestedSubcategoryName?: boolean
+  suggestedSubcategorySlug?: boolean
   ionIcon?: boolean
   colorHex?: boolean
   reason?: boolean
@@ -919,7 +997,7 @@ export type CategorySuggestionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CategorySuggestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "transactionId" | "suggestedName" | "suggestedSlug" | "ionIcon" | "colorHex" | "reason" | "confidenceScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["categorySuggestion"]>
+export type CategorySuggestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "transactionId" | "suggestedName" | "suggestedSlug" | "suggestedSubcategoryName" | "suggestedSubcategorySlug" | "ionIcon" | "colorHex" | "reason" | "confidenceScore" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["categorySuggestion"]>
 export type CategorySuggestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
@@ -945,6 +1023,8 @@ export type $CategorySuggestionPayload<ExtArgs extends runtime.Types.Extensions.
     transactionId: string
     suggestedName: string
     suggestedSlug: string
+    suggestedSubcategoryName: string | null
+    suggestedSubcategorySlug: string | null
     ionIcon: string
     colorHex: string
     reason: string
@@ -1382,6 +1462,8 @@ export interface CategorySuggestionFieldRefs {
   readonly transactionId: Prisma.FieldRef<"CategorySuggestion", 'String'>
   readonly suggestedName: Prisma.FieldRef<"CategorySuggestion", 'String'>
   readonly suggestedSlug: Prisma.FieldRef<"CategorySuggestion", 'String'>
+  readonly suggestedSubcategoryName: Prisma.FieldRef<"CategorySuggestion", 'String'>
+  readonly suggestedSubcategorySlug: Prisma.FieldRef<"CategorySuggestion", 'String'>
   readonly ionIcon: Prisma.FieldRef<"CategorySuggestion", 'String'>
   readonly colorHex: Prisma.FieldRef<"CategorySuggestion", 'String'>
   readonly reason: Prisma.FieldRef<"CategorySuggestion", 'String'>

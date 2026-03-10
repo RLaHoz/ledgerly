@@ -52,6 +52,9 @@ export type TransactionMinAggregateOutputType = {
   merchant: string | null
   description: string | null
   categoryId: string | null
+  subcategoryId: string | null
+  classifiedByRuleId: string | null
+  classifiedAt: Date | null
   isTransfer: boolean | null
   isPending: boolean | null
   dedupeHash: string | null
@@ -76,6 +79,9 @@ export type TransactionMaxAggregateOutputType = {
   merchant: string | null
   description: string | null
   categoryId: string | null
+  subcategoryId: string | null
+  classifiedByRuleId: string | null
+  classifiedAt: Date | null
   isTransfer: boolean | null
   isPending: boolean | null
   dedupeHash: string | null
@@ -100,6 +106,9 @@ export type TransactionCountAggregateOutputType = {
   merchant: number
   description: number
   categoryId: number
+  subcategoryId: number
+  classifiedByRuleId: number
+  classifiedAt: number
   isTransfer: number
   isPending: number
   dedupeHash: number
@@ -136,6 +145,9 @@ export type TransactionMinAggregateInputType = {
   merchant?: true
   description?: true
   categoryId?: true
+  subcategoryId?: true
+  classifiedByRuleId?: true
+  classifiedAt?: true
   isTransfer?: true
   isPending?: true
   dedupeHash?: true
@@ -160,6 +172,9 @@ export type TransactionMaxAggregateInputType = {
   merchant?: true
   description?: true
   categoryId?: true
+  subcategoryId?: true
+  classifiedByRuleId?: true
+  classifiedAt?: true
   isTransfer?: true
   isPending?: true
   dedupeHash?: true
@@ -184,6 +199,9 @@ export type TransactionCountAggregateInputType = {
   merchant?: true
   description?: true
   categoryId?: true
+  subcategoryId?: true
+  classifiedByRuleId?: true
+  classifiedAt?: true
   isTransfer?: true
   isPending?: true
   dedupeHash?: true
@@ -295,6 +313,9 @@ export type TransactionGroupByOutputType = {
   merchant: string | null
   description: string
   categoryId: string | null
+  subcategoryId: string | null
+  classifiedByRuleId: string | null
+  classifiedAt: Date | null
   isTransfer: boolean
   isPending: boolean
   dedupeHash: string
@@ -342,6 +363,9 @@ export type TransactionWhereInput = {
   merchant?: Prisma.StringNullableFilter<"Transaction"> | string | null
   description?: Prisma.StringFilter<"Transaction"> | string
   categoryId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  subcategoryId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  classifiedByRuleId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  classifiedAt?: Prisma.DateTimeNullableFilter<"Transaction"> | Date | string | null
   isTransfer?: Prisma.BoolFilter<"Transaction"> | boolean
   isPending?: Prisma.BoolFilter<"Transaction"> | boolean
   dedupeHash?: Prisma.StringFilter<"Transaction"> | string
@@ -353,6 +377,8 @@ export type TransactionWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   bankAccount?: Prisma.XOR<Prisma.BankAccountNullableScalarRelationFilter, Prisma.BankAccountWhereInput> | null
   category?: Prisma.XOR<Prisma.BudgetCategoryNullableScalarRelationFilter, Prisma.BudgetCategoryWhereInput> | null
+  subcategory?: Prisma.XOR<Prisma.BudgetSubcategoryNullableScalarRelationFilter, Prisma.BudgetSubcategoryWhereInput> | null
+  classifiedByRule?: Prisma.XOR<Prisma.RuleNullableScalarRelationFilter, Prisma.RuleWhereInput> | null
   rawRef?: Prisma.XOR<Prisma.BankTransactionRawNullableScalarRelationFilter, Prisma.BankTransactionRawWhereInput> | null
   ruleExecutions?: Prisma.RuleExecutionListRelationFilter
 }
@@ -373,6 +399,9 @@ export type TransactionOrderByWithRelationInput = {
   merchant?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subcategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  classifiedByRuleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  classifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isTransfer?: Prisma.SortOrder
   isPending?: Prisma.SortOrder
   dedupeHash?: Prisma.SortOrder
@@ -384,6 +413,8 @@ export type TransactionOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   bankAccount?: Prisma.BankAccountOrderByWithRelationInput
   category?: Prisma.BudgetCategoryOrderByWithRelationInput
+  subcategory?: Prisma.BudgetSubcategoryOrderByWithRelationInput
+  classifiedByRule?: Prisma.RuleOrderByWithRelationInput
   rawRef?: Prisma.BankTransactionRawOrderByWithRelationInput
   ruleExecutions?: Prisma.RuleExecutionOrderByRelationAggregateInput
 }
@@ -408,6 +439,9 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   merchant?: Prisma.StringNullableFilter<"Transaction"> | string | null
   description?: Prisma.StringFilter<"Transaction"> | string
   categoryId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  subcategoryId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  classifiedByRuleId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  classifiedAt?: Prisma.DateTimeNullableFilter<"Transaction"> | Date | string | null
   isTransfer?: Prisma.BoolFilter<"Transaction"> | boolean
   isPending?: Prisma.BoolFilter<"Transaction"> | boolean
   dedupeHash?: Prisma.StringFilter<"Transaction"> | string
@@ -419,6 +453,8 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   bankAccount?: Prisma.XOR<Prisma.BankAccountNullableScalarRelationFilter, Prisma.BankAccountWhereInput> | null
   category?: Prisma.XOR<Prisma.BudgetCategoryNullableScalarRelationFilter, Prisma.BudgetCategoryWhereInput> | null
+  subcategory?: Prisma.XOR<Prisma.BudgetSubcategoryNullableScalarRelationFilter, Prisma.BudgetSubcategoryWhereInput> | null
+  classifiedByRule?: Prisma.XOR<Prisma.RuleNullableScalarRelationFilter, Prisma.RuleWhereInput> | null
   rawRef?: Prisma.XOR<Prisma.BankTransactionRawNullableScalarRelationFilter, Prisma.BankTransactionRawWhereInput> | null
   ruleExecutions?: Prisma.RuleExecutionListRelationFilter
 }, "id" | "userId_dedupeHash">
@@ -439,6 +475,9 @@ export type TransactionOrderByWithAggregationInput = {
   merchant?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subcategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  classifiedByRuleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  classifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isTransfer?: Prisma.SortOrder
   isPending?: Prisma.SortOrder
   dedupeHash?: Prisma.SortOrder
@@ -471,6 +510,9 @@ export type TransactionScalarWhereWithAggregatesInput = {
   merchant?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   description?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   categoryId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+  subcategoryId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+  classifiedByRuleId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+  classifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
   isTransfer?: Prisma.BoolWithAggregatesFilter<"Transaction"> | boolean
   isPending?: Prisma.BoolWithAggregatesFilter<"Transaction"> | boolean
   dedupeHash?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
@@ -491,6 +533,7 @@ export type TransactionCreateInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -501,6 +544,8 @@ export type TransactionCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
@@ -521,6 +566,9 @@ export type TransactionUncheckedCreateInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -543,6 +591,7 @@ export type TransactionUpdateInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -553,6 +602,8 @@ export type TransactionUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
@@ -573,6 +624,9 @@ export type TransactionUncheckedUpdateInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -599,6 +653,9 @@ export type TransactionCreateManyInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -619,6 +676,7 @@ export type TransactionUpdateManyMutationInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -642,6 +700,9 @@ export type TransactionUncheckedUpdateManyInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -686,6 +747,9 @@ export type TransactionCountOrderByAggregateInput = {
   merchant?: Prisma.SortOrder
   description?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  subcategoryId?: Prisma.SortOrder
+  classifiedByRuleId?: Prisma.SortOrder
+  classifiedAt?: Prisma.SortOrder
   isTransfer?: Prisma.SortOrder
   isPending?: Prisma.SortOrder
   dedupeHash?: Prisma.SortOrder
@@ -715,6 +779,9 @@ export type TransactionMaxOrderByAggregateInput = {
   merchant?: Prisma.SortOrder
   description?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  subcategoryId?: Prisma.SortOrder
+  classifiedByRuleId?: Prisma.SortOrder
+  classifiedAt?: Prisma.SortOrder
   isTransfer?: Prisma.SortOrder
   isPending?: Prisma.SortOrder
   dedupeHash?: Prisma.SortOrder
@@ -739,6 +806,9 @@ export type TransactionMinOrderByAggregateInput = {
   merchant?: Prisma.SortOrder
   description?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  subcategoryId?: Prisma.SortOrder
+  classifiedByRuleId?: Prisma.SortOrder
+  classifiedAt?: Prisma.SortOrder
   isTransfer?: Prisma.SortOrder
   isPending?: Prisma.SortOrder
   dedupeHash?: Prisma.SortOrder
@@ -892,12 +962,96 @@ export type TransactionUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
+export type TransactionCreateNestedManyWithoutSubcategoryInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSubcategoryInput, Prisma.TransactionUncheckedCreateWithoutSubcategoryInput> | Prisma.TransactionCreateWithoutSubcategoryInput[] | Prisma.TransactionUncheckedCreateWithoutSubcategoryInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSubcategoryInput | Prisma.TransactionCreateOrConnectWithoutSubcategoryInput[]
+  createMany?: Prisma.TransactionCreateManySubcategoryInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutSubcategoryInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSubcategoryInput, Prisma.TransactionUncheckedCreateWithoutSubcategoryInput> | Prisma.TransactionCreateWithoutSubcategoryInput[] | Prisma.TransactionUncheckedCreateWithoutSubcategoryInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSubcategoryInput | Prisma.TransactionCreateOrConnectWithoutSubcategoryInput[]
+  createMany?: Prisma.TransactionCreateManySubcategoryInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUpdateManyWithoutSubcategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSubcategoryInput, Prisma.TransactionUncheckedCreateWithoutSubcategoryInput> | Prisma.TransactionCreateWithoutSubcategoryInput[] | Prisma.TransactionUncheckedCreateWithoutSubcategoryInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSubcategoryInput | Prisma.TransactionCreateOrConnectWithoutSubcategoryInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutSubcategoryInput | Prisma.TransactionUpsertWithWhereUniqueWithoutSubcategoryInput[]
+  createMany?: Prisma.TransactionCreateManySubcategoryInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutSubcategoryInput | Prisma.TransactionUpdateWithWhereUniqueWithoutSubcategoryInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutSubcategoryInput | Prisma.TransactionUpdateManyWithWhereWithoutSubcategoryInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutSubcategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSubcategoryInput, Prisma.TransactionUncheckedCreateWithoutSubcategoryInput> | Prisma.TransactionCreateWithoutSubcategoryInput[] | Prisma.TransactionUncheckedCreateWithoutSubcategoryInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSubcategoryInput | Prisma.TransactionCreateOrConnectWithoutSubcategoryInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutSubcategoryInput | Prisma.TransactionUpsertWithWhereUniqueWithoutSubcategoryInput[]
+  createMany?: Prisma.TransactionCreateManySubcategoryInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutSubcategoryInput | Prisma.TransactionUpdateWithWhereUniqueWithoutSubcategoryInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutSubcategoryInput | Prisma.TransactionUpdateManyWithWhereWithoutSubcategoryInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
 export type EnumTransactionSourceTypeFieldUpdateOperationsInput = {
   set?: $Enums.TransactionSourceType
 }
 
 export type EnumClassificationStatusFieldUpdateOperationsInput = {
   set?: $Enums.ClassificationStatus
+}
+
+export type TransactionCreateNestedManyWithoutClassifiedByRuleInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput> | Prisma.TransactionCreateWithoutClassifiedByRuleInput[] | Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput | Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput[]
+  createMany?: Prisma.TransactionCreateManyClassifiedByRuleInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput> | Prisma.TransactionCreateWithoutClassifiedByRuleInput[] | Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput | Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput[]
+  createMany?: Prisma.TransactionCreateManyClassifiedByRuleInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUpdateManyWithoutClassifiedByRuleNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput> | Prisma.TransactionCreateWithoutClassifiedByRuleInput[] | Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput | Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutClassifiedByRuleInput | Prisma.TransactionUpsertWithWhereUniqueWithoutClassifiedByRuleInput[]
+  createMany?: Prisma.TransactionCreateManyClassifiedByRuleInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutClassifiedByRuleInput | Prisma.TransactionUpdateWithWhereUniqueWithoutClassifiedByRuleInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutClassifiedByRuleInput | Prisma.TransactionUpdateManyWithWhereWithoutClassifiedByRuleInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput> | Prisma.TransactionCreateWithoutClassifiedByRuleInput[] | Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput | Prisma.TransactionCreateOrConnectWithoutClassifiedByRuleInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutClassifiedByRuleInput | Prisma.TransactionUpsertWithWhereUniqueWithoutClassifiedByRuleInput[]
+  createMany?: Prisma.TransactionCreateManyClassifiedByRuleInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutClassifiedByRuleInput | Prisma.TransactionUpdateWithWhereUniqueWithoutClassifiedByRuleInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutClassifiedByRuleInput | Prisma.TransactionUpdateManyWithWhereWithoutClassifiedByRuleInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
 export type TransactionCreateNestedOneWithoutRuleExecutionsInput = {
@@ -1010,6 +1164,7 @@ export type TransactionCreateWithoutImportRunInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1019,6 +1174,8 @@ export type TransactionCreateWithoutImportRunInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
@@ -1038,6 +1195,9 @@ export type TransactionUncheckedCreateWithoutImportRunInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1093,6 +1253,9 @@ export type TransactionScalarWhereInput = {
   merchant?: Prisma.StringNullableFilter<"Transaction"> | string | null
   description?: Prisma.StringFilter<"Transaction"> | string
   categoryId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  subcategoryId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  classifiedByRuleId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  classifiedAt?: Prisma.DateTimeNullableFilter<"Transaction"> | Date | string | null
   isTransfer?: Prisma.BoolFilter<"Transaction"> | boolean
   isPending?: Prisma.BoolFilter<"Transaction"> | boolean
   dedupeHash?: Prisma.StringFilter<"Transaction"> | string
@@ -1113,6 +1276,7 @@ export type TransactionCreateWithoutSuggestionsInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1122,6 +1286,8 @@ export type TransactionCreateWithoutSuggestionsInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
@@ -1142,6 +1308,9 @@ export type TransactionUncheckedCreateWithoutSuggestionsInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1179,6 +1348,7 @@ export type TransactionUpdateWithoutSuggestionsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1188,6 +1358,8 @@ export type TransactionUpdateWithoutSuggestionsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
@@ -1208,6 +1380,9 @@ export type TransactionUncheckedUpdateWithoutSuggestionsInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1229,6 +1404,7 @@ export type TransactionCreateWithoutUserInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1238,6 +1414,8 @@ export type TransactionCreateWithoutUserInput = {
   importRun?: Prisma.ImportRunCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
@@ -1257,6 +1435,9 @@ export type TransactionUncheckedCreateWithoutUserInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1305,6 +1486,7 @@ export type TransactionCreateWithoutCategoryInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1314,6 +1496,8 @@ export type TransactionCreateWithoutCategoryInput = {
   importRun?: Prisma.ImportRunCreateNestedOneWithoutTransactionsInput
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
@@ -1333,6 +1517,9 @@ export type TransactionUncheckedCreateWithoutCategoryInput = {
   currency: string
   merchant?: string | null
   description: string
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1369,6 +1556,170 @@ export type TransactionUpdateManyWithWhereWithoutCategoryInput = {
   data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutCategoryInput>
 }
 
+export type TransactionCreateWithoutSubcategoryInput = {
+  id?: string
+  sourceType: $Enums.TransactionSourceType
+  classificationStatus?: $Enums.ClassificationStatus
+  confidenceScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  externalTxId?: string | null
+  occurredAt: Date | string
+  bookingDate?: Date | string | null
+  amountSigned: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency: string
+  merchant?: string | null
+  description: string
+  classifiedAt?: Date | string | null
+  isTransfer?: boolean
+  isPending?: boolean
+  dedupeHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  suggestions?: Prisma.CategorySuggestionCreateNestedManyWithoutTransactionInput
+  importRun?: Prisma.ImportRunCreateNestedOneWithoutTransactionsInput
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
+  category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
+  rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
+  ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutSubcategoryInput = {
+  id?: string
+  userId: string
+  bankAccountId?: string | null
+  sourceType: $Enums.TransactionSourceType
+  classificationStatus?: $Enums.ClassificationStatus
+  confidenceScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: string | null
+  externalTxId?: string | null
+  occurredAt: Date | string
+  bookingDate?: Date | string | null
+  amountSigned: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency: string
+  merchant?: string | null
+  description: string
+  categoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
+  isTransfer?: boolean
+  isPending?: boolean
+  dedupeHash: string
+  rawRefId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  suggestions?: Prisma.CategorySuggestionUncheckedCreateNestedManyWithoutTransactionInput
+  ruleExecutions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutSubcategoryInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutSubcategoryInput, Prisma.TransactionUncheckedCreateWithoutSubcategoryInput>
+}
+
+export type TransactionCreateManySubcategoryInputEnvelope = {
+  data: Prisma.TransactionCreateManySubcategoryInput | Prisma.TransactionCreateManySubcategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutSubcategoryInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutSubcategoryInput, Prisma.TransactionUncheckedUpdateWithoutSubcategoryInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutSubcategoryInput, Prisma.TransactionUncheckedCreateWithoutSubcategoryInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutSubcategoryInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutSubcategoryInput, Prisma.TransactionUncheckedUpdateWithoutSubcategoryInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutSubcategoryInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutSubcategoryInput>
+}
+
+export type TransactionCreateWithoutClassifiedByRuleInput = {
+  id?: string
+  sourceType: $Enums.TransactionSourceType
+  classificationStatus?: $Enums.ClassificationStatus
+  confidenceScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  externalTxId?: string | null
+  occurredAt: Date | string
+  bookingDate?: Date | string | null
+  amountSigned: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency: string
+  merchant?: string | null
+  description: string
+  classifiedAt?: Date | string | null
+  isTransfer?: boolean
+  isPending?: boolean
+  dedupeHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  suggestions?: Prisma.CategorySuggestionCreateNestedManyWithoutTransactionInput
+  importRun?: Prisma.ImportRunCreateNestedOneWithoutTransactionsInput
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
+  category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
+  ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutClassifiedByRuleInput = {
+  id?: string
+  userId: string
+  bankAccountId?: string | null
+  sourceType: $Enums.TransactionSourceType
+  classificationStatus?: $Enums.ClassificationStatus
+  confidenceScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: string | null
+  externalTxId?: string | null
+  occurredAt: Date | string
+  bookingDate?: Date | string | null
+  amountSigned: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency: string
+  merchant?: string | null
+  description: string
+  categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedAt?: Date | string | null
+  isTransfer?: boolean
+  isPending?: boolean
+  dedupeHash: string
+  rawRefId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  suggestions?: Prisma.CategorySuggestionUncheckedCreateNestedManyWithoutTransactionInput
+  ruleExecutions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutClassifiedByRuleInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput>
+}
+
+export type TransactionCreateManyClassifiedByRuleInputEnvelope = {
+  data: Prisma.TransactionCreateManyClassifiedByRuleInput | Prisma.TransactionCreateManyClassifiedByRuleInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutClassifiedByRuleInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedUpdateWithoutClassifiedByRuleInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedCreateWithoutClassifiedByRuleInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutClassifiedByRuleInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutClassifiedByRuleInput, Prisma.TransactionUncheckedUpdateWithoutClassifiedByRuleInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutClassifiedByRuleInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleInput>
+}
+
 export type TransactionCreateWithoutRuleExecutionsInput = {
   id?: string
   sourceType: $Enums.TransactionSourceType
@@ -1381,6 +1732,7 @@ export type TransactionCreateWithoutRuleExecutionsInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1391,6 +1743,8 @@ export type TransactionCreateWithoutRuleExecutionsInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
 }
 
@@ -1410,6 +1764,9 @@ export type TransactionUncheckedCreateWithoutRuleExecutionsInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1447,6 +1804,7 @@ export type TransactionUpdateWithoutRuleExecutionsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1457,6 +1815,8 @@ export type TransactionUpdateWithoutRuleExecutionsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
 }
 
@@ -1476,6 +1836,9 @@ export type TransactionUncheckedUpdateWithoutRuleExecutionsInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1497,6 +1860,7 @@ export type TransactionCreateWithoutBankAccountInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1506,6 +1870,8 @@ export type TransactionCreateWithoutBankAccountInput = {
   importRun?: Prisma.ImportRunCreateNestedOneWithoutTransactionsInput
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   rawRef?: Prisma.BankTransactionRawCreateNestedOneWithoutNormalizedTxsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
@@ -1525,6 +1891,9 @@ export type TransactionUncheckedCreateWithoutBankAccountInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1573,6 +1942,7 @@ export type TransactionCreateWithoutRawRefInput = {
   currency: string
   merchant?: string | null
   description: string
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1583,6 +1953,8 @@ export type TransactionCreateWithoutRawRefInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   bankAccount?: Prisma.BankAccountCreateNestedOneWithoutTransactionsInput
   category?: Prisma.BudgetCategoryCreateNestedOneWithoutTransactionsInput
+  subcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutTransactionsInput
+  classifiedByRule?: Prisma.RuleCreateNestedOneWithoutClassifiedTransactionsInput
   ruleExecutions?: Prisma.RuleExecutionCreateNestedManyWithoutTransactionInput
 }
 
@@ -1602,6 +1974,9 @@ export type TransactionUncheckedCreateWithoutRawRefInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1652,6 +2027,9 @@ export type TransactionCreateManyImportRunInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1672,6 +2050,7 @@ export type TransactionUpdateWithoutImportRunInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1681,6 +2060,8 @@ export type TransactionUpdateWithoutImportRunInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
@@ -1700,6 +2081,9 @@ export type TransactionUncheckedUpdateWithoutImportRunInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1725,6 +2109,9 @@ export type TransactionUncheckedUpdateManyWithoutImportRunInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1748,6 +2135,9 @@ export type TransactionCreateManyUserInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1768,6 +2158,7 @@ export type TransactionUpdateWithoutUserInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1777,6 +2168,8 @@ export type TransactionUpdateWithoutUserInput = {
   importRun?: Prisma.ImportRunUpdateOneWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
@@ -1796,6 +2189,9 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1821,6 +2217,9 @@ export type TransactionUncheckedUpdateManyWithoutUserInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1844,6 +2243,9 @@ export type TransactionCreateManyCategoryInput = {
   currency: string
   merchant?: string | null
   description: string
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1864,6 +2266,7 @@ export type TransactionUpdateWithoutCategoryInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1873,6 +2276,8 @@ export type TransactionUpdateWithoutCategoryInput = {
   importRun?: Prisma.ImportRunUpdateOneWithoutTransactionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
@@ -1892,6 +2297,9 @@ export type TransactionUncheckedUpdateWithoutCategoryInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1917,6 +2325,225 @@ export type TransactionUncheckedUpdateManyWithoutCategoryInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rawRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransactionCreateManySubcategoryInput = {
+  id?: string
+  userId: string
+  bankAccountId?: string | null
+  sourceType: $Enums.TransactionSourceType
+  classificationStatus?: $Enums.ClassificationStatus
+  confidenceScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: string | null
+  externalTxId?: string | null
+  occurredAt: Date | string
+  bookingDate?: Date | string | null
+  amountSigned: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency: string
+  merchant?: string | null
+  description: string
+  categoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
+  isTransfer?: boolean
+  isPending?: boolean
+  dedupeHash: string
+  rawRefId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransactionUpdateWithoutSubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.EnumTransactionSourceTypeFieldUpdateOperationsInput | $Enums.TransactionSourceType
+  classificationStatus?: Prisma.EnumClassificationStatusFieldUpdateOperationsInput | $Enums.ClassificationStatus
+  confidenceScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  externalTxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  amountSigned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestions?: Prisma.CategorySuggestionUpdateManyWithoutTransactionNestedInput
+  importRun?: Prisma.ImportRunUpdateOneWithoutTransactionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
+  category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
+  rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
+  ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutSubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumTransactionSourceTypeFieldUpdateOperationsInput | $Enums.TransactionSourceType
+  classificationStatus?: Prisma.EnumClassificationStatusFieldUpdateOperationsInput | $Enums.ClassificationStatus
+  confidenceScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalTxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  amountSigned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rawRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestions?: Prisma.CategorySuggestionUncheckedUpdateManyWithoutTransactionNestedInput
+  ruleExecutions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutSubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumTransactionSourceTypeFieldUpdateOperationsInput | $Enums.TransactionSourceType
+  classificationStatus?: Prisma.EnumClassificationStatusFieldUpdateOperationsInput | $Enums.ClassificationStatus
+  confidenceScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalTxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  amountSigned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rawRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransactionCreateManyClassifiedByRuleInput = {
+  id?: string
+  userId: string
+  bankAccountId?: string | null
+  sourceType: $Enums.TransactionSourceType
+  classificationStatus?: $Enums.ClassificationStatus
+  confidenceScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: string | null
+  externalTxId?: string | null
+  occurredAt: Date | string
+  bookingDate?: Date | string | null
+  amountSigned: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency: string
+  merchant?: string | null
+  description: string
+  categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedAt?: Date | string | null
+  isTransfer?: boolean
+  isPending?: boolean
+  dedupeHash: string
+  rawRefId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransactionUpdateWithoutClassifiedByRuleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceType?: Prisma.EnumTransactionSourceTypeFieldUpdateOperationsInput | $Enums.TransactionSourceType
+  classificationStatus?: Prisma.EnumClassificationStatusFieldUpdateOperationsInput | $Enums.ClassificationStatus
+  confidenceScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  externalTxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  amountSigned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestions?: Prisma.CategorySuggestionUpdateManyWithoutTransactionNestedInput
+  importRun?: Prisma.ImportRunUpdateOneWithoutTransactionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
+  category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
+  ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutClassifiedByRuleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumTransactionSourceTypeFieldUpdateOperationsInput | $Enums.TransactionSourceType
+  classificationStatus?: Prisma.EnumClassificationStatusFieldUpdateOperationsInput | $Enums.ClassificationStatus
+  confidenceScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalTxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  amountSigned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rawRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestions?: Prisma.CategorySuggestionUncheckedUpdateManyWithoutTransactionNestedInput
+  ruleExecutions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutClassifiedByRuleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.EnumTransactionSourceTypeFieldUpdateOperationsInput | $Enums.TransactionSourceType
+  classificationStatus?: Prisma.EnumClassificationStatusFieldUpdateOperationsInput | $Enums.ClassificationStatus
+  confidenceScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  importRunId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalTxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  amountSigned?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1940,6 +2567,9 @@ export type TransactionCreateManyBankAccountInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -1960,6 +2590,7 @@ export type TransactionUpdateWithoutBankAccountInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1969,6 +2600,8 @@ export type TransactionUpdateWithoutBankAccountInput = {
   importRun?: Prisma.ImportRunUpdateOneWithoutTransactionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   rawRef?: Prisma.BankTransactionRawUpdateOneWithoutNormalizedTxsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
@@ -1988,6 +2621,9 @@ export type TransactionUncheckedUpdateWithoutBankAccountInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2013,6 +2649,9 @@ export type TransactionUncheckedUpdateManyWithoutBankAccountInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2037,6 +2676,9 @@ export type TransactionCreateManyRawRefInput = {
   merchant?: string | null
   description: string
   categoryId?: string | null
+  subcategoryId?: string | null
+  classifiedByRuleId?: string | null
+  classifiedAt?: Date | string | null
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash: string
@@ -2056,6 +2698,7 @@ export type TransactionUpdateWithoutRawRefInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2066,6 +2709,8 @@ export type TransactionUpdateWithoutRawRefInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   bankAccount?: Prisma.BankAccountUpdateOneWithoutTransactionsNestedInput
   category?: Prisma.BudgetCategoryUpdateOneWithoutTransactionsNestedInput
+  subcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutTransactionsNestedInput
+  classifiedByRule?: Prisma.RuleUpdateOneWithoutClassifiedTransactionsNestedInput
   ruleExecutions?: Prisma.RuleExecutionUpdateManyWithoutTransactionNestedInput
 }
 
@@ -2085,6 +2730,9 @@ export type TransactionUncheckedUpdateWithoutRawRefInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2110,6 +2758,9 @@ export type TransactionUncheckedUpdateManyWithoutRawRefInput = {
   merchant?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedByRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isTransfer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isPending?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dedupeHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2173,6 +2824,9 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   merchant?: boolean
   description?: boolean
   categoryId?: boolean
+  subcategoryId?: boolean
+  classifiedByRuleId?: boolean
+  classifiedAt?: boolean
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash?: boolean
@@ -2184,6 +2838,8 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bankAccount?: boolean | Prisma.Transaction$bankAccountArgs<ExtArgs>
   category?: boolean | Prisma.Transaction$categoryArgs<ExtArgs>
+  subcategory?: boolean | Prisma.Transaction$subcategoryArgs<ExtArgs>
+  classifiedByRule?: boolean | Prisma.Transaction$classifiedByRuleArgs<ExtArgs>
   rawRef?: boolean | Prisma.Transaction$rawRefArgs<ExtArgs>
   ruleExecutions?: boolean | Prisma.Transaction$ruleExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
@@ -2205,6 +2861,9 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   merchant?: boolean
   description?: boolean
   categoryId?: boolean
+  subcategoryId?: boolean
+  classifiedByRuleId?: boolean
+  classifiedAt?: boolean
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash?: boolean
@@ -2215,6 +2874,8 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bankAccount?: boolean | Prisma.Transaction$bankAccountArgs<ExtArgs>
   category?: boolean | Prisma.Transaction$categoryArgs<ExtArgs>
+  subcategory?: boolean | Prisma.Transaction$subcategoryArgs<ExtArgs>
+  classifiedByRule?: boolean | Prisma.Transaction$classifiedByRuleArgs<ExtArgs>
   rawRef?: boolean | Prisma.Transaction$rawRefArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
@@ -2234,6 +2895,9 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   merchant?: boolean
   description?: boolean
   categoryId?: boolean
+  subcategoryId?: boolean
+  classifiedByRuleId?: boolean
+  classifiedAt?: boolean
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash?: boolean
@@ -2244,6 +2908,8 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bankAccount?: boolean | Prisma.Transaction$bankAccountArgs<ExtArgs>
   category?: boolean | Prisma.Transaction$categoryArgs<ExtArgs>
+  subcategory?: boolean | Prisma.Transaction$subcategoryArgs<ExtArgs>
+  classifiedByRule?: boolean | Prisma.Transaction$classifiedByRuleArgs<ExtArgs>
   rawRef?: boolean | Prisma.Transaction$rawRefArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
@@ -2263,6 +2929,9 @@ export type TransactionSelectScalar = {
   merchant?: boolean
   description?: boolean
   categoryId?: boolean
+  subcategoryId?: boolean
+  classifiedByRuleId?: boolean
+  classifiedAt?: boolean
   isTransfer?: boolean
   isPending?: boolean
   dedupeHash?: boolean
@@ -2271,13 +2940,15 @@ export type TransactionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bankAccountId" | "sourceType" | "classificationStatus" | "confidenceScore" | "importRunId" | "externalTxId" | "occurredAt" | "bookingDate" | "amountSigned" | "currency" | "merchant" | "description" | "categoryId" | "isTransfer" | "isPending" | "dedupeHash" | "rawRefId" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bankAccountId" | "sourceType" | "classificationStatus" | "confidenceScore" | "importRunId" | "externalTxId" | "occurredAt" | "bookingDate" | "amountSigned" | "currency" | "merchant" | "description" | "categoryId" | "subcategoryId" | "classifiedByRuleId" | "classifiedAt" | "isTransfer" | "isPending" | "dedupeHash" | "rawRefId" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   suggestions?: boolean | Prisma.Transaction$suggestionsArgs<ExtArgs>
   importRun?: boolean | Prisma.Transaction$importRunArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bankAccount?: boolean | Prisma.Transaction$bankAccountArgs<ExtArgs>
   category?: boolean | Prisma.Transaction$categoryArgs<ExtArgs>
+  subcategory?: boolean | Prisma.Transaction$subcategoryArgs<ExtArgs>
+  classifiedByRule?: boolean | Prisma.Transaction$classifiedByRuleArgs<ExtArgs>
   rawRef?: boolean | Prisma.Transaction$rawRefArgs<ExtArgs>
   ruleExecutions?: boolean | Prisma.Transaction$ruleExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
@@ -2287,6 +2958,8 @@ export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bankAccount?: boolean | Prisma.Transaction$bankAccountArgs<ExtArgs>
   category?: boolean | Prisma.Transaction$categoryArgs<ExtArgs>
+  subcategory?: boolean | Prisma.Transaction$subcategoryArgs<ExtArgs>
+  classifiedByRule?: boolean | Prisma.Transaction$classifiedByRuleArgs<ExtArgs>
   rawRef?: boolean | Prisma.Transaction$rawRefArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2294,6 +2967,8 @@ export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bankAccount?: boolean | Prisma.Transaction$bankAccountArgs<ExtArgs>
   category?: boolean | Prisma.Transaction$categoryArgs<ExtArgs>
+  subcategory?: boolean | Prisma.Transaction$subcategoryArgs<ExtArgs>
+  classifiedByRule?: boolean | Prisma.Transaction$classifiedByRuleArgs<ExtArgs>
   rawRef?: boolean | Prisma.Transaction$rawRefArgs<ExtArgs>
 }
 
@@ -2305,6 +2980,8 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     user: Prisma.$UserPayload<ExtArgs>
     bankAccount: Prisma.$BankAccountPayload<ExtArgs> | null
     category: Prisma.$BudgetCategoryPayload<ExtArgs> | null
+    subcategory: Prisma.$BudgetSubcategoryPayload<ExtArgs> | null
+    classifiedByRule: Prisma.$RulePayload<ExtArgs> | null
     rawRef: Prisma.$BankTransactionRawPayload<ExtArgs> | null
     ruleExecutions: Prisma.$RuleExecutionPayload<ExtArgs>[]
   }
@@ -2324,6 +3001,9 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     merchant: string | null
     description: string
     categoryId: string | null
+    subcategoryId: string | null
+    classifiedByRuleId: string | null
+    classifiedAt: Date | null
     isTransfer: boolean
     isPending: boolean
     dedupeHash: string
@@ -2729,6 +3409,8 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bankAccount<T extends Prisma.Transaction$bankAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$bankAccountArgs<ExtArgs>>): Prisma.Prisma__BankAccountClient<runtime.Types.Result.GetResult<Prisma.$BankAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.Transaction$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$categoryArgs<ExtArgs>>): Prisma.Prisma__BudgetCategoryClient<runtime.Types.Result.GetResult<Prisma.$BudgetCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subcategory<T extends Prisma.Transaction$subcategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$subcategoryArgs<ExtArgs>>): Prisma.Prisma__BudgetSubcategoryClient<runtime.Types.Result.GetResult<Prisma.$BudgetSubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  classifiedByRule<T extends Prisma.Transaction$classifiedByRuleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$classifiedByRuleArgs<ExtArgs>>): Prisma.Prisma__RuleClient<runtime.Types.Result.GetResult<Prisma.$RulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   rawRef<T extends Prisma.Transaction$rawRefArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$rawRefArgs<ExtArgs>>): Prisma.Prisma__BankTransactionRawClient<runtime.Types.Result.GetResult<Prisma.$BankTransactionRawPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ruleExecutions<T extends Prisma.Transaction$ruleExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$ruleExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2775,6 +3457,9 @@ export interface TransactionFieldRefs {
   readonly merchant: Prisma.FieldRef<"Transaction", 'String'>
   readonly description: Prisma.FieldRef<"Transaction", 'String'>
   readonly categoryId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly subcategoryId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly classifiedByRuleId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly classifiedAt: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly isTransfer: Prisma.FieldRef<"Transaction", 'Boolean'>
   readonly isPending: Prisma.FieldRef<"Transaction", 'Boolean'>
   readonly dedupeHash: Prisma.FieldRef<"Transaction", 'String'>
@@ -3255,6 +3940,44 @@ export type Transaction$categoryArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.BudgetCategoryInclude<ExtArgs> | null
   where?: Prisma.BudgetCategoryWhereInput
+}
+
+/**
+ * Transaction.subcategory
+ */
+export type Transaction$subcategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetSubcategory
+   */
+  select?: Prisma.BudgetSubcategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetSubcategory
+   */
+  omit?: Prisma.BudgetSubcategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetSubcategoryInclude<ExtArgs> | null
+  where?: Prisma.BudgetSubcategoryWhereInput
+}
+
+/**
+ * Transaction.classifiedByRule
+ */
+export type Transaction$classifiedByRuleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Rule
+   */
+  select?: Prisma.RuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Rule
+   */
+  omit?: Prisma.RuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RuleInclude<ExtArgs> | null
+  where?: Prisma.RuleWhereInput
 }
 
 /**

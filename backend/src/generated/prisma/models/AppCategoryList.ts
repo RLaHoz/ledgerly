@@ -248,7 +248,9 @@ export type AppCategoryListWhereInput = {
   isActive?: Prisma.BoolFilter<"AppCategoryList"> | boolean
   createdAt?: Prisma.DateTimeFilter<"AppCategoryList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AppCategoryList"> | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListListRelationFilter
   userCategories?: Prisma.BudgetCategoryListRelationFilter
+  ruleTemplates?: Prisma.AppRuleTemplateListRelationFilter
 }
 
 export type AppCategoryListOrderByWithRelationInput = {
@@ -261,7 +263,9 @@ export type AppCategoryListOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  appSubcategories?: Prisma.AppSubcategoryListOrderByRelationAggregateInput
   userCategories?: Prisma.BudgetCategoryOrderByRelationAggregateInput
+  ruleTemplates?: Prisma.AppRuleTemplateOrderByRelationAggregateInput
 }
 
 export type AppCategoryListWhereUniqueInput = Prisma.AtLeast<{
@@ -277,7 +281,9 @@ export type AppCategoryListWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"AppCategoryList"> | boolean
   createdAt?: Prisma.DateTimeFilter<"AppCategoryList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AppCategoryList"> | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListListRelationFilter
   userCategories?: Prisma.BudgetCategoryListRelationFilter
+  ruleTemplates?: Prisma.AppRuleTemplateListRelationFilter
 }, "id" | "slug">
 
 export type AppCategoryListOrderByWithAggregationInput = {
@@ -322,7 +328,9 @@ export type AppCategoryListCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  appSubcategories?: Prisma.AppSubcategoryListCreateNestedManyWithoutAppCategoryInput
   userCategories?: Prisma.BudgetCategoryCreateNestedManyWithoutAppCategoryInput
+  ruleTemplates?: Prisma.AppRuleTemplateCreateNestedManyWithoutTargetAppCategoryInput
 }
 
 export type AppCategoryListUncheckedCreateInput = {
@@ -335,7 +343,9 @@ export type AppCategoryListUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUncheckedCreateNestedManyWithoutAppCategoryInput
   userCategories?: Prisma.BudgetCategoryUncheckedCreateNestedManyWithoutAppCategoryInput
+  ruleTemplates?: Prisma.AppRuleTemplateUncheckedCreateNestedManyWithoutTargetAppCategoryInput
 }
 
 export type AppCategoryListUpdateInput = {
@@ -348,7 +358,9 @@ export type AppCategoryListUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUpdateManyWithoutAppCategoryNestedInput
   userCategories?: Prisma.BudgetCategoryUpdateManyWithoutAppCategoryNestedInput
+  ruleTemplates?: Prisma.AppRuleTemplateUpdateManyWithoutTargetAppCategoryNestedInput
 }
 
 export type AppCategoryListUncheckedUpdateInput = {
@@ -361,7 +373,9 @@ export type AppCategoryListUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUncheckedUpdateManyWithoutAppCategoryNestedInput
   userCategories?: Prisma.BudgetCategoryUncheckedUpdateManyWithoutAppCategoryNestedInput
+  ruleTemplates?: Prisma.AppRuleTemplateUncheckedUpdateManyWithoutTargetAppCategoryNestedInput
 }
 
 export type AppCategoryListCreateManyInput = {
@@ -444,6 +458,11 @@ export type AppCategoryListSumOrderByAggregateInput = {
   sortOrder?: Prisma.SortOrder
 }
 
+export type AppCategoryListScalarRelationFilter = {
+  is?: Prisma.AppCategoryListWhereInput
+  isNot?: Prisma.AppCategoryListWhereInput
+}
+
 export type AppCategoryListNullableScalarRelationFilter = {
   is?: Prisma.AppCategoryListWhereInput | null
   isNot?: Prisma.AppCategoryListWhereInput | null
@@ -451,6 +470,36 @@ export type AppCategoryListNullableScalarRelationFilter = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type AppCategoryListCreateNestedOneWithoutAppSubcategoriesInput = {
+  create?: Prisma.XOR<Prisma.AppCategoryListCreateWithoutAppSubcategoriesInput, Prisma.AppCategoryListUncheckedCreateWithoutAppSubcategoriesInput>
+  connectOrCreate?: Prisma.AppCategoryListCreateOrConnectWithoutAppSubcategoriesInput
+  connect?: Prisma.AppCategoryListWhereUniqueInput
+}
+
+export type AppCategoryListUpdateOneRequiredWithoutAppSubcategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCategoryListCreateWithoutAppSubcategoriesInput, Prisma.AppCategoryListUncheckedCreateWithoutAppSubcategoriesInput>
+  connectOrCreate?: Prisma.AppCategoryListCreateOrConnectWithoutAppSubcategoriesInput
+  upsert?: Prisma.AppCategoryListUpsertWithoutAppSubcategoriesInput
+  connect?: Prisma.AppCategoryListWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppCategoryListUpdateToOneWithWhereWithoutAppSubcategoriesInput, Prisma.AppCategoryListUpdateWithoutAppSubcategoriesInput>, Prisma.AppCategoryListUncheckedUpdateWithoutAppSubcategoriesInput>
+}
+
+export type AppCategoryListCreateNestedOneWithoutRuleTemplatesInput = {
+  create?: Prisma.XOR<Prisma.AppCategoryListCreateWithoutRuleTemplatesInput, Prisma.AppCategoryListUncheckedCreateWithoutRuleTemplatesInput>
+  connectOrCreate?: Prisma.AppCategoryListCreateOrConnectWithoutRuleTemplatesInput
+  connect?: Prisma.AppCategoryListWhereUniqueInput
+}
+
+export type AppCategoryListUpdateOneWithoutRuleTemplatesNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCategoryListCreateWithoutRuleTemplatesInput, Prisma.AppCategoryListUncheckedCreateWithoutRuleTemplatesInput>
+  connectOrCreate?: Prisma.AppCategoryListCreateOrConnectWithoutRuleTemplatesInput
+  upsert?: Prisma.AppCategoryListUpsertWithoutRuleTemplatesInput
+  disconnect?: Prisma.AppCategoryListWhereInput | boolean
+  delete?: Prisma.AppCategoryListWhereInput | boolean
+  connect?: Prisma.AppCategoryListWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AppCategoryListUpdateToOneWithWhereWithoutRuleTemplatesInput, Prisma.AppCategoryListUpdateWithoutRuleTemplatesInput>, Prisma.AppCategoryListUncheckedUpdateWithoutRuleTemplatesInput>
 }
 
 export type AppCategoryListCreateNestedOneWithoutUserCategoriesInput = {
@@ -469,6 +518,150 @@ export type AppCategoryListUpdateOneWithoutUserCategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AppCategoryListUpdateToOneWithWhereWithoutUserCategoriesInput, Prisma.AppCategoryListUpdateWithoutUserCategoriesInput>, Prisma.AppCategoryListUncheckedUpdateWithoutUserCategoriesInput>
 }
 
+export type AppCategoryListCreateWithoutAppSubcategoriesInput = {
+  id?: string
+  slug: string
+  name: string
+  ionIcon: string
+  colorHex: string
+  sortOrder?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userCategories?: Prisma.BudgetCategoryCreateNestedManyWithoutAppCategoryInput
+  ruleTemplates?: Prisma.AppRuleTemplateCreateNestedManyWithoutTargetAppCategoryInput
+}
+
+export type AppCategoryListUncheckedCreateWithoutAppSubcategoriesInput = {
+  id?: string
+  slug: string
+  name: string
+  ionIcon: string
+  colorHex: string
+  sortOrder?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userCategories?: Prisma.BudgetCategoryUncheckedCreateNestedManyWithoutAppCategoryInput
+  ruleTemplates?: Prisma.AppRuleTemplateUncheckedCreateNestedManyWithoutTargetAppCategoryInput
+}
+
+export type AppCategoryListCreateOrConnectWithoutAppSubcategoriesInput = {
+  where: Prisma.AppCategoryListWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppCategoryListCreateWithoutAppSubcategoriesInput, Prisma.AppCategoryListUncheckedCreateWithoutAppSubcategoriesInput>
+}
+
+export type AppCategoryListUpsertWithoutAppSubcategoriesInput = {
+  update: Prisma.XOR<Prisma.AppCategoryListUpdateWithoutAppSubcategoriesInput, Prisma.AppCategoryListUncheckedUpdateWithoutAppSubcategoriesInput>
+  create: Prisma.XOR<Prisma.AppCategoryListCreateWithoutAppSubcategoriesInput, Prisma.AppCategoryListUncheckedCreateWithoutAppSubcategoriesInput>
+  where?: Prisma.AppCategoryListWhereInput
+}
+
+export type AppCategoryListUpdateToOneWithWhereWithoutAppSubcategoriesInput = {
+  where?: Prisma.AppCategoryListWhereInput
+  data: Prisma.XOR<Prisma.AppCategoryListUpdateWithoutAppSubcategoriesInput, Prisma.AppCategoryListUncheckedUpdateWithoutAppSubcategoriesInput>
+}
+
+export type AppCategoryListUpdateWithoutAppSubcategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
+  colorHex?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCategories?: Prisma.BudgetCategoryUpdateManyWithoutAppCategoryNestedInput
+  ruleTemplates?: Prisma.AppRuleTemplateUpdateManyWithoutTargetAppCategoryNestedInput
+}
+
+export type AppCategoryListUncheckedUpdateWithoutAppSubcategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
+  colorHex?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userCategories?: Prisma.BudgetCategoryUncheckedUpdateManyWithoutAppCategoryNestedInput
+  ruleTemplates?: Prisma.AppRuleTemplateUncheckedUpdateManyWithoutTargetAppCategoryNestedInput
+}
+
+export type AppCategoryListCreateWithoutRuleTemplatesInput = {
+  id?: string
+  slug: string
+  name: string
+  ionIcon: string
+  colorHex: string
+  sortOrder?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  appSubcategories?: Prisma.AppSubcategoryListCreateNestedManyWithoutAppCategoryInput
+  userCategories?: Prisma.BudgetCategoryCreateNestedManyWithoutAppCategoryInput
+}
+
+export type AppCategoryListUncheckedCreateWithoutRuleTemplatesInput = {
+  id?: string
+  slug: string
+  name: string
+  ionIcon: string
+  colorHex: string
+  sortOrder?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUncheckedCreateNestedManyWithoutAppCategoryInput
+  userCategories?: Prisma.BudgetCategoryUncheckedCreateNestedManyWithoutAppCategoryInput
+}
+
+export type AppCategoryListCreateOrConnectWithoutRuleTemplatesInput = {
+  where: Prisma.AppCategoryListWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppCategoryListCreateWithoutRuleTemplatesInput, Prisma.AppCategoryListUncheckedCreateWithoutRuleTemplatesInput>
+}
+
+export type AppCategoryListUpsertWithoutRuleTemplatesInput = {
+  update: Prisma.XOR<Prisma.AppCategoryListUpdateWithoutRuleTemplatesInput, Prisma.AppCategoryListUncheckedUpdateWithoutRuleTemplatesInput>
+  create: Prisma.XOR<Prisma.AppCategoryListCreateWithoutRuleTemplatesInput, Prisma.AppCategoryListUncheckedCreateWithoutRuleTemplatesInput>
+  where?: Prisma.AppCategoryListWhereInput
+}
+
+export type AppCategoryListUpdateToOneWithWhereWithoutRuleTemplatesInput = {
+  where?: Prisma.AppCategoryListWhereInput
+  data: Prisma.XOR<Prisma.AppCategoryListUpdateWithoutRuleTemplatesInput, Prisma.AppCategoryListUncheckedUpdateWithoutRuleTemplatesInput>
+}
+
+export type AppCategoryListUpdateWithoutRuleTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
+  colorHex?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUpdateManyWithoutAppCategoryNestedInput
+  userCategories?: Prisma.BudgetCategoryUpdateManyWithoutAppCategoryNestedInput
+}
+
+export type AppCategoryListUncheckedUpdateWithoutRuleTemplatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ionIcon?: Prisma.StringFieldUpdateOperationsInput | string
+  colorHex?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUncheckedUpdateManyWithoutAppCategoryNestedInput
+  userCategories?: Prisma.BudgetCategoryUncheckedUpdateManyWithoutAppCategoryNestedInput
+}
+
 export type AppCategoryListCreateWithoutUserCategoriesInput = {
   id?: string
   slug: string
@@ -479,6 +672,8 @@ export type AppCategoryListCreateWithoutUserCategoriesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  appSubcategories?: Prisma.AppSubcategoryListCreateNestedManyWithoutAppCategoryInput
+  ruleTemplates?: Prisma.AppRuleTemplateCreateNestedManyWithoutTargetAppCategoryInput
 }
 
 export type AppCategoryListUncheckedCreateWithoutUserCategoriesInput = {
@@ -491,6 +686,8 @@ export type AppCategoryListUncheckedCreateWithoutUserCategoriesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUncheckedCreateNestedManyWithoutAppCategoryInput
+  ruleTemplates?: Prisma.AppRuleTemplateUncheckedCreateNestedManyWithoutTargetAppCategoryInput
 }
 
 export type AppCategoryListCreateOrConnectWithoutUserCategoriesInput = {
@@ -519,6 +716,8 @@ export type AppCategoryListUpdateWithoutUserCategoriesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUpdateManyWithoutAppCategoryNestedInput
+  ruleTemplates?: Prisma.AppRuleTemplateUpdateManyWithoutTargetAppCategoryNestedInput
 }
 
 export type AppCategoryListUncheckedUpdateWithoutUserCategoriesInput = {
@@ -531,6 +730,8 @@ export type AppCategoryListUncheckedUpdateWithoutUserCategoriesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appSubcategories?: Prisma.AppSubcategoryListUncheckedUpdateManyWithoutAppCategoryNestedInput
+  ruleTemplates?: Prisma.AppRuleTemplateUncheckedUpdateManyWithoutTargetAppCategoryNestedInput
 }
 
 
@@ -539,11 +740,15 @@ export type AppCategoryListUncheckedUpdateWithoutUserCategoriesInput = {
  */
 
 export type AppCategoryListCountOutputType = {
+  appSubcategories: number
   userCategories: number
+  ruleTemplates: number
 }
 
 export type AppCategoryListCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  appSubcategories?: boolean | AppCategoryListCountOutputTypeCountAppSubcategoriesArgs
   userCategories?: boolean | AppCategoryListCountOutputTypeCountUserCategoriesArgs
+  ruleTemplates?: boolean | AppCategoryListCountOutputTypeCountRuleTemplatesArgs
 }
 
 /**
@@ -559,8 +764,22 @@ export type AppCategoryListCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
 /**
  * AppCategoryListCountOutputType without action
  */
+export type AppCategoryListCountOutputTypeCountAppSubcategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AppSubcategoryListWhereInput
+}
+
+/**
+ * AppCategoryListCountOutputType without action
+ */
 export type AppCategoryListCountOutputTypeCountUserCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BudgetCategoryWhereInput
+}
+
+/**
+ * AppCategoryListCountOutputType without action
+ */
+export type AppCategoryListCountOutputTypeCountRuleTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AppRuleTemplateWhereInput
 }
 
 
@@ -574,7 +793,9 @@ export type AppCategoryListSelect<ExtArgs extends runtime.Types.Extensions.Inter
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  appSubcategories?: boolean | Prisma.AppCategoryList$appSubcategoriesArgs<ExtArgs>
   userCategories?: boolean | Prisma.AppCategoryList$userCategoriesArgs<ExtArgs>
+  ruleTemplates?: boolean | Prisma.AppCategoryList$ruleTemplatesArgs<ExtArgs>
   _count?: boolean | Prisma.AppCategoryListCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appCategoryList"]>
 
@@ -616,7 +837,9 @@ export type AppCategoryListSelectScalar = {
 
 export type AppCategoryListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "ionIcon" | "colorHex" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["appCategoryList"]>
 export type AppCategoryListInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  appSubcategories?: boolean | Prisma.AppCategoryList$appSubcategoriesArgs<ExtArgs>
   userCategories?: boolean | Prisma.AppCategoryList$userCategoriesArgs<ExtArgs>
+  ruleTemplates?: boolean | Prisma.AppCategoryList$ruleTemplatesArgs<ExtArgs>
   _count?: boolean | Prisma.AppCategoryListCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AppCategoryListIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -625,7 +848,9 @@ export type AppCategoryListIncludeUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type $AppCategoryListPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AppCategoryList"
   objects: {
+    appSubcategories: Prisma.$AppSubcategoryListPayload<ExtArgs>[]
     userCategories: Prisma.$BudgetCategoryPayload<ExtArgs>[]
+    ruleTemplates: Prisma.$AppRuleTemplatePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1031,7 +1256,9 @@ readonly fields: AppCategoryListFieldRefs;
  */
 export interface Prisma__AppCategoryListClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  appSubcategories<T extends Prisma.AppCategoryList$appSubcategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AppCategoryList$appSubcategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppSubcategoryListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userCategories<T extends Prisma.AppCategoryList$userCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AppCategoryList$userCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ruleTemplates<T extends Prisma.AppCategoryList$ruleTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AppCategoryList$ruleTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppRuleTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1458,6 +1685,30 @@ export type AppCategoryListDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
+ * AppCategoryList.appSubcategories
+ */
+export type AppCategoryList$appSubcategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AppSubcategoryList
+   */
+  select?: Prisma.AppSubcategoryListSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AppSubcategoryList
+   */
+  omit?: Prisma.AppSubcategoryListOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppSubcategoryListInclude<ExtArgs> | null
+  where?: Prisma.AppSubcategoryListWhereInput
+  orderBy?: Prisma.AppSubcategoryListOrderByWithRelationInput | Prisma.AppSubcategoryListOrderByWithRelationInput[]
+  cursor?: Prisma.AppSubcategoryListWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AppSubcategoryListScalarFieldEnum | Prisma.AppSubcategoryListScalarFieldEnum[]
+}
+
+/**
  * AppCategoryList.userCategories
  */
 export type AppCategoryList$userCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1479,6 +1730,30 @@ export type AppCategoryList$userCategoriesArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.BudgetCategoryScalarFieldEnum | Prisma.BudgetCategoryScalarFieldEnum[]
+}
+
+/**
+ * AppCategoryList.ruleTemplates
+ */
+export type AppCategoryList$ruleTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AppRuleTemplate
+   */
+  select?: Prisma.AppRuleTemplateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AppRuleTemplate
+   */
+  omit?: Prisma.AppRuleTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppRuleTemplateInclude<ExtArgs> | null
+  where?: Prisma.AppRuleTemplateWhereInput
+  orderBy?: Prisma.AppRuleTemplateOrderByWithRelationInput | Prisma.AppRuleTemplateOrderByWithRelationInput[]
+  cursor?: Prisma.AppRuleTemplateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AppRuleTemplateScalarFieldEnum | Prisma.AppRuleTemplateScalarFieldEnum[]
 }
 
 /**

@@ -125,8 +125,24 @@ const APP_CATEGORIES = [
   },
 ] as const;
 
+const CATEGORY_ICON_BY_SLUG: Readonly<Record<string, string>> = {
+  utilities: 'flash-outline',
+  'health-medical': 'medkit-outline',
+  insurance: 'shield-checkmark-outline',
+  travel: 'airplane-outline',
+  education: 'school-outline',
+  'family-kids': 'people-outline',
+  subscriptions: 'repeat-outline',
+  'debt-loans': 'card-outline',
+};
+
+const APP_CATEGORIES_WITH_UPDATED_ICONS = APP_CATEGORIES.map((category) => ({
+  ...category,
+  ionIcon: CATEGORY_ICON_BY_SLUG[category.slug] ?? category.ionIcon,
+}));
+
 async function main(): Promise<void> {
-  for (const c of APP_CATEGORIES) {
+  for (const c of APP_CATEGORIES_WITH_UPDATED_ICONS) {
     await prisma.appCategoryList.upsert({
       where: { slug: c.slug },
       update: {

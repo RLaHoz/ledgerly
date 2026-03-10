@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { BackingAuthenticationComponent } from './components/backing-authentication/backing-authentication.component';
-import { Router } from '@angular/router';
 import { ThemeStore } from 'src/app/core/store/theme/theme.store';
 import { AuthStore } from './store/auth.store';
-import { BasiqConsentUiService } from './services/banking/basiq-consent-ui.service';
 import { BankLinkCoordinatorService } from './services/banking/bank-link-coordinator.service';
 
 @Component({
@@ -15,12 +20,27 @@ import { BankLinkCoordinatorService } from './services/banking/bank-link-coordin
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthPage {
- readonly themeStore = inject(ThemeStore);
+  readonly themeStore = inject(ThemeStore);
   readonly authStore = inject(AuthStore);
   private readonly coordinator = inject(BankLinkCoordinatorService);
+  private readonly pendingConnectAttempt = signal(false);
+  readonly isBankLinkLoading = computed(
+    () => this.authStore.isLoading() || this.pendingConnectAttempt(),
+  );
 
   constructor() {
     this.coordinator.init();
+
+    effect(() => {
+      if (this.authStore.isLoading()) {
+        this.pendingConnectAttempt.set(true);
+        return;
+      }
+
+      if (this.authStore.isIdle() || this.authStore.isError() || this.authStore.isSuccess()) {
+        this.pendingConnectAttempt.set(false);
+      }
+    });
   }
 
   onToggleTheme(): void {
@@ -28,6 +48,11 @@ export class AuthPage {
   }
 
   onConnectWithBank(): void {
+    if (this.isBankLinkLoading()) {
+      return;
+    }
+
+    this.pendingConnectAttempt.set(true);
     this.coordinator.startBankLink();
   }
 }

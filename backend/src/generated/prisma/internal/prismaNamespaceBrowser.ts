@@ -54,17 +54,24 @@ export const ModelName = {
   ImportRun: 'ImportRun',
   CategorySuggestion: 'CategorySuggestion',
   User: 'User',
+  UserSession: 'UserSession',
   AppCategoryList: 'AppCategoryList',
+  AppSubcategoryList: 'AppSubcategoryList',
+  AppRuleTemplate: 'AppRuleTemplate',
   UserPreferences: 'UserPreferences',
   BudgetMonth: 'BudgetMonth',
   BudgetCategory: 'BudgetCategory',
+  BudgetSubcategory: 'BudgetSubcategory',
   CategoryBudget: 'CategoryBudget',
+  SubcategoryBudget: 'SubcategoryBudget',
   Transaction: 'Transaction',
   Rule: 'Rule',
   RuleExecution: 'RuleExecution',
   RuleAlert: 'RuleAlert',
   SyncRun: 'SyncRun',
   BankProvider: 'BankProvider',
+  BankProviderUser: 'BankProviderUser',
+  BankConsentAttempt: 'BankConsentAttempt',
   BankConnection: 'BankConnection',
   BankAccount: 'BankAccount',
   BankTransactionRaw: 'BankTransactionRaw',
@@ -112,6 +119,8 @@ export const CategorySuggestionScalarFieldEnum = {
   transactionId: 'transactionId',
   suggestedName: 'suggestedName',
   suggestedSlug: 'suggestedSlug',
+  suggestedSubcategoryName: 'suggestedSubcategoryName',
+  suggestedSubcategorySlug: 'suggestedSubcategorySlug',
   ionIcon: 'ionIcon',
   colorHex: 'colorHex',
   reason: 'reason',
@@ -128,6 +137,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   fullName: 'fullName',
+  passwordHash: 'passwordHash',
   baseCurrency: 'baseCurrency',
   timeZone: 'timeZone',
   createdAt: 'createdAt',
@@ -136,6 +146,24 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  refreshTokenHash: 'refreshTokenHash',
+  deviceId: 'deviceId',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  replacedById: 'replacedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
 
 
 export const AppCategoryListScalarFieldEnum = {
@@ -151,6 +179,44 @@ export const AppCategoryListScalarFieldEnum = {
 } as const
 
 export type AppCategoryListScalarFieldEnum = (typeof AppCategoryListScalarFieldEnum)[keyof typeof AppCategoryListScalarFieldEnum]
+
+
+export const AppSubcategoryListScalarFieldEnum = {
+  id: 'id',
+  appCategoryId: 'appCategoryId',
+  slug: 'slug',
+  name: 'name',
+  ionIcon: 'ionIcon',
+  colorHex: 'colorHex',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppSubcategoryListScalarFieldEnum = (typeof AppSubcategoryListScalarFieldEnum)[keyof typeof AppSubcategoryListScalarFieldEnum]
+
+
+export const AppRuleTemplateScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  type: 'type',
+  enabled: 'enabled',
+  priority: 'priority',
+  matchMode: 'matchMode',
+  conditionJson: 'conditionJson',
+  actionJson: 'actionJson',
+  targetAppCategoryId: 'targetAppCategoryId',
+  targetAppSubcategoryId: 'targetAppSubcategoryId',
+  isDefaultForNewUsers: 'isDefaultForNewUsers',
+  version: 'version',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppRuleTemplateScalarFieldEnum = (typeof AppRuleTemplateScalarFieldEnum)[keyof typeof AppRuleTemplateScalarFieldEnum]
 
 
 export const UserPreferencesScalarFieldEnum = {
@@ -200,6 +266,24 @@ export const BudgetCategoryScalarFieldEnum = {
 export type BudgetCategoryScalarFieldEnum = (typeof BudgetCategoryScalarFieldEnum)[keyof typeof BudgetCategoryScalarFieldEnum]
 
 
+export const BudgetSubcategoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  categoryId: 'categoryId',
+  appSubcategoryId: 'appSubcategoryId',
+  name: 'name',
+  slug: 'slug',
+  ionIcon: 'ionIcon',
+  colorHex: 'colorHex',
+  sortOrder: 'sortOrder',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetSubcategoryScalarFieldEnum = (typeof BudgetSubcategoryScalarFieldEnum)[keyof typeof BudgetSubcategoryScalarFieldEnum]
+
+
 export const CategoryBudgetScalarFieldEnum = {
   id: 'id',
   budgetMonthId: 'budgetMonthId',
@@ -213,6 +297,21 @@ export const CategoryBudgetScalarFieldEnum = {
 } as const
 
 export type CategoryBudgetScalarFieldEnum = (typeof CategoryBudgetScalarFieldEnum)[keyof typeof CategoryBudgetScalarFieldEnum]
+
+
+export const SubcategoryBudgetScalarFieldEnum = {
+  id: 'id',
+  budgetMonthId: 'budgetMonthId',
+  subcategoryId: 'subcategoryId',
+  plannedAmount: 'plannedAmount',
+  alert75: 'alert75',
+  alert90: 'alert90',
+  alert100: 'alert100',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubcategoryBudgetScalarFieldEnum = (typeof SubcategoryBudgetScalarFieldEnum)[keyof typeof SubcategoryBudgetScalarFieldEnum]
 
 
 export const TransactionScalarFieldEnum = {
@@ -231,6 +330,9 @@ export const TransactionScalarFieldEnum = {
   merchant: 'merchant',
   description: 'description',
   categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
+  classifiedByRuleId: 'classifiedByRuleId',
+  classifiedAt: 'classifiedAt',
   isTransfer: 'isTransfer',
   isPending: 'isPending',
   dedupeHash: 'dedupeHash',
@@ -245,13 +347,20 @@ export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[key
 export const RuleScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  sourceTemplateId: 'sourceTemplateId',
+  sourceTemplateVersion: 'sourceTemplateVersion',
+  isSystemManaged: 'isSystemManaged',
   name: 'name',
   type: 'type',
   enabled: 'enabled',
   priority: 'priority',
+  matchMode: 'matchMode',
   conditionJson: 'conditionJson',
   actionJson: 'actionJson',
+  targetCategoryId: 'targetCategoryId',
+  targetSubcategoryId: 'targetSubcategoryId',
   createdBy: 'createdBy',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -265,6 +374,7 @@ export const RuleExecutionScalarFieldEnum = {
   transactionId: 'transactionId',
   outcome: 'outcome',
   message: 'message',
+  matchDetailsJson: 'matchDetailsJson',
   triggeredAt: 'triggeredAt'
 } as const
 
@@ -277,6 +387,7 @@ export const RuleAlertScalarFieldEnum = {
   ruleId: 'ruleId',
   budgetMonthId: 'budgetMonthId',
   categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
   severity: 'severity',
   title: 'title',
   message: 'message',
@@ -320,16 +431,51 @@ export const BankProviderScalarFieldEnum = {
 export type BankProviderScalarFieldEnum = (typeof BankProviderScalarFieldEnum)[keyof typeof BankProviderScalarFieldEnum]
 
 
+export const BankProviderUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  providerId: 'providerId',
+  providerUserId: 'providerUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BankProviderUserScalarFieldEnum = (typeof BankProviderUserScalarFieldEnum)[keyof typeof BankProviderUserScalarFieldEnum]
+
+
+export const BankConsentAttemptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  providerId: 'providerId',
+  bankProviderUserId: 'bankProviderUserId',
+  state: 'state',
+  authorizeUrl: 'authorizeUrl',
+  requestedAt: 'requestedAt',
+  completedAt: 'completedAt',
+  expiresAt: 'expiresAt',
+  status: 'status',
+  jobIdsJson: 'jobIdsJson',
+  errorMessage: 'errorMessage'
+} as const
+
+export type BankConsentAttemptScalarFieldEnum = (typeof BankConsentAttemptScalarFieldEnum)[keyof typeof BankConsentAttemptScalarFieldEnum]
+
+
 export const BankConnectionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   providerId: 'providerId',
+  bankProviderUserId: 'bankProviderUserId',
   providerConnectionId: 'providerConnectionId',
   encryptedAccessToken: 'encryptedAccessToken',
   encryptedRefreshToken: 'encryptedRefreshToken',
   tokenExpiresAt: 'tokenExpiresAt',
   consentScopesJson: 'consentScopesJson',
   status: 'status',
+  consentedAt: 'consentedAt',
+  revokedAt: 'revokedAt',
+  lastErrorCode: 'lastErrorCode',
+  lastErrorMessage: 'lastErrorMessage',
   lastSyncedAt: 'lastSyncedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

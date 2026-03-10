@@ -387,17 +387,24 @@ export const ModelName = {
   ImportRun: 'ImportRun',
   CategorySuggestion: 'CategorySuggestion',
   User: 'User',
+  UserSession: 'UserSession',
   AppCategoryList: 'AppCategoryList',
+  AppSubcategoryList: 'AppSubcategoryList',
+  AppRuleTemplate: 'AppRuleTemplate',
   UserPreferences: 'UserPreferences',
   BudgetMonth: 'BudgetMonth',
   BudgetCategory: 'BudgetCategory',
+  BudgetSubcategory: 'BudgetSubcategory',
   CategoryBudget: 'CategoryBudget',
+  SubcategoryBudget: 'SubcategoryBudget',
   Transaction: 'Transaction',
   Rule: 'Rule',
   RuleExecution: 'RuleExecution',
   RuleAlert: 'RuleAlert',
   SyncRun: 'SyncRun',
   BankProvider: 'BankProvider',
+  BankProviderUser: 'BankProviderUser',
+  BankConsentAttempt: 'BankConsentAttempt',
   BankConnection: 'BankConnection',
   BankAccount: 'BankAccount',
   BankTransactionRaw: 'BankTransactionRaw',
@@ -418,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "importRun" | "categorySuggestion" | "user" | "appCategoryList" | "userPreferences" | "budgetMonth" | "budgetCategory" | "categoryBudget" | "transaction" | "rule" | "ruleExecution" | "ruleAlert" | "syncRun" | "bankProvider" | "bankConnection" | "bankAccount" | "bankTransactionRaw" | "bankSyncCursor" | "webhookEvent"
+    modelProps: "importRun" | "categorySuggestion" | "user" | "userSession" | "appCategoryList" | "appSubcategoryList" | "appRuleTemplate" | "userPreferences" | "budgetMonth" | "budgetCategory" | "budgetSubcategory" | "categoryBudget" | "subcategoryBudget" | "transaction" | "rule" | "ruleExecution" | "ruleAlert" | "syncRun" | "bankProvider" | "bankProviderUser" | "bankConsentAttempt" | "bankConnection" | "bankAccount" | "bankTransactionRaw" | "bankSyncCursor" | "webhookEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -644,6 +651,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserSession: {
+      payload: Prisma.$UserSessionPayload<ExtArgs>
+      fields: Prisma.UserSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.UserSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>
+        }
+        findMany: {
+          args: Prisma.UserSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>[]
+        }
+        create: {
+          args: Prisma.UserSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>
+        }
+        createMany: {
+          args: Prisma.UserSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.UserSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>
+        }
+        update: {
+          args: Prisma.UserSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.UserSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserSession>
+        }
+        groupBy: {
+          args: Prisma.UserSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserSessionCountAggregateOutputType> | number
+        }
+      }
+    }
     AppCategoryList: {
       payload: Prisma.$AppCategoryListPayload<ExtArgs>
       fields: Prisma.AppCategoryListFieldRefs
@@ -715,6 +796,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AppCategoryListCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AppCategoryListCountAggregateOutputType> | number
+        }
+      }
+    }
+    AppSubcategoryList: {
+      payload: Prisma.$AppSubcategoryListPayload<ExtArgs>
+      fields: Prisma.AppSubcategoryListFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppSubcategoryListFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppSubcategoryListFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>
+        }
+        findFirst: {
+          args: Prisma.AppSubcategoryListFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppSubcategoryListFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>
+        }
+        findMany: {
+          args: Prisma.AppSubcategoryListFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>[]
+        }
+        create: {
+          args: Prisma.AppSubcategoryListCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>
+        }
+        createMany: {
+          args: Prisma.AppSubcategoryListCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppSubcategoryListCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>[]
+        }
+        delete: {
+          args: Prisma.AppSubcategoryListDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>
+        }
+        update: {
+          args: Prisma.AppSubcategoryListUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>
+        }
+        deleteMany: {
+          args: Prisma.AppSubcategoryListDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppSubcategoryListUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppSubcategoryListUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>[]
+        }
+        upsert: {
+          args: Prisma.AppSubcategoryListUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppSubcategoryListPayload>
+        }
+        aggregate: {
+          args: Prisma.AppSubcategoryListAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppSubcategoryList>
+        }
+        groupBy: {
+          args: Prisma.AppSubcategoryListGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppSubcategoryListGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppSubcategoryListCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppSubcategoryListCountAggregateOutputType> | number
+        }
+      }
+    }
+    AppRuleTemplate: {
+      payload: Prisma.$AppRuleTemplatePayload<ExtArgs>
+      fields: Prisma.AppRuleTemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppRuleTemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppRuleTemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.AppRuleTemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppRuleTemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>
+        }
+        findMany: {
+          args: Prisma.AppRuleTemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>[]
+        }
+        create: {
+          args: Prisma.AppRuleTemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>
+        }
+        createMany: {
+          args: Prisma.AppRuleTemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppRuleTemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.AppRuleTemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>
+        }
+        update: {
+          args: Prisma.AppRuleTemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.AppRuleTemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppRuleTemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppRuleTemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.AppRuleTemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppRuleTemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.AppRuleTemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppRuleTemplate>
+        }
+        groupBy: {
+          args: Prisma.AppRuleTemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppRuleTemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppRuleTemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppRuleTemplateCountAggregateOutputType> | number
         }
       }
     }
@@ -940,6 +1169,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BudgetSubcategory: {
+      payload: Prisma.$BudgetSubcategoryPayload<ExtArgs>
+      fields: Prisma.BudgetSubcategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BudgetSubcategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BudgetSubcategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.BudgetSubcategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BudgetSubcategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>
+        }
+        findMany: {
+          args: Prisma.BudgetSubcategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>[]
+        }
+        create: {
+          args: Prisma.BudgetSubcategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>
+        }
+        createMany: {
+          args: Prisma.BudgetSubcategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BudgetSubcategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.BudgetSubcategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>
+        }
+        update: {
+          args: Prisma.BudgetSubcategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.BudgetSubcategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BudgetSubcategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BudgetSubcategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.BudgetSubcategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetSubcategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.BudgetSubcategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBudgetSubcategory>
+        }
+        groupBy: {
+          args: Prisma.BudgetSubcategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BudgetSubcategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BudgetSubcategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BudgetSubcategoryCountAggregateOutputType> | number
+        }
+      }
+    }
     CategoryBudget: {
       payload: Prisma.$CategoryBudgetPayload<ExtArgs>
       fields: Prisma.CategoryBudgetFieldRefs
@@ -1011,6 +1314,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CategoryBudgetCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CategoryBudgetCountAggregateOutputType> | number
+        }
+      }
+    }
+    SubcategoryBudget: {
+      payload: Prisma.$SubcategoryBudgetPayload<ExtArgs>
+      fields: Prisma.SubcategoryBudgetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubcategoryBudgetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubcategoryBudgetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>
+        }
+        findFirst: {
+          args: Prisma.SubcategoryBudgetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubcategoryBudgetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>
+        }
+        findMany: {
+          args: Prisma.SubcategoryBudgetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>[]
+        }
+        create: {
+          args: Prisma.SubcategoryBudgetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>
+        }
+        createMany: {
+          args: Prisma.SubcategoryBudgetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubcategoryBudgetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>[]
+        }
+        delete: {
+          args: Prisma.SubcategoryBudgetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>
+        }
+        update: {
+          args: Prisma.SubcategoryBudgetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>
+        }
+        deleteMany: {
+          args: Prisma.SubcategoryBudgetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubcategoryBudgetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubcategoryBudgetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>[]
+        }
+        upsert: {
+          args: Prisma.SubcategoryBudgetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubcategoryBudgetPayload>
+        }
+        aggregate: {
+          args: Prisma.SubcategoryBudgetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubcategoryBudget>
+        }
+        groupBy: {
+          args: Prisma.SubcategoryBudgetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubcategoryBudgetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubcategoryBudgetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubcategoryBudgetCountAggregateOutputType> | number
         }
       }
     }
@@ -1458,6 +1835,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BankProviderUser: {
+      payload: Prisma.$BankProviderUserPayload<ExtArgs>
+      fields: Prisma.BankProviderUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BankProviderUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BankProviderUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>
+        }
+        findFirst: {
+          args: Prisma.BankProviderUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BankProviderUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>
+        }
+        findMany: {
+          args: Prisma.BankProviderUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>[]
+        }
+        create: {
+          args: Prisma.BankProviderUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>
+        }
+        createMany: {
+          args: Prisma.BankProviderUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BankProviderUserCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>[]
+        }
+        delete: {
+          args: Prisma.BankProviderUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>
+        }
+        update: {
+          args: Prisma.BankProviderUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.BankProviderUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BankProviderUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BankProviderUserUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>[]
+        }
+        upsert: {
+          args: Prisma.BankProviderUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankProviderUserPayload>
+        }
+        aggregate: {
+          args: Prisma.BankProviderUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBankProviderUser>
+        }
+        groupBy: {
+          args: Prisma.BankProviderUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BankProviderUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BankProviderUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BankProviderUserCountAggregateOutputType> | number
+        }
+      }
+    }
+    BankConsentAttempt: {
+      payload: Prisma.$BankConsentAttemptPayload<ExtArgs>
+      fields: Prisma.BankConsentAttemptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BankConsentAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BankConsentAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>
+        }
+        findFirst: {
+          args: Prisma.BankConsentAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BankConsentAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>
+        }
+        findMany: {
+          args: Prisma.BankConsentAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>[]
+        }
+        create: {
+          args: Prisma.BankConsentAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>
+        }
+        createMany: {
+          args: Prisma.BankConsentAttemptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BankConsentAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>[]
+        }
+        delete: {
+          args: Prisma.BankConsentAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>
+        }
+        update: {
+          args: Prisma.BankConsentAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>
+        }
+        deleteMany: {
+          args: Prisma.BankConsentAttemptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BankConsentAttemptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BankConsentAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>[]
+        }
+        upsert: {
+          args: Prisma.BankConsentAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BankConsentAttemptPayload>
+        }
+        aggregate: {
+          args: Prisma.BankConsentAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBankConsentAttempt>
+        }
+        groupBy: {
+          args: Prisma.BankConsentAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BankConsentAttemptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BankConsentAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BankConsentAttemptCountAggregateOutputType> | number
+        }
+      }
+    }
     BankConnection: {
       payload: Prisma.$BankConnectionPayload<ExtArgs>
       fields: Prisma.BankConnectionFieldRefs
@@ -1891,6 +2416,8 @@ export const CategorySuggestionScalarFieldEnum = {
   transactionId: 'transactionId',
   suggestedName: 'suggestedName',
   suggestedSlug: 'suggestedSlug',
+  suggestedSubcategoryName: 'suggestedSubcategoryName',
+  suggestedSubcategorySlug: 'suggestedSubcategorySlug',
   ionIcon: 'ionIcon',
   colorHex: 'colorHex',
   reason: 'reason',
@@ -1907,6 +2434,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   fullName: 'fullName',
+  passwordHash: 'passwordHash',
   baseCurrency: 'baseCurrency',
   timeZone: 'timeZone',
   createdAt: 'createdAt',
@@ -1915,6 +2443,24 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  refreshTokenHash: 'refreshTokenHash',
+  deviceId: 'deviceId',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  replacedById: 'replacedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
 
 
 export const AppCategoryListScalarFieldEnum = {
@@ -1930,6 +2476,44 @@ export const AppCategoryListScalarFieldEnum = {
 } as const
 
 export type AppCategoryListScalarFieldEnum = (typeof AppCategoryListScalarFieldEnum)[keyof typeof AppCategoryListScalarFieldEnum]
+
+
+export const AppSubcategoryListScalarFieldEnum = {
+  id: 'id',
+  appCategoryId: 'appCategoryId',
+  slug: 'slug',
+  name: 'name',
+  ionIcon: 'ionIcon',
+  colorHex: 'colorHex',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppSubcategoryListScalarFieldEnum = (typeof AppSubcategoryListScalarFieldEnum)[keyof typeof AppSubcategoryListScalarFieldEnum]
+
+
+export const AppRuleTemplateScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  type: 'type',
+  enabled: 'enabled',
+  priority: 'priority',
+  matchMode: 'matchMode',
+  conditionJson: 'conditionJson',
+  actionJson: 'actionJson',
+  targetAppCategoryId: 'targetAppCategoryId',
+  targetAppSubcategoryId: 'targetAppSubcategoryId',
+  isDefaultForNewUsers: 'isDefaultForNewUsers',
+  version: 'version',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppRuleTemplateScalarFieldEnum = (typeof AppRuleTemplateScalarFieldEnum)[keyof typeof AppRuleTemplateScalarFieldEnum]
 
 
 export const UserPreferencesScalarFieldEnum = {
@@ -1979,6 +2563,24 @@ export const BudgetCategoryScalarFieldEnum = {
 export type BudgetCategoryScalarFieldEnum = (typeof BudgetCategoryScalarFieldEnum)[keyof typeof BudgetCategoryScalarFieldEnum]
 
 
+export const BudgetSubcategoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  categoryId: 'categoryId',
+  appSubcategoryId: 'appSubcategoryId',
+  name: 'name',
+  slug: 'slug',
+  ionIcon: 'ionIcon',
+  colorHex: 'colorHex',
+  sortOrder: 'sortOrder',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetSubcategoryScalarFieldEnum = (typeof BudgetSubcategoryScalarFieldEnum)[keyof typeof BudgetSubcategoryScalarFieldEnum]
+
+
 export const CategoryBudgetScalarFieldEnum = {
   id: 'id',
   budgetMonthId: 'budgetMonthId',
@@ -1992,6 +2594,21 @@ export const CategoryBudgetScalarFieldEnum = {
 } as const
 
 export type CategoryBudgetScalarFieldEnum = (typeof CategoryBudgetScalarFieldEnum)[keyof typeof CategoryBudgetScalarFieldEnum]
+
+
+export const SubcategoryBudgetScalarFieldEnum = {
+  id: 'id',
+  budgetMonthId: 'budgetMonthId',
+  subcategoryId: 'subcategoryId',
+  plannedAmount: 'plannedAmount',
+  alert75: 'alert75',
+  alert90: 'alert90',
+  alert100: 'alert100',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubcategoryBudgetScalarFieldEnum = (typeof SubcategoryBudgetScalarFieldEnum)[keyof typeof SubcategoryBudgetScalarFieldEnum]
 
 
 export const TransactionScalarFieldEnum = {
@@ -2010,6 +2627,9 @@ export const TransactionScalarFieldEnum = {
   merchant: 'merchant',
   description: 'description',
   categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
+  classifiedByRuleId: 'classifiedByRuleId',
+  classifiedAt: 'classifiedAt',
   isTransfer: 'isTransfer',
   isPending: 'isPending',
   dedupeHash: 'dedupeHash',
@@ -2024,13 +2644,20 @@ export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[key
 export const RuleScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  sourceTemplateId: 'sourceTemplateId',
+  sourceTemplateVersion: 'sourceTemplateVersion',
+  isSystemManaged: 'isSystemManaged',
   name: 'name',
   type: 'type',
   enabled: 'enabled',
   priority: 'priority',
+  matchMode: 'matchMode',
   conditionJson: 'conditionJson',
   actionJson: 'actionJson',
+  targetCategoryId: 'targetCategoryId',
+  targetSubcategoryId: 'targetSubcategoryId',
   createdBy: 'createdBy',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2044,6 +2671,7 @@ export const RuleExecutionScalarFieldEnum = {
   transactionId: 'transactionId',
   outcome: 'outcome',
   message: 'message',
+  matchDetailsJson: 'matchDetailsJson',
   triggeredAt: 'triggeredAt'
 } as const
 
@@ -2056,6 +2684,7 @@ export const RuleAlertScalarFieldEnum = {
   ruleId: 'ruleId',
   budgetMonthId: 'budgetMonthId',
   categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
   severity: 'severity',
   title: 'title',
   message: 'message',
@@ -2099,16 +2728,51 @@ export const BankProviderScalarFieldEnum = {
 export type BankProviderScalarFieldEnum = (typeof BankProviderScalarFieldEnum)[keyof typeof BankProviderScalarFieldEnum]
 
 
+export const BankProviderUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  providerId: 'providerId',
+  providerUserId: 'providerUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BankProviderUserScalarFieldEnum = (typeof BankProviderUserScalarFieldEnum)[keyof typeof BankProviderUserScalarFieldEnum]
+
+
+export const BankConsentAttemptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  providerId: 'providerId',
+  bankProviderUserId: 'bankProviderUserId',
+  state: 'state',
+  authorizeUrl: 'authorizeUrl',
+  requestedAt: 'requestedAt',
+  completedAt: 'completedAt',
+  expiresAt: 'expiresAt',
+  status: 'status',
+  jobIdsJson: 'jobIdsJson',
+  errorMessage: 'errorMessage'
+} as const
+
+export type BankConsentAttemptScalarFieldEnum = (typeof BankConsentAttemptScalarFieldEnum)[keyof typeof BankConsentAttemptScalarFieldEnum]
+
+
 export const BankConnectionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   providerId: 'providerId',
+  bankProviderUserId: 'bankProviderUserId',
   providerConnectionId: 'providerConnectionId',
   encryptedAccessToken: 'encryptedAccessToken',
   encryptedRefreshToken: 'encryptedRefreshToken',
   tokenExpiresAt: 'tokenExpiresAt',
   consentScopesJson: 'consentScopesJson',
   status: 'status',
+  consentedAt: 'consentedAt',
+  revokedAt: 'revokedAt',
+  lastErrorCode: 'lastErrorCode',
+  lastErrorMessage: 'lastErrorMessage',
   lastSyncedAt: 'lastSyncedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2315,9 +2979,79 @@ export type ListEnumSuggestionStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'SessionStatus'
+ */
+export type EnumSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'SessionStatus[]'
+ */
+export type ListEnumSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleType'
+ */
+export type EnumRuleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleType'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleType[]'
+ */
+export type ListEnumRuleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleMatchMode'
+ */
+export type EnumRuleMatchModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleMatchMode'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleMatchMode[]'
+ */
+export type ListEnumRuleMatchModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleMatchMode[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleTemplateStatus'
+ */
+export type EnumRuleTemplateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleTemplateStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'RuleTemplateStatus[]'
+ */
+export type ListEnumRuleTemplateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleTemplateStatus[]'>
     
 
 
@@ -2374,34 +3108,6 @@ export type EnumClassificationStatusFieldRefInput<$PrismaModel> = FieldRefInputT
  * Reference to a field of type 'ClassificationStatus[]'
  */
 export type ListEnumClassificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassificationStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'RuleType'
- */
-export type EnumRuleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleType'>
-    
-
-
-/**
- * Reference to a field of type 'RuleType[]'
- */
-export type ListEnumRuleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RuleType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -2500,6 +3206,20 @@ export type EnumBankProviderStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'BankProviderStatus[]'
  */
 export type ListEnumBankProviderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BankProviderStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BankConsentAttemptStatus'
+ */
+export type EnumBankConsentAttemptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BankConsentAttemptStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BankConsentAttemptStatus[]'
+ */
+export type ListEnumBankConsentAttemptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BankConsentAttemptStatus[]'>
     
 
 
@@ -2656,17 +3376,24 @@ export type GlobalOmitConfig = {
   importRun?: Prisma.ImportRunOmit
   categorySuggestion?: Prisma.CategorySuggestionOmit
   user?: Prisma.UserOmit
+  userSession?: Prisma.UserSessionOmit
   appCategoryList?: Prisma.AppCategoryListOmit
+  appSubcategoryList?: Prisma.AppSubcategoryListOmit
+  appRuleTemplate?: Prisma.AppRuleTemplateOmit
   userPreferences?: Prisma.UserPreferencesOmit
   budgetMonth?: Prisma.BudgetMonthOmit
   budgetCategory?: Prisma.BudgetCategoryOmit
+  budgetSubcategory?: Prisma.BudgetSubcategoryOmit
   categoryBudget?: Prisma.CategoryBudgetOmit
+  subcategoryBudget?: Prisma.SubcategoryBudgetOmit
   transaction?: Prisma.TransactionOmit
   rule?: Prisma.RuleOmit
   ruleExecution?: Prisma.RuleExecutionOmit
   ruleAlert?: Prisma.RuleAlertOmit
   syncRun?: Prisma.SyncRunOmit
   bankProvider?: Prisma.BankProviderOmit
+  bankProviderUser?: Prisma.BankProviderUserOmit
+  bankConsentAttempt?: Prisma.BankConsentAttemptOmit
   bankConnection?: Prisma.BankConnectionOmit
   bankAccount?: Prisma.BankAccountOmit
   bankTransactionRaw?: Prisma.BankTransactionRawOmit

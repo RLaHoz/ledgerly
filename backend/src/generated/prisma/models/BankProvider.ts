@@ -192,6 +192,8 @@ export type BankProviderWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"BankProvider"> | Date | string
   connections?: Prisma.BankConnectionListRelationFilter
   webhookEvents?: Prisma.WebhookEventListRelationFilter
+  bankProviderUsers?: Prisma.BankProviderUserListRelationFilter
+  bankConsentAttempts?: Prisma.BankConsentAttemptListRelationFilter
 }
 
 export type BankProviderOrderByWithRelationInput = {
@@ -203,6 +205,8 @@ export type BankProviderOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   connections?: Prisma.BankConnectionOrderByRelationAggregateInput
   webhookEvents?: Prisma.WebhookEventOrderByRelationAggregateInput
+  bankProviderUsers?: Prisma.BankProviderUserOrderByRelationAggregateInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptOrderByRelationAggregateInput
 }
 
 export type BankProviderWhereUniqueInput = Prisma.AtLeast<{
@@ -217,6 +221,8 @@ export type BankProviderWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"BankProvider"> | Date | string
   connections?: Prisma.BankConnectionListRelationFilter
   webhookEvents?: Prisma.WebhookEventListRelationFilter
+  bankProviderUsers?: Prisma.BankProviderUserListRelationFilter
+  bankConsentAttempts?: Prisma.BankConsentAttemptListRelationFilter
 }, "id" | "code">
 
 export type BankProviderOrderByWithAggregationInput = {
@@ -252,6 +258,8 @@ export type BankProviderCreateInput = {
   updatedAt?: Date | string
   connections?: Prisma.BankConnectionCreateNestedManyWithoutProviderInput
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptCreateNestedManyWithoutProviderInput
 }
 
 export type BankProviderUncheckedCreateInput = {
@@ -263,6 +271,8 @@ export type BankProviderUncheckedCreateInput = {
   updatedAt?: Date | string
   connections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutProviderInput
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedCreateNestedManyWithoutProviderInput
 }
 
 export type BankProviderUpdateInput = {
@@ -274,6 +284,8 @@ export type BankProviderUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   connections?: Prisma.BankConnectionUpdateManyWithoutProviderNestedInput
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUpdateManyWithoutProviderNestedInput
 }
 
 export type BankProviderUncheckedUpdateInput = {
@@ -285,6 +297,8 @@ export type BankProviderUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   connections?: Prisma.BankConnectionUncheckedUpdateManyWithoutProviderNestedInput
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedUpdateManyWithoutProviderNestedInput
 }
 
 export type BankProviderCreateManyInput = {
@@ -350,6 +364,34 @@ export type EnumBankProviderStatusFieldUpdateOperationsInput = {
   set?: $Enums.BankProviderStatus
 }
 
+export type BankProviderCreateNestedOneWithoutBankProviderUsersInput = {
+  create?: Prisma.XOR<Prisma.BankProviderCreateWithoutBankProviderUsersInput, Prisma.BankProviderUncheckedCreateWithoutBankProviderUsersInput>
+  connectOrCreate?: Prisma.BankProviderCreateOrConnectWithoutBankProviderUsersInput
+  connect?: Prisma.BankProviderWhereUniqueInput
+}
+
+export type BankProviderUpdateOneRequiredWithoutBankProviderUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.BankProviderCreateWithoutBankProviderUsersInput, Prisma.BankProviderUncheckedCreateWithoutBankProviderUsersInput>
+  connectOrCreate?: Prisma.BankProviderCreateOrConnectWithoutBankProviderUsersInput
+  upsert?: Prisma.BankProviderUpsertWithoutBankProviderUsersInput
+  connect?: Prisma.BankProviderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BankProviderUpdateToOneWithWhereWithoutBankProviderUsersInput, Prisma.BankProviderUpdateWithoutBankProviderUsersInput>, Prisma.BankProviderUncheckedUpdateWithoutBankProviderUsersInput>
+}
+
+export type BankProviderCreateNestedOneWithoutBankConsentAttemptsInput = {
+  create?: Prisma.XOR<Prisma.BankProviderCreateWithoutBankConsentAttemptsInput, Prisma.BankProviderUncheckedCreateWithoutBankConsentAttemptsInput>
+  connectOrCreate?: Prisma.BankProviderCreateOrConnectWithoutBankConsentAttemptsInput
+  connect?: Prisma.BankProviderWhereUniqueInput
+}
+
+export type BankProviderUpdateOneRequiredWithoutBankConsentAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.BankProviderCreateWithoutBankConsentAttemptsInput, Prisma.BankProviderUncheckedCreateWithoutBankConsentAttemptsInput>
+  connectOrCreate?: Prisma.BankProviderCreateOrConnectWithoutBankConsentAttemptsInput
+  upsert?: Prisma.BankProviderUpsertWithoutBankConsentAttemptsInput
+  connect?: Prisma.BankProviderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BankProviderUpdateToOneWithWhereWithoutBankConsentAttemptsInput, Prisma.BankProviderUpdateWithoutBankConsentAttemptsInput>, Prisma.BankProviderUncheckedUpdateWithoutBankConsentAttemptsInput>
+}
+
 export type BankProviderCreateNestedOneWithoutConnectionsInput = {
   create?: Prisma.XOR<Prisma.BankProviderCreateWithoutConnectionsInput, Prisma.BankProviderUncheckedCreateWithoutConnectionsInput>
   connectOrCreate?: Prisma.BankProviderCreateOrConnectWithoutConnectionsInput
@@ -378,6 +420,134 @@ export type BankProviderUpdateOneRequiredWithoutWebhookEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BankProviderUpdateToOneWithWhereWithoutWebhookEventsInput, Prisma.BankProviderUpdateWithoutWebhookEventsInput>, Prisma.BankProviderUncheckedUpdateWithoutWebhookEventsInput>
 }
 
+export type BankProviderCreateWithoutBankProviderUsersInput = {
+  id?: string
+  code: string
+  name: string
+  status?: $Enums.BankProviderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  connections?: Prisma.BankConnectionCreateNestedManyWithoutProviderInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptCreateNestedManyWithoutProviderInput
+}
+
+export type BankProviderUncheckedCreateWithoutBankProviderUsersInput = {
+  id?: string
+  code: string
+  name: string
+  status?: $Enums.BankProviderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  connections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutProviderInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedCreateNestedManyWithoutProviderInput
+}
+
+export type BankProviderCreateOrConnectWithoutBankProviderUsersInput = {
+  where: Prisma.BankProviderWhereUniqueInput
+  create: Prisma.XOR<Prisma.BankProviderCreateWithoutBankProviderUsersInput, Prisma.BankProviderUncheckedCreateWithoutBankProviderUsersInput>
+}
+
+export type BankProviderUpsertWithoutBankProviderUsersInput = {
+  update: Prisma.XOR<Prisma.BankProviderUpdateWithoutBankProviderUsersInput, Prisma.BankProviderUncheckedUpdateWithoutBankProviderUsersInput>
+  create: Prisma.XOR<Prisma.BankProviderCreateWithoutBankProviderUsersInput, Prisma.BankProviderUncheckedCreateWithoutBankProviderUsersInput>
+  where?: Prisma.BankProviderWhereInput
+}
+
+export type BankProviderUpdateToOneWithWhereWithoutBankProviderUsersInput = {
+  where?: Prisma.BankProviderWhereInput
+  data: Prisma.XOR<Prisma.BankProviderUpdateWithoutBankProviderUsersInput, Prisma.BankProviderUncheckedUpdateWithoutBankProviderUsersInput>
+}
+
+export type BankProviderUpdateWithoutBankProviderUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBankProviderStatusFieldUpdateOperationsInput | $Enums.BankProviderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  connections?: Prisma.BankConnectionUpdateManyWithoutProviderNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUpdateManyWithoutProviderNestedInput
+}
+
+export type BankProviderUncheckedUpdateWithoutBankProviderUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBankProviderStatusFieldUpdateOperationsInput | $Enums.BankProviderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  connections?: Prisma.BankConnectionUncheckedUpdateManyWithoutProviderNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedUpdateManyWithoutProviderNestedInput
+}
+
+export type BankProviderCreateWithoutBankConsentAttemptsInput = {
+  id?: string
+  code: string
+  name: string
+  status?: $Enums.BankProviderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  connections?: Prisma.BankConnectionCreateNestedManyWithoutProviderInput
+  webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserCreateNestedManyWithoutProviderInput
+}
+
+export type BankProviderUncheckedCreateWithoutBankConsentAttemptsInput = {
+  id?: string
+  code: string
+  name: string
+  status?: $Enums.BankProviderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  connections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutProviderInput
+  webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedCreateNestedManyWithoutProviderInput
+}
+
+export type BankProviderCreateOrConnectWithoutBankConsentAttemptsInput = {
+  where: Prisma.BankProviderWhereUniqueInput
+  create: Prisma.XOR<Prisma.BankProviderCreateWithoutBankConsentAttemptsInput, Prisma.BankProviderUncheckedCreateWithoutBankConsentAttemptsInput>
+}
+
+export type BankProviderUpsertWithoutBankConsentAttemptsInput = {
+  update: Prisma.XOR<Prisma.BankProviderUpdateWithoutBankConsentAttemptsInput, Prisma.BankProviderUncheckedUpdateWithoutBankConsentAttemptsInput>
+  create: Prisma.XOR<Prisma.BankProviderCreateWithoutBankConsentAttemptsInput, Prisma.BankProviderUncheckedCreateWithoutBankConsentAttemptsInput>
+  where?: Prisma.BankProviderWhereInput
+}
+
+export type BankProviderUpdateToOneWithWhereWithoutBankConsentAttemptsInput = {
+  where?: Prisma.BankProviderWhereInput
+  data: Prisma.XOR<Prisma.BankProviderUpdateWithoutBankConsentAttemptsInput, Prisma.BankProviderUncheckedUpdateWithoutBankConsentAttemptsInput>
+}
+
+export type BankProviderUpdateWithoutBankConsentAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBankProviderStatusFieldUpdateOperationsInput | $Enums.BankProviderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  connections?: Prisma.BankConnectionUpdateManyWithoutProviderNestedInput
+  webhookEvents?: Prisma.WebhookEventUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUpdateManyWithoutProviderNestedInput
+}
+
+export type BankProviderUncheckedUpdateWithoutBankConsentAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBankProviderStatusFieldUpdateOperationsInput | $Enums.BankProviderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  connections?: Prisma.BankConnectionUncheckedUpdateManyWithoutProviderNestedInput
+  webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+}
+
 export type BankProviderCreateWithoutConnectionsInput = {
   id?: string
   code: string
@@ -386,6 +556,8 @@ export type BankProviderCreateWithoutConnectionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   webhookEvents?: Prisma.WebhookEventCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptCreateNestedManyWithoutProviderInput
 }
 
 export type BankProviderUncheckedCreateWithoutConnectionsInput = {
@@ -396,6 +568,8 @@ export type BankProviderUncheckedCreateWithoutConnectionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   webhookEvents?: Prisma.WebhookEventUncheckedCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedCreateNestedManyWithoutProviderInput
 }
 
 export type BankProviderCreateOrConnectWithoutConnectionsInput = {
@@ -422,6 +596,8 @@ export type BankProviderUpdateWithoutConnectionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   webhookEvents?: Prisma.WebhookEventUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUpdateManyWithoutProviderNestedInput
 }
 
 export type BankProviderUncheckedUpdateWithoutConnectionsInput = {
@@ -432,6 +608,8 @@ export type BankProviderUncheckedUpdateWithoutConnectionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   webhookEvents?: Prisma.WebhookEventUncheckedUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedUpdateManyWithoutProviderNestedInput
 }
 
 export type BankProviderCreateWithoutWebhookEventsInput = {
@@ -442,6 +620,8 @@ export type BankProviderCreateWithoutWebhookEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   connections?: Prisma.BankConnectionCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptCreateNestedManyWithoutProviderInput
 }
 
 export type BankProviderUncheckedCreateWithoutWebhookEventsInput = {
@@ -452,6 +632,8 @@ export type BankProviderUncheckedCreateWithoutWebhookEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   connections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutProviderInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedCreateNestedManyWithoutProviderInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedCreateNestedManyWithoutProviderInput
 }
 
 export type BankProviderCreateOrConnectWithoutWebhookEventsInput = {
@@ -478,6 +660,8 @@ export type BankProviderUpdateWithoutWebhookEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   connections?: Prisma.BankConnectionUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUpdateManyWithoutProviderNestedInput
 }
 
 export type BankProviderUncheckedUpdateWithoutWebhookEventsInput = {
@@ -488,6 +672,8 @@ export type BankProviderUncheckedUpdateWithoutWebhookEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   connections?: Prisma.BankConnectionUncheckedUpdateManyWithoutProviderNestedInput
+  bankProviderUsers?: Prisma.BankProviderUserUncheckedUpdateManyWithoutProviderNestedInput
+  bankConsentAttempts?: Prisma.BankConsentAttemptUncheckedUpdateManyWithoutProviderNestedInput
 }
 
 
@@ -498,11 +684,15 @@ export type BankProviderUncheckedUpdateWithoutWebhookEventsInput = {
 export type BankProviderCountOutputType = {
   connections: number
   webhookEvents: number
+  bankProviderUsers: number
+  bankConsentAttempts: number
 }
 
 export type BankProviderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   connections?: boolean | BankProviderCountOutputTypeCountConnectionsArgs
   webhookEvents?: boolean | BankProviderCountOutputTypeCountWebhookEventsArgs
+  bankProviderUsers?: boolean | BankProviderCountOutputTypeCountBankProviderUsersArgs
+  bankConsentAttempts?: boolean | BankProviderCountOutputTypeCountBankConsentAttemptsArgs
 }
 
 /**
@@ -529,6 +719,20 @@ export type BankProviderCountOutputTypeCountWebhookEventsArgs<ExtArgs extends ru
   where?: Prisma.WebhookEventWhereInput
 }
 
+/**
+ * BankProviderCountOutputType without action
+ */
+export type BankProviderCountOutputTypeCountBankProviderUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BankProviderUserWhereInput
+}
+
+/**
+ * BankProviderCountOutputType without action
+ */
+export type BankProviderCountOutputTypeCountBankConsentAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BankConsentAttemptWhereInput
+}
+
 
 export type BankProviderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -539,6 +743,8 @@ export type BankProviderSelect<ExtArgs extends runtime.Types.Extensions.Internal
   updatedAt?: boolean
   connections?: boolean | Prisma.BankProvider$connectionsArgs<ExtArgs>
   webhookEvents?: boolean | Prisma.BankProvider$webhookEventsArgs<ExtArgs>
+  bankProviderUsers?: boolean | Prisma.BankProvider$bankProviderUsersArgs<ExtArgs>
+  bankConsentAttempts?: boolean | Prisma.BankProvider$bankConsentAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.BankProviderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bankProvider"]>
 
@@ -573,6 +779,8 @@ export type BankProviderOmit<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type BankProviderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   connections?: boolean | Prisma.BankProvider$connectionsArgs<ExtArgs>
   webhookEvents?: boolean | Prisma.BankProvider$webhookEventsArgs<ExtArgs>
+  bankProviderUsers?: boolean | Prisma.BankProvider$bankProviderUsersArgs<ExtArgs>
+  bankConsentAttempts?: boolean | Prisma.BankProvider$bankConsentAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.BankProviderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BankProviderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -583,6 +791,8 @@ export type $BankProviderPayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     connections: Prisma.$BankConnectionPayload<ExtArgs>[]
     webhookEvents: Prisma.$WebhookEventPayload<ExtArgs>[]
+    bankProviderUsers: Prisma.$BankProviderUserPayload<ExtArgs>[]
+    bankConsentAttempts: Prisma.$BankConsentAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -987,6 +1197,8 @@ export interface Prisma__BankProviderClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   connections<T extends Prisma.BankProvider$connectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankProvider$connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   webhookEvents<T extends Prisma.BankProvider$webhookEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankProvider$webhookEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bankProviderUsers<T extends Prisma.BankProvider$bankProviderUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankProvider$bankProviderUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankProviderUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bankConsentAttempts<T extends Prisma.BankProvider$bankConsentAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankProvider$bankConsentAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankConsentAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1455,6 +1667,54 @@ export type BankProvider$webhookEventsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.WebhookEventScalarFieldEnum | Prisma.WebhookEventScalarFieldEnum[]
+}
+
+/**
+ * BankProvider.bankProviderUsers
+ */
+export type BankProvider$bankProviderUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BankProviderUser
+   */
+  select?: Prisma.BankProviderUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BankProviderUser
+   */
+  omit?: Prisma.BankProviderUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BankProviderUserInclude<ExtArgs> | null
+  where?: Prisma.BankProviderUserWhereInput
+  orderBy?: Prisma.BankProviderUserOrderByWithRelationInput | Prisma.BankProviderUserOrderByWithRelationInput[]
+  cursor?: Prisma.BankProviderUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BankProviderUserScalarFieldEnum | Prisma.BankProviderUserScalarFieldEnum[]
+}
+
+/**
+ * BankProvider.bankConsentAttempts
+ */
+export type BankProvider$bankConsentAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BankConsentAttempt
+   */
+  select?: Prisma.BankConsentAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BankConsentAttempt
+   */
+  omit?: Prisma.BankConsentAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BankConsentAttemptInclude<ExtArgs> | null
+  where?: Prisma.BankConsentAttemptWhereInput
+  orderBy?: Prisma.BankConsentAttemptOrderByWithRelationInput | Prisma.BankConsentAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.BankConsentAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BankConsentAttemptScalarFieldEnum | Prisma.BankConsentAttemptScalarFieldEnum[]
 }
 
 /**

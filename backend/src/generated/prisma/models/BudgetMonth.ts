@@ -254,6 +254,7 @@ export type BudgetMonthWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"BudgetMonth"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   categoryBudgets?: Prisma.CategoryBudgetListRelationFilter
+  subcategoryBudgets?: Prisma.SubcategoryBudgetListRelationFilter
   alerts?: Prisma.RuleAlertListRelationFilter
 }
 
@@ -269,6 +270,7 @@ export type BudgetMonthOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   categoryBudgets?: Prisma.CategoryBudgetOrderByRelationAggregateInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetOrderByRelationAggregateInput
   alerts?: Prisma.RuleAlertOrderByRelationAggregateInput
 }
 
@@ -288,6 +290,7 @@ export type BudgetMonthWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"BudgetMonth"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   categoryBudgets?: Prisma.CategoryBudgetListRelationFilter
+  subcategoryBudgets?: Prisma.SubcategoryBudgetListRelationFilter
   alerts?: Prisma.RuleAlertListRelationFilter
 }, "id" | "userId_monthYm">
 
@@ -334,6 +337,7 @@ export type BudgetMonthCreateInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBudgetMonthsInput
   categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutBudgetMonthInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetCreateNestedManyWithoutBudgetMonthInput
   alerts?: Prisma.RuleAlertCreateNestedManyWithoutBudgetMonthInput
 }
 
@@ -348,6 +352,7 @@ export type BudgetMonthUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
   alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutBudgetMonthInput
 }
 
@@ -362,6 +367,7 @@ export type BudgetMonthUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBudgetMonthsNestedInput
   categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
   alerts?: Prisma.RuleAlertUpdateManyWithoutBudgetMonthNestedInput
 }
 
@@ -376,6 +382,7 @@ export type BudgetMonthUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
   alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutBudgetMonthNestedInput
 }
 
@@ -553,6 +560,20 @@ export type BudgetMonthUpdateOneRequiredWithoutCategoryBudgetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetMonthUpdateToOneWithWhereWithoutCategoryBudgetsInput, Prisma.BudgetMonthUpdateWithoutCategoryBudgetsInput>, Prisma.BudgetMonthUncheckedUpdateWithoutCategoryBudgetsInput>
 }
 
+export type BudgetMonthCreateNestedOneWithoutSubcategoryBudgetsInput = {
+  create?: Prisma.XOR<Prisma.BudgetMonthCreateWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUncheckedCreateWithoutSubcategoryBudgetsInput>
+  connectOrCreate?: Prisma.BudgetMonthCreateOrConnectWithoutSubcategoryBudgetsInput
+  connect?: Prisma.BudgetMonthWhereUniqueInput
+}
+
+export type BudgetMonthUpdateOneRequiredWithoutSubcategoryBudgetsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetMonthCreateWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUncheckedCreateWithoutSubcategoryBudgetsInput>
+  connectOrCreate?: Prisma.BudgetMonthCreateOrConnectWithoutSubcategoryBudgetsInput
+  upsert?: Prisma.BudgetMonthUpsertWithoutSubcategoryBudgetsInput
+  connect?: Prisma.BudgetMonthWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetMonthUpdateToOneWithWhereWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUpdateWithoutSubcategoryBudgetsInput>, Prisma.BudgetMonthUncheckedUpdateWithoutSubcategoryBudgetsInput>
+}
+
 export type BudgetMonthCreateNestedOneWithoutAlertsInput = {
   create?: Prisma.XOR<Prisma.BudgetMonthCreateWithoutAlertsInput, Prisma.BudgetMonthUncheckedCreateWithoutAlertsInput>
   connectOrCreate?: Prisma.BudgetMonthCreateOrConnectWithoutAlertsInput
@@ -579,6 +600,7 @@ export type BudgetMonthCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutBudgetMonthInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetCreateNestedManyWithoutBudgetMonthInput
   alerts?: Prisma.RuleAlertCreateNestedManyWithoutBudgetMonthInput
 }
 
@@ -592,6 +614,7 @@ export type BudgetMonthUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
   alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutBudgetMonthInput
 }
 
@@ -646,6 +669,7 @@ export type BudgetMonthCreateWithoutCategoryBudgetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBudgetMonthsInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetCreateNestedManyWithoutBudgetMonthInput
   alerts?: Prisma.RuleAlertCreateNestedManyWithoutBudgetMonthInput
 }
 
@@ -659,6 +683,7 @@ export type BudgetMonthUncheckedCreateWithoutCategoryBudgetsInput = {
   status?: $Enums.BudgetMonthStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
   alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutBudgetMonthInput
 }
 
@@ -688,6 +713,7 @@ export type BudgetMonthUpdateWithoutCategoryBudgetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBudgetMonthsNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
   alerts?: Prisma.RuleAlertUpdateManyWithoutBudgetMonthNestedInput
 }
 
@@ -701,6 +727,79 @@ export type BudgetMonthUncheckedUpdateWithoutCategoryBudgetsInput = {
   status?: Prisma.EnumBudgetMonthStatusFieldUpdateOperationsInput | $Enums.BudgetMonthStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
+  alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutBudgetMonthNestedInput
+}
+
+export type BudgetMonthCreateWithoutSubcategoryBudgetsInput = {
+  id?: string
+  monthYm: string
+  plannedTotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expectedIncome?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  status?: $Enums.BudgetMonthStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBudgetMonthsInput
+  categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutBudgetMonthInput
+  alerts?: Prisma.RuleAlertCreateNestedManyWithoutBudgetMonthInput
+}
+
+export type BudgetMonthUncheckedCreateWithoutSubcategoryBudgetsInput = {
+  id?: string
+  userId: string
+  monthYm: string
+  plannedTotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  expectedIncome?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  status?: $Enums.BudgetMonthStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
+  alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutBudgetMonthInput
+}
+
+export type BudgetMonthCreateOrConnectWithoutSubcategoryBudgetsInput = {
+  where: Prisma.BudgetMonthWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetMonthCreateWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUncheckedCreateWithoutSubcategoryBudgetsInput>
+}
+
+export type BudgetMonthUpsertWithoutSubcategoryBudgetsInput = {
+  update: Prisma.XOR<Prisma.BudgetMonthUpdateWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUncheckedUpdateWithoutSubcategoryBudgetsInput>
+  create: Prisma.XOR<Prisma.BudgetMonthCreateWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUncheckedCreateWithoutSubcategoryBudgetsInput>
+  where?: Prisma.BudgetMonthWhereInput
+}
+
+export type BudgetMonthUpdateToOneWithWhereWithoutSubcategoryBudgetsInput = {
+  where?: Prisma.BudgetMonthWhereInput
+  data: Prisma.XOR<Prisma.BudgetMonthUpdateWithoutSubcategoryBudgetsInput, Prisma.BudgetMonthUncheckedUpdateWithoutSubcategoryBudgetsInput>
+}
+
+export type BudgetMonthUpdateWithoutSubcategoryBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  monthYm?: Prisma.StringFieldUpdateOperationsInput | string
+  plannedTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expectedIncome?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBudgetMonthStatusFieldUpdateOperationsInput | $Enums.BudgetMonthStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBudgetMonthsNestedInput
+  categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
+  alerts?: Prisma.RuleAlertUpdateManyWithoutBudgetMonthNestedInput
+}
+
+export type BudgetMonthUncheckedUpdateWithoutSubcategoryBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  monthYm?: Prisma.StringFieldUpdateOperationsInput | string
+  plannedTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  expectedIncome?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumBudgetMonthStatusFieldUpdateOperationsInput | $Enums.BudgetMonthStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
   alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutBudgetMonthNestedInput
 }
 
@@ -715,6 +814,7 @@ export type BudgetMonthCreateWithoutAlertsInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBudgetMonthsInput
   categoryBudgets?: Prisma.CategoryBudgetCreateNestedManyWithoutBudgetMonthInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetCreateNestedManyWithoutBudgetMonthInput
 }
 
 export type BudgetMonthUncheckedCreateWithoutAlertsInput = {
@@ -728,6 +828,7 @@ export type BudgetMonthUncheckedCreateWithoutAlertsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categoryBudgets?: Prisma.CategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedCreateNestedManyWithoutBudgetMonthInput
 }
 
 export type BudgetMonthCreateOrConnectWithoutAlertsInput = {
@@ -757,6 +858,7 @@ export type BudgetMonthUpdateWithoutAlertsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBudgetMonthsNestedInput
   categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
 }
 
 export type BudgetMonthUncheckedUpdateWithoutAlertsInput = {
@@ -770,6 +872,7 @@ export type BudgetMonthUncheckedUpdateWithoutAlertsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
 }
 
 export type BudgetMonthCreateManyUserInput = {
@@ -793,6 +896,7 @@ export type BudgetMonthUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoryBudgets?: Prisma.CategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUpdateManyWithoutBudgetMonthNestedInput
   alerts?: Prisma.RuleAlertUpdateManyWithoutBudgetMonthNestedInput
 }
 
@@ -806,6 +910,7 @@ export type BudgetMonthUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoryBudgets?: Prisma.CategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
+  subcategoryBudgets?: Prisma.SubcategoryBudgetUncheckedUpdateManyWithoutBudgetMonthNestedInput
   alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutBudgetMonthNestedInput
 }
 
@@ -827,11 +932,13 @@ export type BudgetMonthUncheckedUpdateManyWithoutUserInput = {
 
 export type BudgetMonthCountOutputType = {
   categoryBudgets: number
+  subcategoryBudgets: number
   alerts: number
 }
 
 export type BudgetMonthCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categoryBudgets?: boolean | BudgetMonthCountOutputTypeCountCategoryBudgetsArgs
+  subcategoryBudgets?: boolean | BudgetMonthCountOutputTypeCountSubcategoryBudgetsArgs
   alerts?: boolean | BudgetMonthCountOutputTypeCountAlertsArgs
 }
 
@@ -855,6 +962,13 @@ export type BudgetMonthCountOutputTypeCountCategoryBudgetsArgs<ExtArgs extends r
 /**
  * BudgetMonthCountOutputType without action
  */
+export type BudgetMonthCountOutputTypeCountSubcategoryBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubcategoryBudgetWhereInput
+}
+
+/**
+ * BudgetMonthCountOutputType without action
+ */
 export type BudgetMonthCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.RuleAlertWhereInput
 }
@@ -872,6 +986,7 @@ export type BudgetMonthSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryBudgets?: boolean | Prisma.BudgetMonth$categoryBudgetsArgs<ExtArgs>
+  subcategoryBudgets?: boolean | Prisma.BudgetMonth$subcategoryBudgetsArgs<ExtArgs>
   alerts?: boolean | Prisma.BudgetMonth$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.BudgetMonthCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["budgetMonth"]>
@@ -918,6 +1033,7 @@ export type BudgetMonthOmit<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type BudgetMonthInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryBudgets?: boolean | Prisma.BudgetMonth$categoryBudgetsArgs<ExtArgs>
+  subcategoryBudgets?: boolean | Prisma.BudgetMonth$subcategoryBudgetsArgs<ExtArgs>
   alerts?: boolean | Prisma.BudgetMonth$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.BudgetMonthCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -933,6 +1049,7 @@ export type $BudgetMonthPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     categoryBudgets: Prisma.$CategoryBudgetPayload<ExtArgs>[]
+    subcategoryBudgets: Prisma.$SubcategoryBudgetPayload<ExtArgs>[]
     alerts: Prisma.$RuleAlertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1341,6 +1458,7 @@ export interface Prisma__BudgetMonthClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   categoryBudgets<T extends Prisma.BudgetMonth$categoryBudgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetMonth$categoryBudgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryBudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subcategoryBudgets<T extends Prisma.BudgetMonth$subcategoryBudgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetMonth$subcategoryBudgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubcategoryBudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   alerts<T extends Prisma.BudgetMonth$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetMonth$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1797,6 +1915,30 @@ export type BudgetMonth$categoryBudgetsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.CategoryBudgetScalarFieldEnum | Prisma.CategoryBudgetScalarFieldEnum[]
+}
+
+/**
+ * BudgetMonth.subcategoryBudgets
+ */
+export type BudgetMonth$subcategoryBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubcategoryBudget
+   */
+  select?: Prisma.SubcategoryBudgetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubcategoryBudget
+   */
+  omit?: Prisma.SubcategoryBudgetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubcategoryBudgetInclude<ExtArgs> | null
+  where?: Prisma.SubcategoryBudgetWhereInput
+  orderBy?: Prisma.SubcategoryBudgetOrderByWithRelationInput | Prisma.SubcategoryBudgetOrderByWithRelationInput[]
+  cursor?: Prisma.SubcategoryBudgetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubcategoryBudgetScalarFieldEnum | Prisma.SubcategoryBudgetScalarFieldEnum[]
 }
 
 /**

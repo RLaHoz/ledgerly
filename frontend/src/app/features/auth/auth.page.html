@@ -1,6 +1,6 @@
 <app-backing-authentication
   [isIdle]="authStore.isIdle()"
-  [isLoading]="authStore.isLoading()"
+  [isLoading]="isBankLinkLoading()"
   [isSuccess]="authStore.isSuccess()"
   [isError]="authStore.isError()"
   [errorMessage]="authStore.error()"

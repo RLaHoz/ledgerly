@@ -1,0 +1,125 @@
+<section class="step-block">
+  <div class="section-intro">
+    <h1 class="section-title">Set your monthly budget</h1>
+    <p class="section-description">Define planned spending per category and subcategory.</p>
+  </div>
+
+  <article class="surface-card monthly-target-card">
+    <label>Monthly budget target (optional)</label>
+    <div class="money-input-wrap">
+      <span>$</span>
+      <ion-input
+        type="text"
+        inputmode="decimal"
+        placeholder="e.g. 4000"
+        [value]="monthlyTargetInputValue()"
+        (ionInput)="onMonthlyTargetChange($any($event).detail?.value)"
+      ></ion-input>
+    </div>
+    <p class="hint-text">Leave empty to use sum of category budgets.</p>
+  </article>
+
+  <div class="quick-actions">
+    <ion-button fill="clear" class="quick-btn" (click)="wizard.autoFillFromHistory()">
+      <ion-icon name="sparkles-outline"></ion-icon>
+      Auto-fill from history
+    </ion-button>
+    <ion-button
+      fill="clear"
+      class="quick-btn"
+      [disabled]="wizard.monthlyTarget() === null"
+      (click)="wizard.distributeRemaining()"
+    >
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+      Distribute remaining
+    </ion-button>
+  </div>
+
+  <article class="surface-card budgets-card">
+    <header><h2>Category budgets</h2></header>
+    <div class="budget-rows">
+      @for (category of categoryBudgetSections(); track category.id) {
+        <div class="budget-row">
+          <div class="budget-head">
+            <span class="cat-icon" [style.background]="category.colorHex + '18'">
+              <ion-icon [name]="category.iconName" [style.color]="category.colorHex"></ion-icon>
+            </span>
+
+            <div class="cat-copy">
+              <p class="cat-name">{{ category.name }}</p>
+              <p class="cat-imported">Imported: {{ formatMoney(category.importedAmount) }}</p>
+            </div>
+
+            <p class="cat-status">Near history</p>
+          </div>
+
+          <div class="money-input-wrap compact">
+            <span>$</span>
+            <ion-input
+              type="text"
+              inputmode="decimal"
+              [value]="wizard.categoryBudgetBySlug(category.slug)"
+              (ionInput)="onCategoryBudgetChange(category.slug, $any($event).detail?.value)"
+            ></ion-input>
+          </div>
+
+          <div class="subcategory-budget-list">
+            @if (category.subcategories.length > 0) {
+              @for (subcategory of category.subcategories; track subcategory.id) {
+                <div class="subcategory-budget-row">
+                  <div class="subcategory-meta">
+                    <span class="cat-icon tiny" [style.background]="subcategory.colorHex + '18'">
+                      <ion-icon [name]="subcategory.iconName" [style.color]="subcategory.colorHex"></ion-icon>
+                    </span>
+                    <div>
+                      <p class="subcategory-name">{{ subcategory.name }}</p>
+                      <p class="subcategory-imported">
+                        Imported: {{ formatMoney(subcategory.importedAmount) }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="money-input-wrap compact">
+                    <span>$</span>
+                    <ion-input
+                      type="text"
+                      inputmode="decimal"
+                      [value]="wizard.subcategoryBudgetById(subcategory.id)"
+                      (ionInput)="onSubcategoryBudgetChange(subcategory.id, $any($event).detail?.value)"
+                    ></ion-input>
+                  </div>
+                </div>
+              }
+            } @else {
+              <p class="subcategory-empty">No identified subcategories for this category yet.</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+
+  <article class="surface-card summary-card" [class.over-target]="monthlyDifference() < 0">
+    <h2>Summary</h2>
+    <div class="summary-row">
+      <p>Assigned total</p>
+      <p>{{ formatMoney(wizard.assignedTotal()) }}</p>
+    </div>
+    <div class="summary-row">
+      <p>Monthly target</p>
+      <p>
+        @if (wizard.monthlyTarget() === null) {
+          Not set
+        } @else {
+          {{ formatMoney(wizard.monthlyTarget() ?? 0) }}
+        }
+      </p>
+    </div>
+    <div class="summary-row divider">
+      <p>Difference</p>
+      <p [class.positive]="monthlyDifference() >= 0" [class.negative]="monthlyDifference() < 0">
+        {{ formatMoney(monthlyDifference()) }}
+      </p>
+    </div>
+  </article>
+</section>

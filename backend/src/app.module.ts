@@ -1,27 +1,23 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './sourceDB/database/prisma.module';
-import { FinancialDataModule } from './modules/financial-data/financial-data.module';
 import { SpendClassificationModule } from './modules/spend-classification/spend-classification.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthGuard } from './modules/auth/guards/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { RulesModule } from './modules/rules/rules.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
     PrismaModule,
     SpendClassificationModule,
-    FinancialDataModule,
+    CategoriesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     AuthModule,
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    RulesModule,
+    TransactionsModule,
   ],
 })
 export class AppModule {}

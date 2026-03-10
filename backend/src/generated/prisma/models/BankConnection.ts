@@ -28,11 +28,16 @@ export type BankConnectionMinAggregateOutputType = {
   id: string | null
   userId: string | null
   providerId: string | null
+  bankProviderUserId: string | null
   providerConnectionId: string | null
   encryptedAccessToken: string | null
   encryptedRefreshToken: string | null
   tokenExpiresAt: Date | null
   status: $Enums.BankConnectionStatus | null
+  consentedAt: Date | null
+  revokedAt: Date | null
+  lastErrorCode: string | null
+  lastErrorMessage: string | null
   lastSyncedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -42,11 +47,16 @@ export type BankConnectionMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   providerId: string | null
+  bankProviderUserId: string | null
   providerConnectionId: string | null
   encryptedAccessToken: string | null
   encryptedRefreshToken: string | null
   tokenExpiresAt: Date | null
   status: $Enums.BankConnectionStatus | null
+  consentedAt: Date | null
+  revokedAt: Date | null
+  lastErrorCode: string | null
+  lastErrorMessage: string | null
   lastSyncedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -56,12 +66,17 @@ export type BankConnectionCountAggregateOutputType = {
   id: number
   userId: number
   providerId: number
+  bankProviderUserId: number
   providerConnectionId: number
   encryptedAccessToken: number
   encryptedRefreshToken: number
   tokenExpiresAt: number
   consentScopesJson: number
   status: number
+  consentedAt: number
+  revokedAt: number
+  lastErrorCode: number
+  lastErrorMessage: number
   lastSyncedAt: number
   createdAt: number
   updatedAt: number
@@ -73,11 +88,16 @@ export type BankConnectionMinAggregateInputType = {
   id?: true
   userId?: true
   providerId?: true
+  bankProviderUserId?: true
   providerConnectionId?: true
   encryptedAccessToken?: true
   encryptedRefreshToken?: true
   tokenExpiresAt?: true
   status?: true
+  consentedAt?: true
+  revokedAt?: true
+  lastErrorCode?: true
+  lastErrorMessage?: true
   lastSyncedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -87,11 +107,16 @@ export type BankConnectionMaxAggregateInputType = {
   id?: true
   userId?: true
   providerId?: true
+  bankProviderUserId?: true
   providerConnectionId?: true
   encryptedAccessToken?: true
   encryptedRefreshToken?: true
   tokenExpiresAt?: true
   status?: true
+  consentedAt?: true
+  revokedAt?: true
+  lastErrorCode?: true
+  lastErrorMessage?: true
   lastSyncedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -101,12 +126,17 @@ export type BankConnectionCountAggregateInputType = {
   id?: true
   userId?: true
   providerId?: true
+  bankProviderUserId?: true
   providerConnectionId?: true
   encryptedAccessToken?: true
   encryptedRefreshToken?: true
   tokenExpiresAt?: true
   consentScopesJson?: true
   status?: true
+  consentedAt?: true
+  revokedAt?: true
+  lastErrorCode?: true
+  lastErrorMessage?: true
   lastSyncedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -189,12 +219,17 @@ export type BankConnectionGroupByOutputType = {
   id: string
   userId: string
   providerId: string
+  bankProviderUserId: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken: string | null
   encryptedRefreshToken: string | null
   tokenExpiresAt: Date | null
   consentScopesJson: runtime.JsonValue
   status: $Enums.BankConnectionStatus
+  consentedAt: Date | null
+  revokedAt: Date | null
+  lastErrorCode: string | null
+  lastErrorMessage: string | null
   lastSyncedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -225,17 +260,23 @@ export type BankConnectionWhereInput = {
   id?: Prisma.UuidFilter<"BankConnection"> | string
   userId?: Prisma.UuidFilter<"BankConnection"> | string
   providerId?: Prisma.UuidFilter<"BankConnection"> | string
+  bankProviderUserId?: Prisma.UuidNullableFilter<"BankConnection"> | string | null
   providerConnectionId?: Prisma.StringFilter<"BankConnection"> | string
-  encryptedAccessToken?: Prisma.StringFilter<"BankConnection"> | string
+  encryptedAccessToken?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   encryptedRefreshToken?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   tokenExpiresAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
   consentScopesJson?: Prisma.JsonFilter<"BankConnection">
   status?: Prisma.EnumBankConnectionStatusFilter<"BankConnection"> | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
+  revokedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
+  lastErrorCode?: Prisma.StringNullableFilter<"BankConnection"> | string | null
+  lastErrorMessage?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   lastSyncedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   provider?: Prisma.XOR<Prisma.BankProviderScalarRelationFilter, Prisma.BankProviderWhereInput>
+  bankProviderUser?: Prisma.XOR<Prisma.BankProviderUserNullableScalarRelationFilter, Prisma.BankProviderUserWhereInput> | null
   accounts?: Prisma.BankAccountListRelationFilter
   rawTransactions?: Prisma.BankTransactionRawListRelationFilter
   syncRuns?: Prisma.SyncRunListRelationFilter
@@ -246,17 +287,23 @@ export type BankConnectionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  bankProviderUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerConnectionId?: Prisma.SortOrder
-  encryptedAccessToken?: Prisma.SortOrder
+  encryptedAccessToken?: Prisma.SortOrderInput | Prisma.SortOrder
   encryptedRefreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   consentScopesJson?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  consentedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastErrorCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastErrorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSyncedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   provider?: Prisma.BankProviderOrderByWithRelationInput
+  bankProviderUser?: Prisma.BankProviderUserOrderByWithRelationInput
   accounts?: Prisma.BankAccountOrderByRelationAggregateInput
   rawTransactions?: Prisma.BankTransactionRawOrderByRelationAggregateInput
   syncRuns?: Prisma.SyncRunOrderByRelationAggregateInput
@@ -271,17 +318,23 @@ export type BankConnectionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.BankConnectionWhereInput | Prisma.BankConnectionWhereInput[]
   userId?: Prisma.UuidFilter<"BankConnection"> | string
   providerId?: Prisma.UuidFilter<"BankConnection"> | string
+  bankProviderUserId?: Prisma.UuidNullableFilter<"BankConnection"> | string | null
   providerConnectionId?: Prisma.StringFilter<"BankConnection"> | string
-  encryptedAccessToken?: Prisma.StringFilter<"BankConnection"> | string
+  encryptedAccessToken?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   encryptedRefreshToken?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   tokenExpiresAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
   consentScopesJson?: Prisma.JsonFilter<"BankConnection">
   status?: Prisma.EnumBankConnectionStatusFilter<"BankConnection"> | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
+  revokedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
+  lastErrorCode?: Prisma.StringNullableFilter<"BankConnection"> | string | null
+  lastErrorMessage?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   lastSyncedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   provider?: Prisma.XOR<Prisma.BankProviderScalarRelationFilter, Prisma.BankProviderWhereInput>
+  bankProviderUser?: Prisma.XOR<Prisma.BankProviderUserNullableScalarRelationFilter, Prisma.BankProviderUserWhereInput> | null
   accounts?: Prisma.BankAccountListRelationFilter
   rawTransactions?: Prisma.BankTransactionRawListRelationFilter
   syncRuns?: Prisma.SyncRunListRelationFilter
@@ -292,12 +345,17 @@ export type BankConnectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  bankProviderUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerConnectionId?: Prisma.SortOrder
-  encryptedAccessToken?: Prisma.SortOrder
+  encryptedAccessToken?: Prisma.SortOrderInput | Prisma.SortOrder
   encryptedRefreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   consentScopesJson?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  consentedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastErrorCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastErrorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSyncedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -313,12 +371,17 @@ export type BankConnectionScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"BankConnection"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"BankConnection"> | string
   providerId?: Prisma.UuidWithAggregatesFilter<"BankConnection"> | string
+  bankProviderUserId?: Prisma.UuidNullableWithAggregatesFilter<"BankConnection"> | string | null
   providerConnectionId?: Prisma.StringWithAggregatesFilter<"BankConnection"> | string
-  encryptedAccessToken?: Prisma.StringWithAggregatesFilter<"BankConnection"> | string
+  encryptedAccessToken?: Prisma.StringNullableWithAggregatesFilter<"BankConnection"> | string | null
   encryptedRefreshToken?: Prisma.StringNullableWithAggregatesFilter<"BankConnection"> | string | null
   tokenExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BankConnection"> | Date | string | null
   consentScopesJson?: Prisma.JsonWithAggregatesFilter<"BankConnection">
   status?: Prisma.EnumBankConnectionStatusWithAggregatesFilter<"BankConnection"> | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BankConnection"> | Date | string | null
+  revokedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BankConnection"> | Date | string | null
+  lastErrorCode?: Prisma.StringNullableWithAggregatesFilter<"BankConnection"> | string | null
+  lastErrorMessage?: Prisma.StringNullableWithAggregatesFilter<"BankConnection"> | string | null
   lastSyncedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BankConnection"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BankConnection"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BankConnection"> | Date | string
@@ -327,16 +390,21 @@ export type BankConnectionScalarWhereWithAggregatesInput = {
 export type BankConnectionCreateInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
   provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
   rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
@@ -347,12 +415,17 @@ export type BankConnectionUncheckedCreateInput = {
   id?: string
   userId: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -365,16 +438,21 @@ export type BankConnectionUncheckedCreateInput = {
 export type BankConnectionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
   provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
   rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
@@ -385,12 +463,17 @@ export type BankConnectionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -404,12 +487,17 @@ export type BankConnectionCreateManyInput = {
   id?: string
   userId: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -418,11 +506,15 @@ export type BankConnectionCreateManyInput = {
 export type BankConnectionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -432,12 +524,17 @@ export type BankConnectionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -467,12 +564,17 @@ export type BankConnectionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  bankProviderUserId?: Prisma.SortOrder
   providerConnectionId?: Prisma.SortOrder
   encryptedAccessToken?: Prisma.SortOrder
   encryptedRefreshToken?: Prisma.SortOrder
   tokenExpiresAt?: Prisma.SortOrder
   consentScopesJson?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  consentedAt?: Prisma.SortOrder
+  revokedAt?: Prisma.SortOrder
+  lastErrorCode?: Prisma.SortOrder
+  lastErrorMessage?: Prisma.SortOrder
   lastSyncedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -482,11 +584,16 @@ export type BankConnectionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  bankProviderUserId?: Prisma.SortOrder
   providerConnectionId?: Prisma.SortOrder
   encryptedAccessToken?: Prisma.SortOrder
   encryptedRefreshToken?: Prisma.SortOrder
   tokenExpiresAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  consentedAt?: Prisma.SortOrder
+  revokedAt?: Prisma.SortOrder
+  lastErrorCode?: Prisma.SortOrder
+  lastErrorMessage?: Prisma.SortOrder
   lastSyncedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -496,11 +603,16 @@ export type BankConnectionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  bankProviderUserId?: Prisma.SortOrder
   providerConnectionId?: Prisma.SortOrder
   encryptedAccessToken?: Prisma.SortOrder
   encryptedRefreshToken?: Prisma.SortOrder
   tokenExpiresAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  consentedAt?: Prisma.SortOrder
+  revokedAt?: Prisma.SortOrder
+  lastErrorCode?: Prisma.SortOrder
+  lastErrorMessage?: Prisma.SortOrder
   lastSyncedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -611,6 +723,48 @@ export type BankConnectionUncheckedUpdateManyWithoutProviderNestedInput = {
   deleteMany?: Prisma.BankConnectionScalarWhereInput | Prisma.BankConnectionScalarWhereInput[]
 }
 
+export type BankConnectionCreateNestedManyWithoutBankProviderUserInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput> | Prisma.BankConnectionCreateWithoutBankProviderUserInput[] | Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput | Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput[]
+  createMany?: Prisma.BankConnectionCreateManyBankProviderUserInputEnvelope
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+}
+
+export type BankConnectionUncheckedCreateNestedManyWithoutBankProviderUserInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput> | Prisma.BankConnectionCreateWithoutBankProviderUserInput[] | Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput | Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput[]
+  createMany?: Prisma.BankConnectionCreateManyBankProviderUserInputEnvelope
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+}
+
+export type BankConnectionUpdateManyWithoutBankProviderUserNestedInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput> | Prisma.BankConnectionCreateWithoutBankProviderUserInput[] | Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput | Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput[]
+  upsert?: Prisma.BankConnectionUpsertWithWhereUniqueWithoutBankProviderUserInput | Prisma.BankConnectionUpsertWithWhereUniqueWithoutBankProviderUserInput[]
+  createMany?: Prisma.BankConnectionCreateManyBankProviderUserInputEnvelope
+  set?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  disconnect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  delete?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  update?: Prisma.BankConnectionUpdateWithWhereUniqueWithoutBankProviderUserInput | Prisma.BankConnectionUpdateWithWhereUniqueWithoutBankProviderUserInput[]
+  updateMany?: Prisma.BankConnectionUpdateManyWithWhereWithoutBankProviderUserInput | Prisma.BankConnectionUpdateManyWithWhereWithoutBankProviderUserInput[]
+  deleteMany?: Prisma.BankConnectionScalarWhereInput | Prisma.BankConnectionScalarWhereInput[]
+}
+
+export type BankConnectionUncheckedUpdateManyWithoutBankProviderUserNestedInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput> | Prisma.BankConnectionCreateWithoutBankProviderUserInput[] | Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput | Prisma.BankConnectionCreateOrConnectWithoutBankProviderUserInput[]
+  upsert?: Prisma.BankConnectionUpsertWithWhereUniqueWithoutBankProviderUserInput | Prisma.BankConnectionUpsertWithWhereUniqueWithoutBankProviderUserInput[]
+  createMany?: Prisma.BankConnectionCreateManyBankProviderUserInputEnvelope
+  set?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  disconnect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  delete?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  update?: Prisma.BankConnectionUpdateWithWhereUniqueWithoutBankProviderUserInput | Prisma.BankConnectionUpdateWithWhereUniqueWithoutBankProviderUserInput[]
+  updateMany?: Prisma.BankConnectionUpdateManyWithWhereWithoutBankProviderUserInput | Prisma.BankConnectionUpdateManyWithWhereWithoutBankProviderUserInput[]
+  deleteMany?: Prisma.BankConnectionScalarWhereInput | Prisma.BankConnectionScalarWhereInput[]
+}
+
 export type EnumBankConnectionStatusFieldUpdateOperationsInput = {
   set?: $Enums.BankConnectionStatus
 }
@@ -660,15 +814,20 @@ export type BankConnectionUpdateOneRequiredWithoutSyncCursorNestedInput = {
 export type BankConnectionCreateWithoutUserInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
   rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
@@ -678,12 +837,17 @@ export type BankConnectionCreateWithoutUserInput = {
 export type BankConnectionUncheckedCreateWithoutUserInput = {
   id?: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -726,12 +890,17 @@ export type BankConnectionScalarWhereInput = {
   id?: Prisma.UuidFilter<"BankConnection"> | string
   userId?: Prisma.UuidFilter<"BankConnection"> | string
   providerId?: Prisma.UuidFilter<"BankConnection"> | string
+  bankProviderUserId?: Prisma.UuidNullableFilter<"BankConnection"> | string | null
   providerConnectionId?: Prisma.StringFilter<"BankConnection"> | string
-  encryptedAccessToken?: Prisma.StringFilter<"BankConnection"> | string
+  encryptedAccessToken?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   encryptedRefreshToken?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   tokenExpiresAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
   consentScopesJson?: Prisma.JsonFilter<"BankConnection">
   status?: Prisma.EnumBankConnectionStatusFilter<"BankConnection"> | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
+  revokedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
+  lastErrorCode?: Prisma.StringNullableFilter<"BankConnection"> | string | null
+  lastErrorMessage?: Prisma.StringNullableFilter<"BankConnection"> | string | null
   lastSyncedAt?: Prisma.DateTimeNullableFilter<"BankConnection"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
@@ -740,16 +909,21 @@ export type BankConnectionScalarWhereInput = {
 export type BankConnectionCreateWithoutSyncRunsInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
   provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
   rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
   syncCursor?: Prisma.BankSyncCursorCreateNestedOneWithoutBankConnectionInput
@@ -759,12 +933,17 @@ export type BankConnectionUncheckedCreateWithoutSyncRunsInput = {
   id?: string
   userId: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -792,16 +971,21 @@ export type BankConnectionUpdateToOneWithWhereWithoutSyncRunsInput = {
 export type BankConnectionUpdateWithoutSyncRunsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
   provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
   rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
   syncCursor?: Prisma.BankSyncCursorUpdateOneWithoutBankConnectionNestedInput
@@ -811,12 +995,17 @@ export type BankConnectionUncheckedUpdateWithoutSyncRunsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -828,15 +1017,20 @@ export type BankConnectionUncheckedUpdateWithoutSyncRunsInput = {
 export type BankConnectionCreateWithoutProviderInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
   rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
@@ -846,12 +1040,17 @@ export type BankConnectionCreateWithoutProviderInput = {
 export type BankConnectionUncheckedCreateWithoutProviderInput = {
   id?: string
   userId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -887,19 +1086,96 @@ export type BankConnectionUpdateManyWithWhereWithoutProviderInput = {
   data: Prisma.XOR<Prisma.BankConnectionUpdateManyMutationInput, Prisma.BankConnectionUncheckedUpdateManyWithoutProviderInput>
 }
 
-export type BankConnectionCreateWithoutAccountsInput = {
+export type BankConnectionCreateWithoutBankProviderUserInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
   provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
+  rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
+  syncCursor?: Prisma.BankSyncCursorCreateNestedOneWithoutBankConnectionInput
+}
+
+export type BankConnectionUncheckedCreateWithoutBankProviderUserInput = {
+  id?: string
+  userId: string
+  providerId: string
+  providerConnectionId: string
+  encryptedAccessToken?: string | null
+  encryptedRefreshToken?: string | null
+  tokenExpiresAt?: Date | string | null
+  consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.BankAccountUncheckedCreateNestedManyWithoutBankConnectionInput
+  rawTransactions?: Prisma.BankTransactionRawUncheckedCreateNestedManyWithoutBankConnectionInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutBankConnectionInput
+  syncCursor?: Prisma.BankSyncCursorUncheckedCreateNestedOneWithoutBankConnectionInput
+}
+
+export type BankConnectionCreateOrConnectWithoutBankProviderUserInput = {
+  where: Prisma.BankConnectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.BankConnectionCreateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput>
+}
+
+export type BankConnectionCreateManyBankProviderUserInputEnvelope = {
+  data: Prisma.BankConnectionCreateManyBankProviderUserInput | Prisma.BankConnectionCreateManyBankProviderUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type BankConnectionUpsertWithWhereUniqueWithoutBankProviderUserInput = {
+  where: Prisma.BankConnectionWhereUniqueInput
+  update: Prisma.XOR<Prisma.BankConnectionUpdateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedUpdateWithoutBankProviderUserInput>
+  create: Prisma.XOR<Prisma.BankConnectionCreateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedCreateWithoutBankProviderUserInput>
+}
+
+export type BankConnectionUpdateWithWhereUniqueWithoutBankProviderUserInput = {
+  where: Prisma.BankConnectionWhereUniqueInput
+  data: Prisma.XOR<Prisma.BankConnectionUpdateWithoutBankProviderUserInput, Prisma.BankConnectionUncheckedUpdateWithoutBankProviderUserInput>
+}
+
+export type BankConnectionUpdateManyWithWhereWithoutBankProviderUserInput = {
+  where: Prisma.BankConnectionScalarWhereInput
+  data: Prisma.XOR<Prisma.BankConnectionUpdateManyMutationInput, Prisma.BankConnectionUncheckedUpdateManyWithoutBankProviderUserInput>
+}
+
+export type BankConnectionCreateWithoutAccountsInput = {
+  id?: string
+  providerConnectionId: string
+  encryptedAccessToken?: string | null
+  encryptedRefreshToken?: string | null
+  tokenExpiresAt?: Date | string | null
+  consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
+  provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
   syncCursor?: Prisma.BankSyncCursorCreateNestedOneWithoutBankConnectionInput
@@ -909,12 +1185,17 @@ export type BankConnectionUncheckedCreateWithoutAccountsInput = {
   id?: string
   userId: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -942,16 +1223,21 @@ export type BankConnectionUpdateToOneWithWhereWithoutAccountsInput = {
 export type BankConnectionUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
   provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
   syncCursor?: Prisma.BankSyncCursorUpdateOneWithoutBankConnectionNestedInput
@@ -961,12 +1247,17 @@ export type BankConnectionUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -978,16 +1269,21 @@ export type BankConnectionUncheckedUpdateWithoutAccountsInput = {
 export type BankConnectionCreateWithoutRawTransactionsInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
   provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
   syncCursor?: Prisma.BankSyncCursorCreateNestedOneWithoutBankConnectionInput
@@ -997,12 +1293,17 @@ export type BankConnectionUncheckedCreateWithoutRawTransactionsInput = {
   id?: string
   userId: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1030,16 +1331,21 @@ export type BankConnectionUpdateToOneWithWhereWithoutRawTransactionsInput = {
 export type BankConnectionUpdateWithoutRawTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
   provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
   syncCursor?: Prisma.BankSyncCursorUpdateOneWithoutBankConnectionNestedInput
@@ -1049,12 +1355,17 @@ export type BankConnectionUncheckedUpdateWithoutRawTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1066,16 +1377,21 @@ export type BankConnectionUncheckedUpdateWithoutRawTransactionsInput = {
 export type BankConnectionCreateWithoutSyncCursorInput = {
   id?: string
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
   provider: Prisma.BankProviderCreateNestedOneWithoutConnectionsInput
+  bankProviderUser?: Prisma.BankProviderUserCreateNestedOneWithoutConnectionsInput
   accounts?: Prisma.BankAccountCreateNestedManyWithoutBankConnectionInput
   rawTransactions?: Prisma.BankTransactionRawCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
@@ -1085,12 +1401,17 @@ export type BankConnectionUncheckedCreateWithoutSyncCursorInput = {
   id?: string
   userId: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1118,16 +1439,21 @@ export type BankConnectionUpdateToOneWithWhereWithoutSyncCursorInput = {
 export type BankConnectionUpdateWithoutSyncCursorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
   provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
   rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
@@ -1137,12 +1463,17 @@ export type BankConnectionUncheckedUpdateWithoutSyncCursorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1154,12 +1485,17 @@ export type BankConnectionUncheckedUpdateWithoutSyncCursorInput = {
 export type BankConnectionCreateManyUserInput = {
   id?: string
   providerId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1168,15 +1504,20 @@ export type BankConnectionCreateManyUserInput = {
 export type BankConnectionUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
   rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
@@ -1186,12 +1527,17 @@ export type BankConnectionUpdateWithoutUserInput = {
 export type BankConnectionUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1204,12 +1550,17 @@ export type BankConnectionUncheckedUpdateWithoutUserInput = {
 export type BankConnectionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1218,12 +1569,17 @@ export type BankConnectionUncheckedUpdateManyWithoutUserInput = {
 export type BankConnectionCreateManyProviderInput = {
   id?: string
   userId: string
+  bankProviderUserId?: string | null
   providerConnectionId: string
-  encryptedAccessToken: string
+  encryptedAccessToken?: string | null
   encryptedRefreshToken?: string | null
   tokenExpiresAt?: Date | string | null
   consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1232,15 +1588,20 @@ export type BankConnectionCreateManyProviderInput = {
 export type BankConnectionUpdateWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
+  bankProviderUser?: Prisma.BankProviderUserUpdateOneWithoutConnectionsNestedInput
   accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
   rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
@@ -1250,12 +1611,17 @@ export type BankConnectionUpdateWithoutProviderInput = {
 export type BankConnectionUncheckedUpdateWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1268,12 +1634,101 @@ export type BankConnectionUncheckedUpdateWithoutProviderInput = {
 export type BankConnectionUncheckedUpdateManyWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankProviderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
-  encryptedAccessToken?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type BankConnectionCreateManyBankProviderUserInput = {
+  id?: string
+  userId: string
+  providerId: string
+  providerConnectionId: string
+  encryptedAccessToken?: string | null
+  encryptedRefreshToken?: string | null
+  tokenExpiresAt?: Date | string | null
+  consentScopesJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.BankConnectionStatus
+  consentedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  lastErrorCode?: string | null
+  lastErrorMessage?: string | null
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type BankConnectionUpdateWithoutBankProviderUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
+  provider?: Prisma.BankProviderUpdateOneRequiredWithoutConnectionsNestedInput
+  accounts?: Prisma.BankAccountUpdateManyWithoutBankConnectionNestedInput
+  rawTransactions?: Prisma.BankTransactionRawUpdateManyWithoutBankConnectionNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
+  syncCursor?: Prisma.BankSyncCursorUpdateOneWithoutBankConnectionNestedInput
+}
+
+export type BankConnectionUncheckedUpdateWithoutBankProviderUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.BankAccountUncheckedUpdateManyWithoutBankConnectionNestedInput
+  rawTransactions?: Prisma.BankTransactionRawUncheckedUpdateManyWithoutBankConnectionNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutBankConnectionNestedInput
+  syncCursor?: Prisma.BankSyncCursorUncheckedUpdateOneWithoutBankConnectionNestedInput
+}
+
+export type BankConnectionUncheckedUpdateManyWithoutBankProviderUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConnectionId?: Prisma.StringFieldUpdateOperationsInput | string
+  encryptedAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  encryptedRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentScopesJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumBankConnectionStatusFieldUpdateOperationsInput | $Enums.BankConnectionStatus
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastErrorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1332,17 +1787,23 @@ export type BankConnectionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   userId?: boolean
   providerId?: boolean
+  bankProviderUserId?: boolean
   providerConnectionId?: boolean
   encryptedAccessToken?: boolean
   encryptedRefreshToken?: boolean
   tokenExpiresAt?: boolean
   consentScopesJson?: boolean
   status?: boolean
+  consentedAt?: boolean
+  revokedAt?: boolean
+  lastErrorCode?: boolean
+  lastErrorMessage?: boolean
   lastSyncedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.BankProviderDefaultArgs<ExtArgs>
+  bankProviderUser?: boolean | Prisma.BankConnection$bankProviderUserArgs<ExtArgs>
   accounts?: boolean | Prisma.BankConnection$accountsArgs<ExtArgs>
   rawTransactions?: boolean | Prisma.BankConnection$rawTransactionsArgs<ExtArgs>
   syncRuns?: boolean | Prisma.BankConnection$syncRunsArgs<ExtArgs>
@@ -1354,55 +1815,73 @@ export type BankConnectionSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   userId?: boolean
   providerId?: boolean
+  bankProviderUserId?: boolean
   providerConnectionId?: boolean
   encryptedAccessToken?: boolean
   encryptedRefreshToken?: boolean
   tokenExpiresAt?: boolean
   consentScopesJson?: boolean
   status?: boolean
+  consentedAt?: boolean
+  revokedAt?: boolean
+  lastErrorCode?: boolean
+  lastErrorMessage?: boolean
   lastSyncedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.BankProviderDefaultArgs<ExtArgs>
+  bankProviderUser?: boolean | Prisma.BankConnection$bankProviderUserArgs<ExtArgs>
 }, ExtArgs["result"]["bankConnection"]>
 
 export type BankConnectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
   providerId?: boolean
+  bankProviderUserId?: boolean
   providerConnectionId?: boolean
   encryptedAccessToken?: boolean
   encryptedRefreshToken?: boolean
   tokenExpiresAt?: boolean
   consentScopesJson?: boolean
   status?: boolean
+  consentedAt?: boolean
+  revokedAt?: boolean
+  lastErrorCode?: boolean
+  lastErrorMessage?: boolean
   lastSyncedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.BankProviderDefaultArgs<ExtArgs>
+  bankProviderUser?: boolean | Prisma.BankConnection$bankProviderUserArgs<ExtArgs>
 }, ExtArgs["result"]["bankConnection"]>
 
 export type BankConnectionSelectScalar = {
   id?: boolean
   userId?: boolean
   providerId?: boolean
+  bankProviderUserId?: boolean
   providerConnectionId?: boolean
   encryptedAccessToken?: boolean
   encryptedRefreshToken?: boolean
   tokenExpiresAt?: boolean
   consentScopesJson?: boolean
   status?: boolean
+  consentedAt?: boolean
+  revokedAt?: boolean
+  lastErrorCode?: boolean
+  lastErrorMessage?: boolean
   lastSyncedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BankConnectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "providerId" | "providerConnectionId" | "encryptedAccessToken" | "encryptedRefreshToken" | "tokenExpiresAt" | "consentScopesJson" | "status" | "lastSyncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["bankConnection"]>
+export type BankConnectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "providerId" | "bankProviderUserId" | "providerConnectionId" | "encryptedAccessToken" | "encryptedRefreshToken" | "tokenExpiresAt" | "consentScopesJson" | "status" | "consentedAt" | "revokedAt" | "lastErrorCode" | "lastErrorMessage" | "lastSyncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["bankConnection"]>
 export type BankConnectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.BankProviderDefaultArgs<ExtArgs>
+  bankProviderUser?: boolean | Prisma.BankConnection$bankProviderUserArgs<ExtArgs>
   accounts?: boolean | Prisma.BankConnection$accountsArgs<ExtArgs>
   rawTransactions?: boolean | Prisma.BankConnection$rawTransactionsArgs<ExtArgs>
   syncRuns?: boolean | Prisma.BankConnection$syncRunsArgs<ExtArgs>
@@ -1412,10 +1891,12 @@ export type BankConnectionInclude<ExtArgs extends runtime.Types.Extensions.Inter
 export type BankConnectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.BankProviderDefaultArgs<ExtArgs>
+  bankProviderUser?: boolean | Prisma.BankConnection$bankProviderUserArgs<ExtArgs>
 }
 export type BankConnectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.BankProviderDefaultArgs<ExtArgs>
+  bankProviderUser?: boolean | Prisma.BankConnection$bankProviderUserArgs<ExtArgs>
 }
 
 export type $BankConnectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1423,6 +1904,7 @@ export type $BankConnectionPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     provider: Prisma.$BankProviderPayload<ExtArgs>
+    bankProviderUser: Prisma.$BankProviderUserPayload<ExtArgs> | null
     accounts: Prisma.$BankAccountPayload<ExtArgs>[]
     rawTransactions: Prisma.$BankTransactionRawPayload<ExtArgs>[]
     syncRuns: Prisma.$SyncRunPayload<ExtArgs>[]
@@ -1432,12 +1914,17 @@ export type $BankConnectionPayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     userId: string
     providerId: string
+    bankProviderUserId: string | null
     providerConnectionId: string
-    encryptedAccessToken: string
+    encryptedAccessToken: string | null
     encryptedRefreshToken: string | null
     tokenExpiresAt: Date | null
     consentScopesJson: runtime.JsonValue
     status: $Enums.BankConnectionStatus
+    consentedAt: Date | null
+    revokedAt: Date | null
+    lastErrorCode: string | null
+    lastErrorMessage: string | null
     lastSyncedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1837,6 +2324,7 @@ export interface Prisma__BankConnectionClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   provider<T extends Prisma.BankProviderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankProviderDefaultArgs<ExtArgs>>): Prisma.Prisma__BankProviderClient<runtime.Types.Result.GetResult<Prisma.$BankProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  bankProviderUser<T extends Prisma.BankConnection$bankProviderUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankConnection$bankProviderUserArgs<ExtArgs>>): Prisma.Prisma__BankProviderUserClient<runtime.Types.Result.GetResult<Prisma.$BankProviderUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   accounts<T extends Prisma.BankConnection$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankConnection$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rawTransactions<T extends Prisma.BankConnection$rawTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankConnection$rawTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankTransactionRawPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   syncRuns<T extends Prisma.BankConnection$syncRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankConnection$syncRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SyncRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1873,12 +2361,17 @@ export interface BankConnectionFieldRefs {
   readonly id: Prisma.FieldRef<"BankConnection", 'String'>
   readonly userId: Prisma.FieldRef<"BankConnection", 'String'>
   readonly providerId: Prisma.FieldRef<"BankConnection", 'String'>
+  readonly bankProviderUserId: Prisma.FieldRef<"BankConnection", 'String'>
   readonly providerConnectionId: Prisma.FieldRef<"BankConnection", 'String'>
   readonly encryptedAccessToken: Prisma.FieldRef<"BankConnection", 'String'>
   readonly encryptedRefreshToken: Prisma.FieldRef<"BankConnection", 'String'>
   readonly tokenExpiresAt: Prisma.FieldRef<"BankConnection", 'DateTime'>
   readonly consentScopesJson: Prisma.FieldRef<"BankConnection", 'Json'>
   readonly status: Prisma.FieldRef<"BankConnection", 'BankConnectionStatus'>
+  readonly consentedAt: Prisma.FieldRef<"BankConnection", 'DateTime'>
+  readonly revokedAt: Prisma.FieldRef<"BankConnection", 'DateTime'>
+  readonly lastErrorCode: Prisma.FieldRef<"BankConnection", 'String'>
+  readonly lastErrorMessage: Prisma.FieldRef<"BankConnection", 'String'>
   readonly lastSyncedAt: Prisma.FieldRef<"BankConnection", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"BankConnection", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BankConnection", 'DateTime'>
@@ -2275,6 +2768,25 @@ export type BankConnectionDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many BankConnections to delete.
    */
   limit?: number
+}
+
+/**
+ * BankConnection.bankProviderUser
+ */
+export type BankConnection$bankProviderUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BankProviderUser
+   */
+  select?: Prisma.BankProviderUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BankProviderUser
+   */
+  omit?: Prisma.BankProviderUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BankProviderUserInclude<ExtArgs> | null
+  where?: Prisma.BankProviderUserWhereInput
 }
 
 /**

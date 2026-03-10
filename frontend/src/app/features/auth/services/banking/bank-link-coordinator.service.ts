@@ -1,16 +1,11 @@
-// frontend/src/app/features/auth/services/bank-link-consent-coordinator.service.ts
 import { DestroyRef, Injectable, Injector, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { EMPTY } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs/operators';
-
 import { AuthStore } from '../../store/auth.store';
 import { BasiqConsentUiService } from './basiq-consent-ui.service';
-import { BasiqConsentCallbackEvent } from '../../models/bank.models';
-import { BankLinkTelemetryService } from './bank-link-telemetry.service';
 import { AuthService } from '../auth.service';
-
 
 @Injectable({ providedIn: 'root' })
 export class BankLinkCoordinatorService {
@@ -20,20 +15,18 @@ export class BankLinkCoordinatorService {
   private readonly authStore = inject(AuthStore);
   private readonly authService = inject(AuthService);
   private readonly consentUi = inject(BasiqConsentUiService);
-  private readonly telemetry = inject(BankLinkTelemetryService);
 
-  // Guards duplicate opening in rare replay/re-emission scenarios.
-  private lastOpenedAuthorizeUrl: string | null = null;
   private initialized = false;
+  private lastOpenedAuthorizeUrl: string | null = null;
 
   init(): void {
     if (this.initialized) return;
     this.initialized = true;
 
-    this.listenConsentSdkEvents();
+    this.consentUi.initialize().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
     this.listenBankAuthorizeUrl();
     this.listenCallbackStream();
-    this.listenConsentCancelledStream();
+    this.listenCancelledStream();
   }
 
   startBankLink(): void {
@@ -44,16 +37,8 @@ export class BankLinkCoordinatorService {
   consumeCallbackUrl(rawUrl: string): boolean {
     const event = this.consentUi.parseCallbackFromUrl(rawUrl);
     if (!event) return false;
-
     this.processConsentCallback(event);
     return true;
-  }
-
-  private listenConsentSdkEvents(): void {
-    this.consentUi
-      .initialize()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
   }
 
   private listenBankAuthorizeUrl(): void {
@@ -64,16 +49,10 @@ export class BankLinkCoordinatorService {
         filter((url) => url !== this.lastOpenedAuthorizeUrl),
         tap((url) => {
           this.lastOpenedAuthorizeUrl = url;
-          this.authStore.setPendingConsentState(this.extractState(url));
-          this.telemetry.emit('consent_open_requested', { hasState: !!this.extractState(url) });
         }),
         switchMap((url) =>
           this.consentUi.openConsent(url).pipe(
-            tap(() => this.telemetry.emit('consent_open_succeeded')),
-            catchError((err) => {
-              this.telemetry.emit('consent_open_failed', {
-                message: err instanceof Error ? err.message : 'unknown',
-              });
+            catchError(() => {
               this.authStore.resetBankLinkFlow();
               this.lastOpenedAuthorizeUrl = null;
               return EMPTY;
@@ -94,68 +73,87 @@ export class BankLinkCoordinatorService {
       .subscribe();
   }
 
-  private processConsentCallback(event: BasiqConsentCallbackEvent): void {
-    this.telemetry.emit('consent_callback_received', {
-      hasJobId: !!event.jobId,
-      jobIdsCount: event.jobIds.length,
-    });
+  private processConsentCallback(event: {
+    state: string | null;
+    jobId: string | null;
+    jobIds: string[];
+  }): void {
+    const expectedState = this.authStore.pendingConsentState();
 
-    if (!this.isValidState(event)) {
+    if (!event.state || !expectedState || event.state !== expectedState) {
+      console.warn('[BankLink] Invalid consent callback state', {
+        callbackState: event.state,
+        expectedState,
+      });
+      this.authStore.setBankLinkError('Invalid consent callback state');
+      this.lastOpenedAuthorizeUrl = null;
+      void this.router.navigateByUrl('/auth', { replaceUrl: true });
       return;
     }
 
-    const jobIds = this.resolveCallbackJobIds(event);
+    const jobIds = [...new Set([...(event.jobIds ?? []), ...(event.jobId ? [event.jobId] : [])])];
+
     if (jobIds.length === 0) {
-      this.telemetry.emit('consent_verification_failed', {
-        reason: 'missing_job_ids',
-      });
-      this.authStore.setBankLinkError(
-        'We could not verify the bank connection. Please try again.',
-      );
+      this.authStore.setBankLinkError('No consent jobs returned by provider');
       this.lastOpenedAuthorizeUrl = null;
       void this.router.navigateByUrl('/auth', { replaceUrl: true });
       return;
     }
 
     this.authService
-      .verifyBankConsent(jobIds)
+      .verifyBankConsent({ state: event.state, jobIds })
       .pipe(
         take(1),
-        tap((verification) => {
-          if (!verification.success) {
-            this.telemetry.emit('consent_verification_failed', {
-              failedJobIds: verification.failedJobIds,
-              pendingJobIds: verification.pendingJobIds,
-              message: verification.message,
+        tap((result) => {
+          if (!result.success) {
+            console.warn('[BankLink] Consent verification failed', {
+              state: event.state,
+              jobIds,
+              failedJobIds: result.failedJobIds,
+              pendingJobIds: result.pendingJobIds,
+              message: result.message,
             });
-            this.authStore.setBankLinkError(verification.message);
+            this.authStore.setBankLinkError(result.message);
             this.lastOpenedAuthorizeUrl = null;
             void this.router.navigateByUrl('/auth', { replaceUrl: true });
             return;
           }
 
-          this.telemetry.emit('consent_verification_succeeded', {
-            verifiedJobs: jobIds.length,
+          console.info('[BankLink] Consent verification succeeded', {
+            state: event.state,
+            jobIds,
+            appUserId: result.context?.appUserId ?? this.authStore.user()?.id,
+            providerCode: result.context?.providerCode,
+            providerUserId: result.context?.providerUserId,
+            providerConnectionIds: result.context?.providerConnectionIds ?? [],
+            isFirstSuccessfulConsentForUser:
+              result.context?.isFirstSuccessfulConsentForUser ?? false,
+            isFirstBankConnectionForUser:
+              result.context?.isFirstBankConnectionForUser ?? false,
+            userConsentProfile:
+              result.context?.isFirstSuccessfulConsentForUser
+                ? 'first_time_user'
+                : 'returning_user',
+            // Use these IDs in your backend transaction sync/fetch endpoint.
+            transactionApiContext: result.context,
           });
-          this.authStore.markBankConnected();
-          this.authStore.clearPendingConsentState();
-          this.lastOpenedAuthorizeUrl = null;
-          this.telemetry.emit('consent_completed');
-          this.consentUi
-            .closeConsent()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe();
 
-          void this.router.navigateByUrl('/dashboard', { replaceUrl: true });
-        }),
-        catchError((error: unknown) => {
-          this.telemetry.emit('consent_verification_failed', {
-            reason: 'verification_request_failed',
-            message: error instanceof Error ? error.message : 'unknown',
+          this.authStore.markBankConnected({
+            isFirstBankConnectionForUser:
+              result.context?.isFirstBankConnectionForUser ?? null,
           });
-          this.authStore.setBankLinkError(
-            'Unable to verify consent result. Please try again.',
-          );
+          this.lastOpenedAuthorizeUrl = null;
+          const targetRoute =
+            this.authStore.getBootstrapTargetRoute('/auth') ?? '/auth';
+
+          void this.router.navigateByUrl(targetRoute, { replaceUrl: true });
+        }),
+        catchError(() => {
+          console.error('[BankLink] Consent verification request failed', {
+            state: event.state,
+            jobIds,
+          });
+          this.authStore.setBankLinkError('Unable to verify consent');
           this.lastOpenedAuthorizeUrl = null;
           void this.router.navigateByUrl('/auth', { replaceUrl: true });
           return EMPTY;
@@ -165,50 +163,15 @@ export class BankLinkCoordinatorService {
       .subscribe();
   }
 
-  private listenConsentCancelledStream(): void {
+  private listenCancelledStream(): void {
     this.consentUi.cancelled$
       .pipe(
         tap(() => {
-          this.telemetry.emit('consent_cancelled');
-          if (!this.authStore.isLoading()) return;
           this.authStore.resetBankLinkFlow();
           this.lastOpenedAuthorizeUrl = null;
         }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
-  }
-
-  private isValidState(event: BasiqConsentCallbackEvent): boolean {
-    const expected = this.authStore.pendingConsentState();
-    if (!expected) return true;
-
-    const valid = event.state === expected;
-    if (!valid) {
-      this.telemetry.emit('consent_state_mismatch', {
-        expectedState: expected,
-        receivedState: event.state,
-      });
-    }
-    return valid;
-  }
-
-  private extractState(authorizeUrl: string): string | null {
-    try {
-      return new URL(authorizeUrl).searchParams.get('state');
-    } catch {
-      return null;
-    }
-  }
-
-  private resolveCallbackJobIds(event: BasiqConsentCallbackEvent): string[] {
-    const normalized = [...event.jobIds];
-    if (event.jobId) {
-      normalized.push(event.jobId);
-    }
-
-    return [...new Set(normalized.map((value) => value.trim()))].filter(
-      Boolean,
-    );
   }
 }

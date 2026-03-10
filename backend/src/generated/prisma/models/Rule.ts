@@ -27,21 +27,30 @@ export type AggregateRule = {
 }
 
 export type RuleAvgAggregateOutputType = {
+  sourceTemplateVersion: number | null
   priority: number | null
 }
 
 export type RuleSumAggregateOutputType = {
+  sourceTemplateVersion: number | null
   priority: number | null
 }
 
 export type RuleMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  sourceTemplateId: string | null
+  sourceTemplateVersion: number | null
+  isSystemManaged: boolean | null
   name: string | null
   type: $Enums.RuleType | null
   enabled: boolean | null
   priority: number | null
+  matchMode: $Enums.RuleMatchMode | null
+  targetCategoryId: string | null
+  targetSubcategoryId: string | null
   createdBy: $Enums.RuleCreatedBy | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,11 +58,18 @@ export type RuleMinAggregateOutputType = {
 export type RuleMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  sourceTemplateId: string | null
+  sourceTemplateVersion: number | null
+  isSystemManaged: boolean | null
   name: string | null
   type: $Enums.RuleType | null
   enabled: boolean | null
   priority: number | null
+  matchMode: $Enums.RuleMatchMode | null
+  targetCategoryId: string | null
+  targetSubcategoryId: string | null
   createdBy: $Enums.RuleCreatedBy | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,13 +77,20 @@ export type RuleMaxAggregateOutputType = {
 export type RuleCountAggregateOutputType = {
   id: number
   userId: number
+  sourceTemplateId: number
+  sourceTemplateVersion: number
+  isSystemManaged: number
   name: number
   type: number
   enabled: number
   priority: number
+  matchMode: number
   conditionJson: number
   actionJson: number
+  targetCategoryId: number
+  targetSubcategoryId: number
   createdBy: number
+  deletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -75,21 +98,30 @@ export type RuleCountAggregateOutputType = {
 
 
 export type RuleAvgAggregateInputType = {
+  sourceTemplateVersion?: true
   priority?: true
 }
 
 export type RuleSumAggregateInputType = {
+  sourceTemplateVersion?: true
   priority?: true
 }
 
 export type RuleMinAggregateInputType = {
   id?: true
   userId?: true
+  sourceTemplateId?: true
+  sourceTemplateVersion?: true
+  isSystemManaged?: true
   name?: true
   type?: true
   enabled?: true
   priority?: true
+  matchMode?: true
+  targetCategoryId?: true
+  targetSubcategoryId?: true
   createdBy?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -97,11 +129,18 @@ export type RuleMinAggregateInputType = {
 export type RuleMaxAggregateInputType = {
   id?: true
   userId?: true
+  sourceTemplateId?: true
+  sourceTemplateVersion?: true
+  isSystemManaged?: true
   name?: true
   type?: true
   enabled?: true
   priority?: true
+  matchMode?: true
+  targetCategoryId?: true
+  targetSubcategoryId?: true
   createdBy?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -109,13 +148,20 @@ export type RuleMaxAggregateInputType = {
 export type RuleCountAggregateInputType = {
   id?: true
   userId?: true
+  sourceTemplateId?: true
+  sourceTemplateVersion?: true
+  isSystemManaged?: true
   name?: true
   type?: true
   enabled?: true
   priority?: true
+  matchMode?: true
   conditionJson?: true
   actionJson?: true
+  targetCategoryId?: true
+  targetSubcategoryId?: true
   createdBy?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -210,13 +256,20 @@ export type RuleGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type RuleGroupByOutputType = {
   id: string
   userId: string
+  sourceTemplateId: string | null
+  sourceTemplateVersion: number | null
+  isSystemManaged: boolean
   name: string
   type: $Enums.RuleType
   enabled: boolean
   priority: number
+  matchMode: $Enums.RuleMatchMode
   conditionJson: runtime.JsonValue
   actionJson: runtime.JsonValue
+  targetCategoryId: string | null
+  targetSubcategoryId: string | null
   createdBy: $Enums.RuleCreatedBy
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: RuleCountAggregateOutputType | null
@@ -247,35 +300,57 @@ export type RuleWhereInput = {
   NOT?: Prisma.RuleWhereInput | Prisma.RuleWhereInput[]
   id?: Prisma.UuidFilter<"Rule"> | string
   userId?: Prisma.UuidFilter<"Rule"> | string
+  sourceTemplateId?: Prisma.UuidNullableFilter<"Rule"> | string | null
+  sourceTemplateVersion?: Prisma.IntNullableFilter<"Rule"> | number | null
+  isSystemManaged?: Prisma.BoolFilter<"Rule"> | boolean
   name?: Prisma.StringFilter<"Rule"> | string
   type?: Prisma.EnumRuleTypeFilter<"Rule"> | $Enums.RuleType
   enabled?: Prisma.BoolFilter<"Rule"> | boolean
   priority?: Prisma.IntFilter<"Rule"> | number
+  matchMode?: Prisma.EnumRuleMatchModeFilter<"Rule"> | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonFilter<"Rule">
   actionJson?: Prisma.JsonFilter<"Rule">
+  targetCategoryId?: Prisma.UuidNullableFilter<"Rule"> | string | null
+  targetSubcategoryId?: Prisma.UuidNullableFilter<"Rule"> | string | null
   createdBy?: Prisma.EnumRuleCreatedByFilter<"Rule"> | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.DateTimeNullableFilter<"Rule"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  sourceTemplate?: Prisma.XOR<Prisma.AppRuleTemplateNullableScalarRelationFilter, Prisma.AppRuleTemplateWhereInput> | null
+  targetCategory?: Prisma.XOR<Prisma.BudgetCategoryNullableScalarRelationFilter, Prisma.BudgetCategoryWhereInput> | null
+  targetSubcategory?: Prisma.XOR<Prisma.BudgetSubcategoryNullableScalarRelationFilter, Prisma.BudgetSubcategoryWhereInput> | null
   executions?: Prisma.RuleExecutionListRelationFilter
   alerts?: Prisma.RuleAlertListRelationFilter
+  classifiedTransactions?: Prisma.TransactionListRelationFilter
 }
 
 export type RuleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceTemplateId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceTemplateVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSystemManaged?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   priority?: Prisma.SortOrder
+  matchMode?: Prisma.SortOrder
   conditionJson?: Prisma.SortOrder
   actionJson?: Prisma.SortOrder
+  targetCategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetSubcategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  sourceTemplate?: Prisma.AppRuleTemplateOrderByWithRelationInput
+  targetCategory?: Prisma.BudgetCategoryOrderByWithRelationInput
+  targetSubcategory?: Prisma.BudgetSubcategoryOrderByWithRelationInput
   executions?: Prisma.RuleExecutionOrderByRelationAggregateInput
   alerts?: Prisma.RuleAlertOrderByRelationAggregateInput
+  classifiedTransactions?: Prisma.TransactionOrderByRelationAggregateInput
 }
 
 export type RuleWhereUniqueInput = Prisma.AtLeast<{
@@ -284,30 +359,48 @@ export type RuleWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RuleWhereInput[]
   NOT?: Prisma.RuleWhereInput | Prisma.RuleWhereInput[]
   userId?: Prisma.UuidFilter<"Rule"> | string
+  sourceTemplateId?: Prisma.UuidNullableFilter<"Rule"> | string | null
+  sourceTemplateVersion?: Prisma.IntNullableFilter<"Rule"> | number | null
+  isSystemManaged?: Prisma.BoolFilter<"Rule"> | boolean
   name?: Prisma.StringFilter<"Rule"> | string
   type?: Prisma.EnumRuleTypeFilter<"Rule"> | $Enums.RuleType
   enabled?: Prisma.BoolFilter<"Rule"> | boolean
   priority?: Prisma.IntFilter<"Rule"> | number
+  matchMode?: Prisma.EnumRuleMatchModeFilter<"Rule"> | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonFilter<"Rule">
   actionJson?: Prisma.JsonFilter<"Rule">
+  targetCategoryId?: Prisma.UuidNullableFilter<"Rule"> | string | null
+  targetSubcategoryId?: Prisma.UuidNullableFilter<"Rule"> | string | null
   createdBy?: Prisma.EnumRuleCreatedByFilter<"Rule"> | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.DateTimeNullableFilter<"Rule"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  sourceTemplate?: Prisma.XOR<Prisma.AppRuleTemplateNullableScalarRelationFilter, Prisma.AppRuleTemplateWhereInput> | null
+  targetCategory?: Prisma.XOR<Prisma.BudgetCategoryNullableScalarRelationFilter, Prisma.BudgetCategoryWhereInput> | null
+  targetSubcategory?: Prisma.XOR<Prisma.BudgetSubcategoryNullableScalarRelationFilter, Prisma.BudgetSubcategoryWhereInput> | null
   executions?: Prisma.RuleExecutionListRelationFilter
   alerts?: Prisma.RuleAlertListRelationFilter
+  classifiedTransactions?: Prisma.TransactionListRelationFilter
 }, "id">
 
 export type RuleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceTemplateId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceTemplateVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSystemManaged?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   priority?: Prisma.SortOrder
+  matchMode?: Prisma.SortOrder
   conditionJson?: Prisma.SortOrder
   actionJson?: Prisma.SortOrder
+  targetCategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetSubcategoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RuleCountOrderByAggregateInput
@@ -323,104 +416,154 @@ export type RuleScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RuleScalarWhereWithAggregatesInput | Prisma.RuleScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Rule"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"Rule"> | string
+  sourceTemplateId?: Prisma.UuidNullableWithAggregatesFilter<"Rule"> | string | null
+  sourceTemplateVersion?: Prisma.IntNullableWithAggregatesFilter<"Rule"> | number | null
+  isSystemManaged?: Prisma.BoolWithAggregatesFilter<"Rule"> | boolean
   name?: Prisma.StringWithAggregatesFilter<"Rule"> | string
   type?: Prisma.EnumRuleTypeWithAggregatesFilter<"Rule"> | $Enums.RuleType
   enabled?: Prisma.BoolWithAggregatesFilter<"Rule"> | boolean
   priority?: Prisma.IntWithAggregatesFilter<"Rule"> | number
+  matchMode?: Prisma.EnumRuleMatchModeWithAggregatesFilter<"Rule"> | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonWithAggregatesFilter<"Rule">
   actionJson?: Prisma.JsonWithAggregatesFilter<"Rule">
+  targetCategoryId?: Prisma.UuidNullableWithAggregatesFilter<"Rule"> | string | null
+  targetSubcategoryId?: Prisma.UuidNullableWithAggregatesFilter<"Rule"> | string | null
   createdBy?: Prisma.EnumRuleCreatedByWithAggregatesFilter<"Rule"> | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Rule"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Rule"> | Date | string
 }
 
 export type RuleCreateInput = {
   id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRulesInput
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
   executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
   alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleUncheckedCreateInput = {
   id?: string
   userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
   alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
   executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
   alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
   alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleCreateManyInput = {
   id?: string
   userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type RuleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -428,13 +571,20 @@ export type RuleUpdateManyMutationInput = {
 export type RuleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -449,32 +599,52 @@ export type RuleOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type RuleNullableScalarRelationFilter = {
+  is?: Prisma.RuleWhereInput | null
+  isNot?: Prisma.RuleWhereInput | null
+}
+
 export type RuleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceTemplateId?: Prisma.SortOrder
+  sourceTemplateVersion?: Prisma.SortOrder
+  isSystemManaged?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   priority?: Prisma.SortOrder
+  matchMode?: Prisma.SortOrder
   conditionJson?: Prisma.SortOrder
   actionJson?: Prisma.SortOrder
+  targetCategoryId?: Prisma.SortOrder
+  targetSubcategoryId?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RuleAvgOrderByAggregateInput = {
+  sourceTemplateVersion?: Prisma.SortOrder
   priority?: Prisma.SortOrder
 }
 
 export type RuleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceTemplateId?: Prisma.SortOrder
+  sourceTemplateVersion?: Prisma.SortOrder
+  isSystemManaged?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   priority?: Prisma.SortOrder
+  matchMode?: Prisma.SortOrder
+  targetCategoryId?: Prisma.SortOrder
+  targetSubcategoryId?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -482,27 +652,30 @@ export type RuleMaxOrderByAggregateInput = {
 export type RuleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceTemplateId?: Prisma.SortOrder
+  sourceTemplateVersion?: Prisma.SortOrder
+  isSystemManaged?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   priority?: Prisma.SortOrder
+  matchMode?: Prisma.SortOrder
+  targetCategoryId?: Prisma.SortOrder
+  targetSubcategoryId?: Prisma.SortOrder
   createdBy?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RuleSumOrderByAggregateInput = {
+  sourceTemplateVersion?: Prisma.SortOrder
   priority?: Prisma.SortOrder
 }
 
 export type RuleScalarRelationFilter = {
   is?: Prisma.RuleWhereInput
   isNot?: Prisma.RuleWhereInput
-}
-
-export type RuleNullableScalarRelationFilter = {
-  is?: Prisma.RuleWhereInput | null
-  isNot?: Prisma.RuleWhereInput | null
 }
 
 export type RuleCreateNestedManyWithoutUserInput = {
@@ -547,8 +720,154 @@ export type RuleUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
 }
 
-export type EnumRuleTypeFieldUpdateOperationsInput = {
-  set?: $Enums.RuleType
+export type RuleCreateNestedManyWithoutSourceTemplateInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutSourceTemplateInput, Prisma.RuleUncheckedCreateWithoutSourceTemplateInput> | Prisma.RuleCreateWithoutSourceTemplateInput[] | Prisma.RuleUncheckedCreateWithoutSourceTemplateInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutSourceTemplateInput | Prisma.RuleCreateOrConnectWithoutSourceTemplateInput[]
+  createMany?: Prisma.RuleCreateManySourceTemplateInputEnvelope
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+}
+
+export type RuleUncheckedCreateNestedManyWithoutSourceTemplateInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutSourceTemplateInput, Prisma.RuleUncheckedCreateWithoutSourceTemplateInput> | Prisma.RuleCreateWithoutSourceTemplateInput[] | Prisma.RuleUncheckedCreateWithoutSourceTemplateInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutSourceTemplateInput | Prisma.RuleCreateOrConnectWithoutSourceTemplateInput[]
+  createMany?: Prisma.RuleCreateManySourceTemplateInputEnvelope
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+}
+
+export type RuleUpdateManyWithoutSourceTemplateNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutSourceTemplateInput, Prisma.RuleUncheckedCreateWithoutSourceTemplateInput> | Prisma.RuleCreateWithoutSourceTemplateInput[] | Prisma.RuleUncheckedCreateWithoutSourceTemplateInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutSourceTemplateInput | Prisma.RuleCreateOrConnectWithoutSourceTemplateInput[]
+  upsert?: Prisma.RuleUpsertWithWhereUniqueWithoutSourceTemplateInput | Prisma.RuleUpsertWithWhereUniqueWithoutSourceTemplateInput[]
+  createMany?: Prisma.RuleCreateManySourceTemplateInputEnvelope
+  set?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  disconnect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  delete?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  update?: Prisma.RuleUpdateWithWhereUniqueWithoutSourceTemplateInput | Prisma.RuleUpdateWithWhereUniqueWithoutSourceTemplateInput[]
+  updateMany?: Prisma.RuleUpdateManyWithWhereWithoutSourceTemplateInput | Prisma.RuleUpdateManyWithWhereWithoutSourceTemplateInput[]
+  deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
+}
+
+export type RuleUncheckedUpdateManyWithoutSourceTemplateNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutSourceTemplateInput, Prisma.RuleUncheckedCreateWithoutSourceTemplateInput> | Prisma.RuleCreateWithoutSourceTemplateInput[] | Prisma.RuleUncheckedCreateWithoutSourceTemplateInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutSourceTemplateInput | Prisma.RuleCreateOrConnectWithoutSourceTemplateInput[]
+  upsert?: Prisma.RuleUpsertWithWhereUniqueWithoutSourceTemplateInput | Prisma.RuleUpsertWithWhereUniqueWithoutSourceTemplateInput[]
+  createMany?: Prisma.RuleCreateManySourceTemplateInputEnvelope
+  set?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  disconnect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  delete?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  update?: Prisma.RuleUpdateWithWhereUniqueWithoutSourceTemplateInput | Prisma.RuleUpdateWithWhereUniqueWithoutSourceTemplateInput[]
+  updateMany?: Prisma.RuleUpdateManyWithWhereWithoutSourceTemplateInput | Prisma.RuleUpdateManyWithWhereWithoutSourceTemplateInput[]
+  deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
+}
+
+export type RuleCreateNestedManyWithoutTargetCategoryInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetCategoryInput, Prisma.RuleUncheckedCreateWithoutTargetCategoryInput> | Prisma.RuleCreateWithoutTargetCategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetCategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetCategoryInput | Prisma.RuleCreateOrConnectWithoutTargetCategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetCategoryInputEnvelope
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+}
+
+export type RuleUncheckedCreateNestedManyWithoutTargetCategoryInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetCategoryInput, Prisma.RuleUncheckedCreateWithoutTargetCategoryInput> | Prisma.RuleCreateWithoutTargetCategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetCategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetCategoryInput | Prisma.RuleCreateOrConnectWithoutTargetCategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetCategoryInputEnvelope
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+}
+
+export type RuleUpdateManyWithoutTargetCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetCategoryInput, Prisma.RuleUncheckedCreateWithoutTargetCategoryInput> | Prisma.RuleCreateWithoutTargetCategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetCategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetCategoryInput | Prisma.RuleCreateOrConnectWithoutTargetCategoryInput[]
+  upsert?: Prisma.RuleUpsertWithWhereUniqueWithoutTargetCategoryInput | Prisma.RuleUpsertWithWhereUniqueWithoutTargetCategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetCategoryInputEnvelope
+  set?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  disconnect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  delete?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  update?: Prisma.RuleUpdateWithWhereUniqueWithoutTargetCategoryInput | Prisma.RuleUpdateWithWhereUniqueWithoutTargetCategoryInput[]
+  updateMany?: Prisma.RuleUpdateManyWithWhereWithoutTargetCategoryInput | Prisma.RuleUpdateManyWithWhereWithoutTargetCategoryInput[]
+  deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
+}
+
+export type RuleUncheckedUpdateManyWithoutTargetCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetCategoryInput, Prisma.RuleUncheckedCreateWithoutTargetCategoryInput> | Prisma.RuleCreateWithoutTargetCategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetCategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetCategoryInput | Prisma.RuleCreateOrConnectWithoutTargetCategoryInput[]
+  upsert?: Prisma.RuleUpsertWithWhereUniqueWithoutTargetCategoryInput | Prisma.RuleUpsertWithWhereUniqueWithoutTargetCategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetCategoryInputEnvelope
+  set?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  disconnect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  delete?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  update?: Prisma.RuleUpdateWithWhereUniqueWithoutTargetCategoryInput | Prisma.RuleUpdateWithWhereUniqueWithoutTargetCategoryInput[]
+  updateMany?: Prisma.RuleUpdateManyWithWhereWithoutTargetCategoryInput | Prisma.RuleUpdateManyWithWhereWithoutTargetCategoryInput[]
+  deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
+}
+
+export type RuleCreateNestedManyWithoutTargetSubcategoryInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput> | Prisma.RuleCreateWithoutTargetSubcategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput | Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetSubcategoryInputEnvelope
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+}
+
+export type RuleUncheckedCreateNestedManyWithoutTargetSubcategoryInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput> | Prisma.RuleCreateWithoutTargetSubcategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput | Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetSubcategoryInputEnvelope
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+}
+
+export type RuleUpdateManyWithoutTargetSubcategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput> | Prisma.RuleCreateWithoutTargetSubcategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput | Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput[]
+  upsert?: Prisma.RuleUpsertWithWhereUniqueWithoutTargetSubcategoryInput | Prisma.RuleUpsertWithWhereUniqueWithoutTargetSubcategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetSubcategoryInputEnvelope
+  set?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  disconnect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  delete?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  update?: Prisma.RuleUpdateWithWhereUniqueWithoutTargetSubcategoryInput | Prisma.RuleUpdateWithWhereUniqueWithoutTargetSubcategoryInput[]
+  updateMany?: Prisma.RuleUpdateManyWithWhereWithoutTargetSubcategoryInput | Prisma.RuleUpdateManyWithWhereWithoutTargetSubcategoryInput[]
+  deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
+}
+
+export type RuleUncheckedUpdateManyWithoutTargetSubcategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput> | Prisma.RuleCreateWithoutTargetSubcategoryInput[] | Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput[]
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput | Prisma.RuleCreateOrConnectWithoutTargetSubcategoryInput[]
+  upsert?: Prisma.RuleUpsertWithWhereUniqueWithoutTargetSubcategoryInput | Prisma.RuleUpsertWithWhereUniqueWithoutTargetSubcategoryInput[]
+  createMany?: Prisma.RuleCreateManyTargetSubcategoryInputEnvelope
+  set?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  disconnect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  delete?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  connect?: Prisma.RuleWhereUniqueInput | Prisma.RuleWhereUniqueInput[]
+  update?: Prisma.RuleUpdateWithWhereUniqueWithoutTargetSubcategoryInput | Prisma.RuleUpdateWithWhereUniqueWithoutTargetSubcategoryInput[]
+  updateMany?: Prisma.RuleUpdateManyWithWhereWithoutTargetSubcategoryInput | Prisma.RuleUpdateManyWithWhereWithoutTargetSubcategoryInput[]
+  deleteMany?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
+}
+
+export type RuleCreateNestedOneWithoutClassifiedTransactionsInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutClassifiedTransactionsInput, Prisma.RuleUncheckedCreateWithoutClassifiedTransactionsInput>
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutClassifiedTransactionsInput
+  connect?: Prisma.RuleWhereUniqueInput
+}
+
+export type RuleUpdateOneWithoutClassifiedTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.RuleCreateWithoutClassifiedTransactionsInput, Prisma.RuleUncheckedCreateWithoutClassifiedTransactionsInput>
+  connectOrCreate?: Prisma.RuleCreateOrConnectWithoutClassifiedTransactionsInput
+  upsert?: Prisma.RuleUpsertWithoutClassifiedTransactionsInput
+  disconnect?: Prisma.RuleWhereInput | boolean
+  delete?: Prisma.RuleWhereInput | boolean
+  connect?: Prisma.RuleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RuleUpdateToOneWithWhereWithoutClassifiedTransactionsInput, Prisma.RuleUpdateWithoutClassifiedTransactionsInput>, Prisma.RuleUncheckedUpdateWithoutClassifiedTransactionsInput>
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type EnumRuleCreatedByFieldUpdateOperationsInput = {
@@ -587,32 +906,48 @@ export type RuleUpdateOneWithoutAlertsNestedInput = {
 
 export type RuleCreateWithoutUserInput = {
   id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
   executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
   alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleUncheckedCreateWithoutUserInput = {
   id?: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
   alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleCreateOrConnectWithoutUserInput = {
@@ -647,45 +982,392 @@ export type RuleScalarWhereInput = {
   NOT?: Prisma.RuleScalarWhereInput | Prisma.RuleScalarWhereInput[]
   id?: Prisma.UuidFilter<"Rule"> | string
   userId?: Prisma.UuidFilter<"Rule"> | string
+  sourceTemplateId?: Prisma.UuidNullableFilter<"Rule"> | string | null
+  sourceTemplateVersion?: Prisma.IntNullableFilter<"Rule"> | number | null
+  isSystemManaged?: Prisma.BoolFilter<"Rule"> | boolean
   name?: Prisma.StringFilter<"Rule"> | string
   type?: Prisma.EnumRuleTypeFilter<"Rule"> | $Enums.RuleType
   enabled?: Prisma.BoolFilter<"Rule"> | boolean
   priority?: Prisma.IntFilter<"Rule"> | number
+  matchMode?: Prisma.EnumRuleMatchModeFilter<"Rule"> | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonFilter<"Rule">
   actionJson?: Prisma.JsonFilter<"Rule">
+  targetCategoryId?: Prisma.UuidNullableFilter<"Rule"> | string | null
+  targetSubcategoryId?: Prisma.UuidNullableFilter<"Rule"> | string | null
   createdBy?: Prisma.EnumRuleCreatedByFilter<"Rule"> | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.DateTimeNullableFilter<"Rule"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rule"> | Date | string
 }
 
-export type RuleCreateWithoutExecutionsInput = {
+export type RuleCreateWithoutSourceTemplateInput = {
   id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
+  executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
   alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
+}
+
+export type RuleUncheckedCreateWithoutSourceTemplateInput = {
+  id?: string
+  userId: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
+}
+
+export type RuleCreateOrConnectWithoutSourceTemplateInput = {
+  where: Prisma.RuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.RuleCreateWithoutSourceTemplateInput, Prisma.RuleUncheckedCreateWithoutSourceTemplateInput>
+}
+
+export type RuleCreateManySourceTemplateInputEnvelope = {
+  data: Prisma.RuleCreateManySourceTemplateInput | Prisma.RuleCreateManySourceTemplateInput[]
+  skipDuplicates?: boolean
+}
+
+export type RuleUpsertWithWhereUniqueWithoutSourceTemplateInput = {
+  where: Prisma.RuleWhereUniqueInput
+  update: Prisma.XOR<Prisma.RuleUpdateWithoutSourceTemplateInput, Prisma.RuleUncheckedUpdateWithoutSourceTemplateInput>
+  create: Prisma.XOR<Prisma.RuleCreateWithoutSourceTemplateInput, Prisma.RuleUncheckedCreateWithoutSourceTemplateInput>
+}
+
+export type RuleUpdateWithWhereUniqueWithoutSourceTemplateInput = {
+  where: Prisma.RuleWhereUniqueInput
+  data: Prisma.XOR<Prisma.RuleUpdateWithoutSourceTemplateInput, Prisma.RuleUncheckedUpdateWithoutSourceTemplateInput>
+}
+
+export type RuleUpdateManyWithWhereWithoutSourceTemplateInput = {
+  where: Prisma.RuleScalarWhereInput
+  data: Prisma.XOR<Prisma.RuleUpdateManyMutationInput, Prisma.RuleUncheckedUpdateManyWithoutSourceTemplateInput>
+}
+
+export type RuleCreateWithoutTargetCategoryInput = {
+  id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutRulesInput
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
+  executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
+}
+
+export type RuleUncheckedCreateWithoutTargetCategoryInput = {
+  id?: string
+  userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetSubcategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
+}
+
+export type RuleCreateOrConnectWithoutTargetCategoryInput = {
+  where: Prisma.RuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.RuleCreateWithoutTargetCategoryInput, Prisma.RuleUncheckedCreateWithoutTargetCategoryInput>
+}
+
+export type RuleCreateManyTargetCategoryInputEnvelope = {
+  data: Prisma.RuleCreateManyTargetCategoryInput | Prisma.RuleCreateManyTargetCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type RuleUpsertWithWhereUniqueWithoutTargetCategoryInput = {
+  where: Prisma.RuleWhereUniqueInput
+  update: Prisma.XOR<Prisma.RuleUpdateWithoutTargetCategoryInput, Prisma.RuleUncheckedUpdateWithoutTargetCategoryInput>
+  create: Prisma.XOR<Prisma.RuleCreateWithoutTargetCategoryInput, Prisma.RuleUncheckedCreateWithoutTargetCategoryInput>
+}
+
+export type RuleUpdateWithWhereUniqueWithoutTargetCategoryInput = {
+  where: Prisma.RuleWhereUniqueInput
+  data: Prisma.XOR<Prisma.RuleUpdateWithoutTargetCategoryInput, Prisma.RuleUncheckedUpdateWithoutTargetCategoryInput>
+}
+
+export type RuleUpdateManyWithWhereWithoutTargetCategoryInput = {
+  where: Prisma.RuleScalarWhereInput
+  data: Prisma.XOR<Prisma.RuleUpdateManyMutationInput, Prisma.RuleUncheckedUpdateManyWithoutTargetCategoryInput>
+}
+
+export type RuleCreateWithoutTargetSubcategoryInput = {
+  id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutRulesInput
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
+}
+
+export type RuleUncheckedCreateWithoutTargetSubcategoryInput = {
+  id?: string
+  userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
+}
+
+export type RuleCreateOrConnectWithoutTargetSubcategoryInput = {
+  where: Prisma.RuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.RuleCreateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput>
+}
+
+export type RuleCreateManyTargetSubcategoryInputEnvelope = {
+  data: Prisma.RuleCreateManyTargetSubcategoryInput | Prisma.RuleCreateManyTargetSubcategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type RuleUpsertWithWhereUniqueWithoutTargetSubcategoryInput = {
+  where: Prisma.RuleWhereUniqueInput
+  update: Prisma.XOR<Prisma.RuleUpdateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedUpdateWithoutTargetSubcategoryInput>
+  create: Prisma.XOR<Prisma.RuleCreateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedCreateWithoutTargetSubcategoryInput>
+}
+
+export type RuleUpdateWithWhereUniqueWithoutTargetSubcategoryInput = {
+  where: Prisma.RuleWhereUniqueInput
+  data: Prisma.XOR<Prisma.RuleUpdateWithoutTargetSubcategoryInput, Prisma.RuleUncheckedUpdateWithoutTargetSubcategoryInput>
+}
+
+export type RuleUpdateManyWithWhereWithoutTargetSubcategoryInput = {
+  where: Prisma.RuleScalarWhereInput
+  data: Prisma.XOR<Prisma.RuleUpdateManyMutationInput, Prisma.RuleUncheckedUpdateManyWithoutTargetSubcategoryInput>
+}
+
+export type RuleCreateWithoutClassifiedTransactionsInput = {
+  id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutRulesInput
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
+  executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+}
+
+export type RuleUncheckedCreateWithoutClassifiedTransactionsInput = {
+  id?: string
+  userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
+  alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+}
+
+export type RuleCreateOrConnectWithoutClassifiedTransactionsInput = {
+  where: Prisma.RuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.RuleCreateWithoutClassifiedTransactionsInput, Prisma.RuleUncheckedCreateWithoutClassifiedTransactionsInput>
+}
+
+export type RuleUpsertWithoutClassifiedTransactionsInput = {
+  update: Prisma.XOR<Prisma.RuleUpdateWithoutClassifiedTransactionsInput, Prisma.RuleUncheckedUpdateWithoutClassifiedTransactionsInput>
+  create: Prisma.XOR<Prisma.RuleCreateWithoutClassifiedTransactionsInput, Prisma.RuleUncheckedCreateWithoutClassifiedTransactionsInput>
+  where?: Prisma.RuleWhereInput
+}
+
+export type RuleUpdateToOneWithWhereWithoutClassifiedTransactionsInput = {
+  where?: Prisma.RuleWhereInput
+  data: Prisma.XOR<Prisma.RuleUpdateWithoutClassifiedTransactionsInput, Prisma.RuleUncheckedUpdateWithoutClassifiedTransactionsInput>
+}
+
+export type RuleUpdateWithoutClassifiedTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
+  executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+}
+
+export type RuleUncheckedUpdateWithoutClassifiedTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+}
+
+export type RuleCreateWithoutExecutionsInput = {
+  id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutRulesInput
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
+  alerts?: Prisma.RuleAlertCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleUncheckedCreateWithoutExecutionsInput = {
   id?: string
   userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   alerts?: Prisma.RuleAlertUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleCreateOrConnectWithoutExecutionsInput = {
@@ -706,62 +1388,94 @@ export type RuleUpdateToOneWithWhereWithoutExecutionsInput = {
 
 export type RuleUpdateWithoutExecutionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
   alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleUncheckedUpdateWithoutExecutionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleCreateWithoutAlertsInput = {
   id?: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRulesInput
+  sourceTemplate?: Prisma.AppRuleTemplateCreateNestedOneWithoutRulesInput
+  targetCategory?: Prisma.BudgetCategoryCreateNestedOneWithoutRulesAsTargetInput
+  targetSubcategory?: Prisma.BudgetSubcategoryCreateNestedOneWithoutRulesAsTargetInput
   executions?: Prisma.RuleExecutionCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleUncheckedCreateWithoutAlertsInput = {
   id?: string
   userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   executions?: Prisma.RuleExecutionUncheckedCreateNestedManyWithoutRuleInput
+  classifiedTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutClassifiedByRuleInput
 }
 
 export type RuleCreateOrConnectWithoutAlertsInput = {
@@ -782,86 +1496,390 @@ export type RuleUpdateToOneWithWhereWithoutAlertsInput = {
 
 export type RuleUpdateWithoutAlertsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
   executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleUncheckedUpdateWithoutAlertsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleCreateManyUserInput = {
   id?: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
   name: string
   type: $Enums.RuleType
   enabled?: boolean
   priority?: number
+  matchMode?: $Enums.RuleMatchMode
   conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
   createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type RuleUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
   executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
   alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
   alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
 }
 
 export type RuleUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RuleCreateManySourceTemplateInput = {
+  id?: string
+  userId: string
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  targetSubcategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RuleUpdateWithoutSourceTemplateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
   conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
+  executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
+}
+
+export type RuleUncheckedUpdateWithoutSourceTemplateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
+}
+
+export type RuleUncheckedUpdateManyWithoutSourceTemplateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RuleCreateManyTargetCategoryInput = {
+  id?: string
+  userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetSubcategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RuleUpdateWithoutTargetCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetSubcategory?: Prisma.BudgetSubcategoryUpdateOneWithoutRulesAsTargetNestedInput
+  executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
+}
+
+export type RuleUncheckedUpdateWithoutTargetCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
+}
+
+export type RuleUncheckedUpdateManyWithoutTargetCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetSubcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RuleCreateManyTargetSubcategoryInput = {
+  id?: string
+  userId: string
+  sourceTemplateId?: string | null
+  sourceTemplateVersion?: number | null
+  isSystemManaged?: boolean
+  name: string
+  type: $Enums.RuleType
+  enabled?: boolean
+  priority?: number
+  matchMode?: $Enums.RuleMatchMode
+  conditionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: string | null
+  createdBy?: $Enums.RuleCreatedBy
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RuleUpdateWithoutTargetSubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutRulesNestedInput
+  sourceTemplate?: Prisma.AppRuleTemplateUpdateOneWithoutRulesNestedInput
+  targetCategory?: Prisma.BudgetCategoryUpdateOneWithoutRulesAsTargetNestedInput
+  executions?: Prisma.RuleExecutionUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUpdateManyWithoutClassifiedByRuleNestedInput
+}
+
+export type RuleUncheckedUpdateWithoutTargetSubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  executions?: Prisma.RuleExecutionUncheckedUpdateManyWithoutRuleNestedInput
+  alerts?: Prisma.RuleAlertUncheckedUpdateManyWithoutRuleNestedInput
+  classifiedTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutClassifiedByRuleNestedInput
+}
+
+export type RuleUncheckedUpdateManyWithoutTargetSubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSystemManaged?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumRuleTypeFieldUpdateOperationsInput | $Enums.RuleType
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  matchMode?: Prisma.EnumRuleMatchModeFieldUpdateOperationsInput | $Enums.RuleMatchMode
+  conditionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  actionJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  targetCategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBy?: Prisma.EnumRuleCreatedByFieldUpdateOperationsInput | $Enums.RuleCreatedBy
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -874,11 +1892,13 @@ export type RuleUncheckedUpdateManyWithoutUserInput = {
 export type RuleCountOutputType = {
   executions: number
   alerts: number
+  classifiedTransactions: number
 }
 
 export type RuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   executions?: boolean | RuleCountOutputTypeCountExecutionsArgs
   alerts?: boolean | RuleCountOutputTypeCountAlertsArgs
+  classifiedTransactions?: boolean | RuleCountOutputTypeCountClassifiedTransactionsArgs
 }
 
 /**
@@ -905,100 +1925,166 @@ export type RuleCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.RuleAlertWhereInput
 }
 
+/**
+ * RuleCountOutputType without action
+ */
+export type RuleCountOutputTypeCountClassifiedTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransactionWhereInput
+}
+
 
 export type RuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  sourceTemplateId?: boolean
+  sourceTemplateVersion?: boolean
+  isSystemManaged?: boolean
   name?: boolean
   type?: boolean
   enabled?: boolean
   priority?: boolean
+  matchMode?: boolean
   conditionJson?: boolean
   actionJson?: boolean
+  targetCategoryId?: boolean
+  targetSubcategoryId?: boolean
   createdBy?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  sourceTemplate?: boolean | Prisma.Rule$sourceTemplateArgs<ExtArgs>
+  targetCategory?: boolean | Prisma.Rule$targetCategoryArgs<ExtArgs>
+  targetSubcategory?: boolean | Prisma.Rule$targetSubcategoryArgs<ExtArgs>
   executions?: boolean | Prisma.Rule$executionsArgs<ExtArgs>
   alerts?: boolean | Prisma.Rule$alertsArgs<ExtArgs>
+  classifiedTransactions?: boolean | Prisma.Rule$classifiedTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.RuleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["rule"]>
 
 export type RuleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  sourceTemplateId?: boolean
+  sourceTemplateVersion?: boolean
+  isSystemManaged?: boolean
   name?: boolean
   type?: boolean
   enabled?: boolean
   priority?: boolean
+  matchMode?: boolean
   conditionJson?: boolean
   actionJson?: boolean
+  targetCategoryId?: boolean
+  targetSubcategoryId?: boolean
   createdBy?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  sourceTemplate?: boolean | Prisma.Rule$sourceTemplateArgs<ExtArgs>
+  targetCategory?: boolean | Prisma.Rule$targetCategoryArgs<ExtArgs>
+  targetSubcategory?: boolean | Prisma.Rule$targetSubcategoryArgs<ExtArgs>
 }, ExtArgs["result"]["rule"]>
 
 export type RuleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  sourceTemplateId?: boolean
+  sourceTemplateVersion?: boolean
+  isSystemManaged?: boolean
   name?: boolean
   type?: boolean
   enabled?: boolean
   priority?: boolean
+  matchMode?: boolean
   conditionJson?: boolean
   actionJson?: boolean
+  targetCategoryId?: boolean
+  targetSubcategoryId?: boolean
   createdBy?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  sourceTemplate?: boolean | Prisma.Rule$sourceTemplateArgs<ExtArgs>
+  targetCategory?: boolean | Prisma.Rule$targetCategoryArgs<ExtArgs>
+  targetSubcategory?: boolean | Prisma.Rule$targetSubcategoryArgs<ExtArgs>
 }, ExtArgs["result"]["rule"]>
 
 export type RuleSelectScalar = {
   id?: boolean
   userId?: boolean
+  sourceTemplateId?: boolean
+  sourceTemplateVersion?: boolean
+  isSystemManaged?: boolean
   name?: boolean
   type?: boolean
   enabled?: boolean
   priority?: boolean
+  matchMode?: boolean
   conditionJson?: boolean
   actionJson?: boolean
+  targetCategoryId?: boolean
+  targetSubcategoryId?: boolean
   createdBy?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "type" | "enabled" | "priority" | "conditionJson" | "actionJson" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["rule"]>
+export type RuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "sourceTemplateId" | "sourceTemplateVersion" | "isSystemManaged" | "name" | "type" | "enabled" | "priority" | "matchMode" | "conditionJson" | "actionJson" | "targetCategoryId" | "targetSubcategoryId" | "createdBy" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["rule"]>
 export type RuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  sourceTemplate?: boolean | Prisma.Rule$sourceTemplateArgs<ExtArgs>
+  targetCategory?: boolean | Prisma.Rule$targetCategoryArgs<ExtArgs>
+  targetSubcategory?: boolean | Prisma.Rule$targetSubcategoryArgs<ExtArgs>
   executions?: boolean | Prisma.Rule$executionsArgs<ExtArgs>
   alerts?: boolean | Prisma.Rule$alertsArgs<ExtArgs>
+  classifiedTransactions?: boolean | Prisma.Rule$classifiedTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.RuleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RuleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  sourceTemplate?: boolean | Prisma.Rule$sourceTemplateArgs<ExtArgs>
+  targetCategory?: boolean | Prisma.Rule$targetCategoryArgs<ExtArgs>
+  targetSubcategory?: boolean | Prisma.Rule$targetSubcategoryArgs<ExtArgs>
 }
 export type RuleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  sourceTemplate?: boolean | Prisma.Rule$sourceTemplateArgs<ExtArgs>
+  targetCategory?: boolean | Prisma.Rule$targetCategoryArgs<ExtArgs>
+  targetSubcategory?: boolean | Prisma.Rule$targetSubcategoryArgs<ExtArgs>
 }
 
 export type $RulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Rule"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    sourceTemplate: Prisma.$AppRuleTemplatePayload<ExtArgs> | null
+    targetCategory: Prisma.$BudgetCategoryPayload<ExtArgs> | null
+    targetSubcategory: Prisma.$BudgetSubcategoryPayload<ExtArgs> | null
     executions: Prisma.$RuleExecutionPayload<ExtArgs>[]
     alerts: Prisma.$RuleAlertPayload<ExtArgs>[]
+    classifiedTransactions: Prisma.$TransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
+    sourceTemplateId: string | null
+    sourceTemplateVersion: number | null
+    isSystemManaged: boolean
     name: string
     type: $Enums.RuleType
     enabled: boolean
     priority: number
+    matchMode: $Enums.RuleMatchMode
     conditionJson: runtime.JsonValue
     actionJson: runtime.JsonValue
+    targetCategoryId: string | null
+    targetSubcategoryId: string | null
     createdBy: $Enums.RuleCreatedBy
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["rule"]>
@@ -1396,8 +2482,12 @@ readonly fields: RuleFieldRefs;
 export interface Prisma__RuleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  sourceTemplate<T extends Prisma.Rule$sourceTemplateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$sourceTemplateArgs<ExtArgs>>): Prisma.Prisma__AppRuleTemplateClient<runtime.Types.Result.GetResult<Prisma.$AppRuleTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  targetCategory<T extends Prisma.Rule$targetCategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$targetCategoryArgs<ExtArgs>>): Prisma.Prisma__BudgetCategoryClient<runtime.Types.Result.GetResult<Prisma.$BudgetCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  targetSubcategory<T extends Prisma.Rule$targetSubcategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$targetSubcategoryArgs<ExtArgs>>): Prisma.Prisma__BudgetSubcategoryClient<runtime.Types.Result.GetResult<Prisma.$BudgetSubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   executions<T extends Prisma.Rule$executionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$executionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   alerts<T extends Prisma.Rule$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RuleAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classifiedTransactions<T extends Prisma.Rule$classifiedTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Rule$classifiedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1429,13 +2519,20 @@ export interface Prisma__RuleClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface RuleFieldRefs {
   readonly id: Prisma.FieldRef<"Rule", 'String'>
   readonly userId: Prisma.FieldRef<"Rule", 'String'>
+  readonly sourceTemplateId: Prisma.FieldRef<"Rule", 'String'>
+  readonly sourceTemplateVersion: Prisma.FieldRef<"Rule", 'Int'>
+  readonly isSystemManaged: Prisma.FieldRef<"Rule", 'Boolean'>
   readonly name: Prisma.FieldRef<"Rule", 'String'>
   readonly type: Prisma.FieldRef<"Rule", 'RuleType'>
   readonly enabled: Prisma.FieldRef<"Rule", 'Boolean'>
   readonly priority: Prisma.FieldRef<"Rule", 'Int'>
+  readonly matchMode: Prisma.FieldRef<"Rule", 'RuleMatchMode'>
   readonly conditionJson: Prisma.FieldRef<"Rule", 'Json'>
   readonly actionJson: Prisma.FieldRef<"Rule", 'Json'>
+  readonly targetCategoryId: Prisma.FieldRef<"Rule", 'String'>
+  readonly targetSubcategoryId: Prisma.FieldRef<"Rule", 'String'>
   readonly createdBy: Prisma.FieldRef<"Rule", 'RuleCreatedBy'>
+  readonly deletedAt: Prisma.FieldRef<"Rule", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Rule", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Rule", 'DateTime'>
 }
@@ -1834,6 +2931,63 @@ export type RuleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Rule.sourceTemplate
+ */
+export type Rule$sourceTemplateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AppRuleTemplate
+   */
+  select?: Prisma.AppRuleTemplateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AppRuleTemplate
+   */
+  omit?: Prisma.AppRuleTemplateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppRuleTemplateInclude<ExtArgs> | null
+  where?: Prisma.AppRuleTemplateWhereInput
+}
+
+/**
+ * Rule.targetCategory
+ */
+export type Rule$targetCategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetCategory
+   */
+  select?: Prisma.BudgetCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetCategory
+   */
+  omit?: Prisma.BudgetCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetCategoryInclude<ExtArgs> | null
+  where?: Prisma.BudgetCategoryWhereInput
+}
+
+/**
+ * Rule.targetSubcategory
+ */
+export type Rule$targetSubcategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetSubcategory
+   */
+  select?: Prisma.BudgetSubcategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetSubcategory
+   */
+  omit?: Prisma.BudgetSubcategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetSubcategoryInclude<ExtArgs> | null
+  where?: Prisma.BudgetSubcategoryWhereInput
+}
+
+/**
  * Rule.executions
  */
 export type Rule$executionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1879,6 +3033,30 @@ export type Rule$alertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.RuleAlertScalarFieldEnum | Prisma.RuleAlertScalarFieldEnum[]
+}
+
+/**
+ * Rule.classifiedTransactions
+ */
+export type Rule$classifiedTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transaction
+   */
+  select?: Prisma.TransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transaction
+   */
+  omit?: Prisma.TransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransactionInclude<ExtArgs> | null
+  where?: Prisma.TransactionWhereInput
+  orderBy?: Prisma.TransactionOrderByWithRelationInput | Prisma.TransactionOrderByWithRelationInput[]
+  cursor?: Prisma.TransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
 }
 
 /**

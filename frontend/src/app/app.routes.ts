@@ -23,6 +23,11 @@ export const routes: Routes = [
   },
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'auth',
+  },
+  {
+    path: '',
     loadComponent: () =>
       import('./core/layout/layout.page').then((m) => m.LayoutPage),
     children: [
@@ -67,8 +72,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/settings/settings.page').then((m) => m.SettingsPage),
       },
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
     ],
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'auth' },
 ];

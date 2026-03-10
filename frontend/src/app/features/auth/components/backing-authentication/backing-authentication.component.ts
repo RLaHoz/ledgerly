@@ -1,6 +1,4 @@
-import { Location } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, input, output, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal } from '@angular/core';
 import { IonButton, IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -12,10 +10,6 @@ import {
   shieldOutline,
   sunnyOutline,
 } from 'ionicons/icons';
-import { ThemeStore } from '../../../../core/store/theme/theme.store';
-
-type BankAuthState = 'idle' | 'loading' | 'success';
-
 @Component({
   selector: 'app-backing-authentication',
   standalone: true,
@@ -34,8 +28,13 @@ export class BackingAuthenticationComponent {
   readonly isError = input.required<boolean>();
   readonly errorMessage = input<string | null>(null);
   readonly themeIcon = input.required<"sunny-outline" | "moon-outline">();
-
-
+  private readonly isRequestSubmitting = signal(false);
+  readonly isCtaLoading = computed(
+    () => this.isLoading() || this.isRequestSubmitting(),
+  );
+  readonly isCtaDisabled = computed(
+    () => this.isCtaLoading() || this.isSuccess(),
+  );
 
 
   constructor() {
@@ -48,6 +47,17 @@ export class BackingAuthenticationComponent {
       'sunny-outline': sunnyOutline,
       'shield-outline': shieldOutline,
     });
+
+    effect(() => {
+      if (this.isLoading()) {
+        this.isRequestSubmitting.set(true);
+        return;
+      }
+
+      if (this.isIdle() || this.isError() || this.isSuccess()) {
+        this.isRequestSubmitting.set(false);
+      }
+    });
   }
 
   onBack(): void {
@@ -59,6 +69,11 @@ export class BackingAuthenticationComponent {
   }
 
   onConnectWithBank(): void {
+    if (this.isCtaDisabled()) {
+      return;
+    }
+
+    this.isRequestSubmitting.set(true);
     this.connectWithBank.emit();
   }
 }

@@ -18,6 +18,25 @@ export const Theme = {
 export type Theme = (typeof Theme)[keyof typeof Theme]
 
 
+export const SessionStatus = {
+  ACTIVE: 'ACTIVE',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus]
+
+
+export const BankConsentAttemptStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  FAILED: 'FAILED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type BankConsentAttemptStatus = (typeof BankConsentAttemptStatus)[keyof typeof BankConsentAttemptStatus]
+
+
 export const BudgetMonthStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
@@ -60,6 +79,23 @@ export const RuleCreatedBy = {
 } as const
 
 export type RuleCreatedBy = (typeof RuleCreatedBy)[keyof typeof RuleCreatedBy]
+
+
+export const RuleTemplateStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type RuleTemplateStatus = (typeof RuleTemplateStatus)[keyof typeof RuleTemplateStatus]
+
+
+export const RuleMatchMode = {
+  KEYWORD_ONLY: 'KEYWORD_ONLY',
+  REGEX_ONLY: 'REGEX_ONLY',
+  KEYWORD_REGEX_HYBRID: 'KEYWORD_REGEX_HYBRID'
+} as const
+
+export type RuleMatchMode = (typeof RuleMatchMode)[keyof typeof RuleMatchMode]
 
 
 export const AlertSeverity = {

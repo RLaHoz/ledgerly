@@ -48,6 +48,7 @@ export type RuleExecutionCountAggregateOutputType = {
   transactionId: number
   outcome: number
   message: number
+  matchDetailsJson: number
   triggeredAt: number
   _all: number
 }
@@ -77,6 +78,7 @@ export type RuleExecutionCountAggregateInputType = {
   transactionId?: true
   outcome?: true
   message?: true
+  matchDetailsJson?: true
   triggeredAt?: true
   _all?: true
 }
@@ -159,6 +161,7 @@ export type RuleExecutionGroupByOutputType = {
   transactionId: string
   outcome: $Enums.RuleOutcome
   message: string | null
+  matchDetailsJson: runtime.JsonValue | null
   triggeredAt: Date
   _count: RuleExecutionCountAggregateOutputType | null
   _min: RuleExecutionMinAggregateOutputType | null
@@ -189,6 +192,7 @@ export type RuleExecutionWhereInput = {
   transactionId?: Prisma.UuidFilter<"RuleExecution"> | string
   outcome?: Prisma.EnumRuleOutcomeFilter<"RuleExecution"> | $Enums.RuleOutcome
   message?: Prisma.StringNullableFilter<"RuleExecution"> | string | null
+  matchDetailsJson?: Prisma.JsonNullableFilter<"RuleExecution">
   triggeredAt?: Prisma.DateTimeFilter<"RuleExecution"> | Date | string
   rule?: Prisma.XOR<Prisma.RuleScalarRelationFilter, Prisma.RuleWhereInput>
   transaction?: Prisma.XOR<Prisma.TransactionScalarRelationFilter, Prisma.TransactionWhereInput>
@@ -200,6 +204,7 @@ export type RuleExecutionOrderByWithRelationInput = {
   transactionId?: Prisma.SortOrder
   outcome?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
+  matchDetailsJson?: Prisma.SortOrderInput | Prisma.SortOrder
   triggeredAt?: Prisma.SortOrder
   rule?: Prisma.RuleOrderByWithRelationInput
   transaction?: Prisma.TransactionOrderByWithRelationInput
@@ -207,7 +212,6 @@ export type RuleExecutionOrderByWithRelationInput = {
 
 export type RuleExecutionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  ruleId_transactionId?: Prisma.RuleExecutionRuleIdTransactionIdCompoundUniqueInput
   AND?: Prisma.RuleExecutionWhereInput | Prisma.RuleExecutionWhereInput[]
   OR?: Prisma.RuleExecutionWhereInput[]
   NOT?: Prisma.RuleExecutionWhereInput | Prisma.RuleExecutionWhereInput[]
@@ -215,10 +219,11 @@ export type RuleExecutionWhereUniqueInput = Prisma.AtLeast<{
   transactionId?: Prisma.UuidFilter<"RuleExecution"> | string
   outcome?: Prisma.EnumRuleOutcomeFilter<"RuleExecution"> | $Enums.RuleOutcome
   message?: Prisma.StringNullableFilter<"RuleExecution"> | string | null
+  matchDetailsJson?: Prisma.JsonNullableFilter<"RuleExecution">
   triggeredAt?: Prisma.DateTimeFilter<"RuleExecution"> | Date | string
   rule?: Prisma.XOR<Prisma.RuleScalarRelationFilter, Prisma.RuleWhereInput>
   transaction?: Prisma.XOR<Prisma.TransactionScalarRelationFilter, Prisma.TransactionWhereInput>
-}, "id" | "ruleId_transactionId">
+}, "id">
 
 export type RuleExecutionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -226,6 +231,7 @@ export type RuleExecutionOrderByWithAggregationInput = {
   transactionId?: Prisma.SortOrder
   outcome?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
+  matchDetailsJson?: Prisma.SortOrderInput | Prisma.SortOrder
   triggeredAt?: Prisma.SortOrder
   _count?: Prisma.RuleExecutionCountOrderByAggregateInput
   _max?: Prisma.RuleExecutionMaxOrderByAggregateInput
@@ -241,6 +247,7 @@ export type RuleExecutionScalarWhereWithAggregatesInput = {
   transactionId?: Prisma.UuidWithAggregatesFilter<"RuleExecution"> | string
   outcome?: Prisma.EnumRuleOutcomeWithAggregatesFilter<"RuleExecution"> | $Enums.RuleOutcome
   message?: Prisma.StringNullableWithAggregatesFilter<"RuleExecution"> | string | null
+  matchDetailsJson?: Prisma.JsonNullableWithAggregatesFilter<"RuleExecution">
   triggeredAt?: Prisma.DateTimeWithAggregatesFilter<"RuleExecution"> | Date | string
 }
 
@@ -248,6 +255,7 @@ export type RuleExecutionCreateInput = {
   id?: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
   rule: Prisma.RuleCreateNestedOneWithoutExecutionsInput
   transaction: Prisma.TransactionCreateNestedOneWithoutRuleExecutionsInput
@@ -259,6 +267,7 @@ export type RuleExecutionUncheckedCreateInput = {
   transactionId: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
 }
 
@@ -266,6 +275,7 @@ export type RuleExecutionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rule?: Prisma.RuleUpdateOneRequiredWithoutExecutionsNestedInput
   transaction?: Prisma.TransactionUpdateOneRequiredWithoutRuleExecutionsNestedInput
@@ -277,6 +287,7 @@ export type RuleExecutionUncheckedUpdateInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -286,6 +297,7 @@ export type RuleExecutionCreateManyInput = {
   transactionId: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
 }
 
@@ -293,6 +305,7 @@ export type RuleExecutionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -302,6 +315,7 @@ export type RuleExecutionUncheckedUpdateManyInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -315,17 +329,13 @@ export type RuleExecutionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type RuleExecutionRuleIdTransactionIdCompoundUniqueInput = {
-  ruleId: string
-  transactionId: string
-}
-
 export type RuleExecutionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ruleId?: Prisma.SortOrder
   transactionId?: Prisma.SortOrder
   outcome?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  matchDetailsJson?: Prisma.SortOrder
   triggeredAt?: Prisma.SortOrder
 }
 
@@ -439,6 +449,7 @@ export type RuleExecutionCreateWithoutTransactionInput = {
   id?: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
   rule: Prisma.RuleCreateNestedOneWithoutExecutionsInput
 }
@@ -448,6 +459,7 @@ export type RuleExecutionUncheckedCreateWithoutTransactionInput = {
   ruleId: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
 }
 
@@ -486,6 +498,7 @@ export type RuleExecutionScalarWhereInput = {
   transactionId?: Prisma.UuidFilter<"RuleExecution"> | string
   outcome?: Prisma.EnumRuleOutcomeFilter<"RuleExecution"> | $Enums.RuleOutcome
   message?: Prisma.StringNullableFilter<"RuleExecution"> | string | null
+  matchDetailsJson?: Prisma.JsonNullableFilter<"RuleExecution">
   triggeredAt?: Prisma.DateTimeFilter<"RuleExecution"> | Date | string
 }
 
@@ -493,6 +506,7 @@ export type RuleExecutionCreateWithoutRuleInput = {
   id?: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
   transaction: Prisma.TransactionCreateNestedOneWithoutRuleExecutionsInput
 }
@@ -502,6 +516,7 @@ export type RuleExecutionUncheckedCreateWithoutRuleInput = {
   transactionId: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
 }
 
@@ -536,6 +551,7 @@ export type RuleExecutionCreateManyTransactionInput = {
   ruleId: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
 }
 
@@ -543,6 +559,7 @@ export type RuleExecutionUpdateWithoutTransactionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rule?: Prisma.RuleUpdateOneRequiredWithoutExecutionsNestedInput
 }
@@ -552,6 +569,7 @@ export type RuleExecutionUncheckedUpdateWithoutTransactionInput = {
   ruleId?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -560,6 +578,7 @@ export type RuleExecutionUncheckedUpdateManyWithoutTransactionInput = {
   ruleId?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -568,6 +587,7 @@ export type RuleExecutionCreateManyRuleInput = {
   transactionId: string
   outcome: $Enums.RuleOutcome
   message?: string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Date | string
 }
 
@@ -575,6 +595,7 @@ export type RuleExecutionUpdateWithoutRuleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transaction?: Prisma.TransactionUpdateOneRequiredWithoutRuleExecutionsNestedInput
 }
@@ -584,6 +605,7 @@ export type RuleExecutionUncheckedUpdateWithoutRuleInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -592,6 +614,7 @@ export type RuleExecutionUncheckedUpdateManyWithoutRuleInput = {
   transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   outcome?: Prisma.EnumRuleOutcomeFieldUpdateOperationsInput | $Enums.RuleOutcome
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  matchDetailsJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   triggeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -603,6 +626,7 @@ export type RuleExecutionSelect<ExtArgs extends runtime.Types.Extensions.Interna
   transactionId?: boolean
   outcome?: boolean
   message?: boolean
+  matchDetailsJson?: boolean
   triggeredAt?: boolean
   rule?: boolean | Prisma.RuleDefaultArgs<ExtArgs>
   transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
@@ -614,6 +638,7 @@ export type RuleExecutionSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   transactionId?: boolean
   outcome?: boolean
   message?: boolean
+  matchDetailsJson?: boolean
   triggeredAt?: boolean
   rule?: boolean | Prisma.RuleDefaultArgs<ExtArgs>
   transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
@@ -625,6 +650,7 @@ export type RuleExecutionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   transactionId?: boolean
   outcome?: boolean
   message?: boolean
+  matchDetailsJson?: boolean
   triggeredAt?: boolean
   rule?: boolean | Prisma.RuleDefaultArgs<ExtArgs>
   transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
@@ -636,10 +662,11 @@ export type RuleExecutionSelectScalar = {
   transactionId?: boolean
   outcome?: boolean
   message?: boolean
+  matchDetailsJson?: boolean
   triggeredAt?: boolean
 }
 
-export type RuleExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ruleId" | "transactionId" | "outcome" | "message" | "triggeredAt", ExtArgs["result"]["ruleExecution"]>
+export type RuleExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ruleId" | "transactionId" | "outcome" | "message" | "matchDetailsJson" | "triggeredAt", ExtArgs["result"]["ruleExecution"]>
 export type RuleExecutionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   rule?: boolean | Prisma.RuleDefaultArgs<ExtArgs>
   transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
@@ -665,6 +692,7 @@ export type $RuleExecutionPayload<ExtArgs extends runtime.Types.Extensions.Inter
     transactionId: string
     outcome: $Enums.RuleOutcome
     message: string | null
+    matchDetailsJson: runtime.JsonValue | null
     triggeredAt: Date
   }, ExtArgs["result"]["ruleExecution"]>
   composites: {}
@@ -1096,6 +1124,7 @@ export interface RuleExecutionFieldRefs {
   readonly transactionId: Prisma.FieldRef<"RuleExecution", 'String'>
   readonly outcome: Prisma.FieldRef<"RuleExecution", 'RuleOutcome'>
   readonly message: Prisma.FieldRef<"RuleExecution", 'String'>
+  readonly matchDetailsJson: Prisma.FieldRef<"RuleExecution", 'Json'>
   readonly triggeredAt: Prisma.FieldRef<"RuleExecution", 'DateTime'>
 }
     

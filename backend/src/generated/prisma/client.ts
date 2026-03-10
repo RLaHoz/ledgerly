@@ -55,10 +55,25 @@ export type CategorySuggestion = Prisma.CategorySuggestionModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model UserSession
+ * 
+ */
+export type UserSession = Prisma.UserSessionModel
+/**
  * Model AppCategoryList
  * 
  */
 export type AppCategoryList = Prisma.AppCategoryListModel
+/**
+ * Model AppSubcategoryList
+ * 
+ */
+export type AppSubcategoryList = Prisma.AppSubcategoryListModel
+/**
+ * Model AppRuleTemplate
+ * 
+ */
+export type AppRuleTemplate = Prisma.AppRuleTemplateModel
 /**
  * Model UserPreferences
  * 
@@ -75,10 +90,20 @@ export type BudgetMonth = Prisma.BudgetMonthModel
  */
 export type BudgetCategory = Prisma.BudgetCategoryModel
 /**
+ * Model BudgetSubcategory
+ * 
+ */
+export type BudgetSubcategory = Prisma.BudgetSubcategoryModel
+/**
  * Model CategoryBudget
  * 
  */
 export type CategoryBudget = Prisma.CategoryBudgetModel
+/**
+ * Model SubcategoryBudget
+ * 
+ */
+export type SubcategoryBudget = Prisma.SubcategoryBudgetModel
 /**
  * Model Transaction
  * 
@@ -109,6 +134,16 @@ export type SyncRun = Prisma.SyncRunModel
  * 
  */
 export type BankProvider = Prisma.BankProviderModel
+/**
+ * Model BankProviderUser
+ * 
+ */
+export type BankProviderUser = Prisma.BankProviderUserModel
+/**
+ * Model BankConsentAttempt
+ * 
+ */
+export type BankConsentAttempt = Prisma.BankConsentAttemptModel
 /**
  * Model BankConnection
  * 

@@ -1,17 +1,37 @@
-export type AuthStatus = 'idle' | 'loading' | 'authenticated' | 'anonymous' | 'error';
+export type AuthStatus = 'booting' | 'idle' | 'loading' | 'authenticated' | 'error';
+
+export interface AuthUser {
+  id: string;
+  roles: string[];
+}
+
+export interface SessionResponse {
+  user: AuthUser;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresInSeconds: number;
+  onboardingCompleted: boolean;
+  isFirstBankConnectionForUser: boolean;
+}
+
+export interface CompleteOnboardingResponse {
+  success: true;
+  onboardingCompleted: true;
+  onboardingCompletedAt: string;
+}
 
 export interface AuthState {
   status: AuthStatus;
   user: AuthUser | null;
-  sessionToken: string | null;
-  error: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+  isLoggedIn: boolean;
+  isFirstBankConnectionForUser: boolean | null;
+  onboardingCompleted: boolean;
+  onboardingCurrentStep: string | null;
   bankAuthorizeUrl: string | null;
-  // Persist expected callback state in store for replay/state-mismatch protection.
   pendingConsentState: string | null;
-}
-
-export interface AuthUser {
-  id: string;
-  email: string;
-  roles: string[];
+  isCompletingOnboarding: boolean;
+  onboardingCompletionError: string | null;
+  error: string | null;
 }
