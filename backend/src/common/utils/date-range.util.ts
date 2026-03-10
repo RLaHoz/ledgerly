@@ -115,23 +115,32 @@ function zonedDateTimeToUtc(input: {
 function getTimeZoneOffsetMs(date: Date, timeZone: string): number {
   const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
+    timeZoneName: 'shortOffset',
   });
 
   const parts = formatter.formatToParts(date);
-  const year = Number(parts.find((p) => p.type === 'year')?.value);
-  const month = Number(parts.find((p) => p.type === 'month')?.value);
-  const day = Number(parts.find((p) => p.type === 'day')?.value);
-  const hour = Number(parts.find((p) => p.type === 'hour')?.value);
-  const minute = Number(parts.find((p) => p.type === 'minute')?.value);
-  const second = Number(parts.find((p) => p.type === 'second')?.value);
+  const timeZoneName = parts.find((part) => part.type === 'timeZoneName')?.value;
 
-  const asUtc = Date.UTC(year, month - 1, day, hour, minute, second, 0);
-  return asUtc - date.getTime();
+  if (!timeZoneName) {
+    throw new BadRequestException('Unable to resolve timezone offset');
+  }
+
+  if (timeZoneName === 'GMT' || timeZoneName === 'UTC') {
+    return 0;
+  }
+
+  const match = /^GMT([+-])(\d{1,2})(?::?(\d{2}))?$/.exec(timeZoneName);
+  if (!match) {
+    throw new BadRequestException('Unable to parse timezone offset');
+  }
+
+  const sign = match[1] === '-' ? -1 : 1;
+  const hours = Number(match[2]);
+  const minutes = Number(match[3] ?? '0');
+
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) {
+    throw new BadRequestException('Unable to parse timezone offset');
+  }
+
+  return sign * ((hours * 60 + minutes) * 60 * 1000);
 }

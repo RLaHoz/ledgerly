@@ -3,14 +3,20 @@
     display: block;
   }
 
+  body.onboarding-layout-lock {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   app-onboarding-wizard ion-content.onboarding-content {
     --background: var(--bg-muted, #e6eaf2);
+    --keyboard-offset: 0px;
     --overflow: hidden;
     color: var(--text-text-primary, #0b1220);
   }
 
-  body.platform-web app-onboarding-wizard ion-content.onboarding-content {
-    --keyboard-offset: 0px;
+  app-onboarding-wizard ion-content.onboarding-content::part(scroll) {
+    overflow: hidden;
   }
 
   app-onboarding-wizard .onboarding-shell {

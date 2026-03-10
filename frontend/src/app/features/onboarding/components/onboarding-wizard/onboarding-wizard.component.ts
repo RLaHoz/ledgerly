@@ -1,4 +1,5 @@
 import {
+  ElementRef,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
@@ -8,7 +9,9 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import {
   IonButton,
   IonContent,
@@ -84,12 +87,15 @@ import { OnboardingUnassignedModalComponent } from './onboarding-unassigned-moda
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingWizardComponent {
+  private readonly document = inject(DOCUMENT);
+  private readonly hostElement = inject(ElementRef<HTMLElement>);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   readonly authStore = inject(AuthStore);
 
   readonly wizard = inject(OnboardingWizardStore);
+  private readonly ionContent = viewChild(IonContent);
   private readonly unassignedWarningModal = viewChild(IonModal);
   readonly fileInputId = 'onboarding-file-input';
   readonly currentStep = signal<OnboardingStepKey>('import');
@@ -170,6 +176,37 @@ export class OnboardingWizardComponent {
     });
 
     this.loadUserTransactionsIfNeeded();
+    this.document.body.classList.add('onboarding-layout-lock');
+    this.destroyRef.onDestroy(() => {
+      this.document.body.classList.remove('onboarding-layout-lock');
+    });
+
+    if (!Capacitor.isNativePlatform()) {
+      const scrollAnchorY = window.scrollY;
+      const handleFocusIn = (event: FocusEvent) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+
+        if (!this.hostElement.nativeElement.contains(target)) {
+          return;
+        }
+
+        requestAnimationFrame(() => {
+          this.restoreIonContentScrollTop();
+
+          if (window.scrollY !== scrollAnchorY) {
+            window.scrollTo({ top: scrollAnchorY, left: 0, behavior: 'auto' });
+          }
+        });
+      };
+
+      this.document.addEventListener('focusin', handleFocusIn, true);
+      this.destroyRef.onDestroy(() => {
+        this.document.removeEventListener('focusin', handleFocusIn, true);
+      });
+    }
 
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -332,6 +369,25 @@ export class OnboardingWizardComponent {
     }
 
     this.wizard.loadUserTransactions();
+  }
+
+  private restoreIonContentScrollTop(): void {
+    const content = this.ionContent();
+    if (!content) {
+      return;
+    }
+
+    void content
+      .getScrollElement()
+      .then((scrollElement) => {
+        if (scrollElement.scrollTop !== 0) {
+          scrollElement.scrollTop = 0;
+          return;
+        }
+
+        return content.scrollToTop(0);
+      })
+      .catch(() => undefined);
   }
 }
 
