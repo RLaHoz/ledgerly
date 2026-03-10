@@ -1,0 +1,20 @@
+<article class="unassigned-modal-card" role="dialog" aria-modal="true" aria-labelledby="unassigned-title">
+  <header class="modal-head">
+    <span class="modal-icon" aria-hidden="true">
+      <ion-icon name="warning-outline"></ion-icon>
+    </span>
+    <div class="modal-copy">
+      <h2 id="unassigned-title">Tienes transacciones sin asignar</h2>
+      <p>¿Deseas guardar así o asignar las faltantes primero?</p>
+    </div>
+  </header>
+
+  <footer class="modal-actions">
+    <ion-button fill="clear" class="btn-secondary" (click)="onAssignMissing()">
+      Asignar faltantes
+    </ion-button>
+    <ion-button fill="solid" class="btn-primary" (click)="onSaveAsIs()">
+      Guardar así
+    </ion-button>
+  </footer>
+</article>

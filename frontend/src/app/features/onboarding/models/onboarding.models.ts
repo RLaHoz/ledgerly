@@ -3,11 +3,22 @@ export type AssignmentType = 'auto' | 'manual' | 'uncategorized';
 export type CategoryFilter = 'auto' | 'manual' | 'uncategorized';
 
 export interface OnboardingCategory {
+  id: string;
   slug: string;
   name: string;
   iconName: string;
   colorHex: string;
+  subcategories: readonly OnboardingSubcategory[];
   plannedAmount: number;
+}
+
+export interface OnboardingSubcategory {
+  id: string;
+  categoryId: string;
+  slug: string;
+  name: string;
+  iconName: string;
+  colorHex: string;
 }
 
 export interface OnboardingTransaction {
@@ -15,7 +26,10 @@ export interface OnboardingTransaction {
   description: string;
   occurredAt: Date;
   amount: number;
+  categoryId: string | null;
   categorySlug: string | null;
+  subcategoryId: string | null;
+  subcategorySlug: string | null;
   assignment: AssignmentType;
   isSelected: boolean;
 }

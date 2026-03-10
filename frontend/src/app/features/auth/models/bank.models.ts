@@ -1,8 +1,6 @@
-export interface BankConsentCallbackEvent {
-  rawUrl: string;
-  state: string | null;
-  jobId: string | null;
-  jobIds: string[];
+export interface BankAuthorizeUrlResponse {
+  authorizeUrl: string;
+  state: string;
 }
 
 export interface BasiqConsentCallbackEvent {
@@ -12,20 +10,23 @@ export interface BasiqConsentCallbackEvent {
   jobIds: string[];
 }
 
+export interface VerifyBankConsentRequest {
+  state: string;
+  jobIds: string[];
+}
+
 export interface BankConsentVerificationResponse {
   success: boolean;
   failedJobIds: string[];
   pendingJobIds: string[];
   message: string;
+  context?: {
+    appUserId: string;
+    providerCode: string;
+    providerUserId: string;
+    providerConnectionIds: string[];
+    jobIds: string[];
+    isFirstSuccessfulConsentForUser: boolean;
+    isFirstBankConnectionForUser: boolean;
+  };
 }
-
-export type BankLinkTelemetryEventName =
-  | 'consent_open_requested'
-  | 'consent_open_succeeded'
-  | 'consent_open_failed'
-  | 'consent_callback_received'
-  | 'consent_verification_succeeded'
-  | 'consent_verification_failed'
-  | 'consent_state_mismatch'
-  | 'consent_cancelled'
-  | 'consent_completed';

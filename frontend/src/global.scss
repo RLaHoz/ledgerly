@@ -48,20 +48,28 @@ body {
   background: var(--bg-muted);
   color: var(--text-text-primary);
   font-family: var(--font-sans);
+  height: 100%;
   min-height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
   margin: 0;
+  inset: 0;
+  position: fixed;
+  width: 100%;
 }
 
 app-root,
 ion-app {
   background: var(--bg-background);
   display: block;
+  height: 100%;
   margin: 0 auto;
   max-width: 430px;
   min-height: 100dvh;
+  overflow: hidden;
   width: 100%;
 }
 

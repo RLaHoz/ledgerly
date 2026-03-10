@@ -8,6 +8,7 @@ import {
   type BankAuthClient,
   resolveCdrMode,
 } from './bank-auth.types';
+import { BANK_DATA_CLIENT, type BankDataClient } from './bank-data.types';
 import { MockCdrClient } from './mock-cdr.client';
 import { BasiqClient } from './basiq.client';
 
@@ -36,7 +37,37 @@ import { BasiqClient } from './basiq.client';
         return sandboxClient;
       },
     },
+    {
+      provide: BANK_DATA_CLIENT,
+      inject: [ConfigService, BasiqClient],
+      useFactory: (
+        config: ConfigService,
+        basiqClient: BasiqClient,
+      ): BankDataClient => {
+        const cdrMode = resolveCdrMode(config.get<string>('CDR_MODE'));
+        if (cdrMode === 'basiq') {
+          return basiqClient;
+        }
+
+        return {
+          listConnectionAccounts() {
+            return Promise.reject(
+              new Error(
+                'Bank data sync is available only when CDR_MODE=basiq.',
+              ),
+            );
+          },
+          listConnectionTransactions() {
+            return Promise.reject(
+              new Error(
+                'Bank data sync is available only when CDR_MODE=basiq.',
+              ),
+            );
+          },
+        };
+      },
+    },
   ],
-  exports: [BANK_AUTH_CLIENT],
+  exports: [BANK_AUTH_CLIENT, BANK_DATA_CLIENT],
 })
 export class CdrAuthModule {}

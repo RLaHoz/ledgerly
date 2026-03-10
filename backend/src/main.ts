@@ -13,7 +13,10 @@ async function bootstrap() {
     .filter(Boolean);
 
   app.enableCors({
-    origin: (origin, callback) => {
+    origin: (
+      origin: string | undefined,
+      callback: (error: Error | null, allow?: boolean) => void,
+    ) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
@@ -36,4 +39,4 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+void bootstrap();

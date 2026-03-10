@@ -19,13 +19,21 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "node --loader ts-node/esm prisma/seed.ts"
+    "seed": "node --loader ts-node/esm prisma/seed.ts",
+    "seed:app-categories": "tsx scripts/seed-app-categories-and-subcategories.ts",
+    "seed:rules:templates": "tsx scripts/seed-rule-templates.ts",
+    "seed:rules:defaults": "tsx scripts/seed-default-classification-rules.ts",
+    "sync:category-icons": "tsx scripts/sync-category-icons.ts",
+    "db:reset:defaults": "tsx scripts/reset-db-to-defaults.ts",
+    "db:restore": "tsx scripts/restore-user-data.ts",
+    "reset:bank-consent": "tsx scripts/reset-bank-consent-state.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",

@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import type {
-  BankAuthClient,
-  BankAuthorizeContext,
-} from './bank-auth.types';
+import type { BankAuthClient, BankAuthorizeContext } from './bank-auth.types';
 
 @Injectable()
 export class MockCdrClient implements BankAuthClient {
   constructor(private readonly config: ConfigService) {}
 
-  async createAuthorizeUrl(): Promise<BankAuthorizeContext> {
+  createAuthorizeUrl(): Promise<BankAuthorizeContext> {
     const clientId = this.config.getOrThrow<string>('CDR_CLIENT_ID');
     const redirectUri = this.config.getOrThrow<string>('CDR_REDIRECT_URI');
     const scope = this.config.getOrThrow<string>('CDR_SCOPE');
@@ -37,12 +34,12 @@ export class MockCdrClient implements BankAuthClient {
     authorizeUrl.searchParams.set('code_challenge_method', 'S256');
     authorizeUrl.searchParams.set('request_uri', requestUri);
 
-    return {
+    return Promise.resolve({
       authorizeUrl: authorizeUrl.toString(),
       state,
       nonce,
       codeVerifier,
-    };
+    });
   }
 }
 

@@ -39,17 +39,18 @@
             class="connect-btn"
             [class.is-success]="isSuccess()"
             [class.is-error]="isError()"
-            [disabled]="isLoading() || isSuccess()"
+            [disabled]="isCtaDisabled()"
+            [attr.aria-busy]="isCtaLoading() ? 'true' : 'false'"
             (click)="onConnectWithBank()"
           >
-            @if (isIdle()) {
+            @if (!isCtaLoading() && isIdle()) {
               <span class="cta-hover-overlay"></span>
               <ion-icon name="business-outline"></ion-icon>
               <span class="cta-label">Sign in with Bank</span>
               <span class="cta-sandbox">(Sandbox)</span>
             }
 
-            @if (isLoading()) {
+            @if (isCtaLoading()) {
               <ion-icon class="spinning" name="refresh-outline"></ion-icon>
               <span class="cta-label">Connecting</span>
               <span class="dots" aria-hidden="true">
@@ -62,7 +63,7 @@
               <span class="cta-label">Connected</span>
             }
 
-            @if (isError()) {
+            @if (!isCtaLoading() && isError()) {
               <ion-icon name="refresh-outline"></ion-icon>
               <span class="cta-label">Try again</span>
             }

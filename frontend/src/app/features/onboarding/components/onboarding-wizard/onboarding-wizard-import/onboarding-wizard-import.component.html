@@ -1,0 +1,111 @@
+<section class="step-block">
+  <div class="section-intro">
+    <h1 class="section-title">Import your transactions</h1>
+    <p class="section-description">Upload your monthly statement to start setup.</p>
+  </div>
+
+  @if (wizard.loadUserTransactionsError(); as loadError) {
+    <article class="warning-banner">
+      <ion-icon name="warning-outline"></ion-icon>
+      <p>{{ loadError }}</p>
+    </article>
+  }
+
+  @if (!wizard.isImportReady() && !wizard.isParsing()) {
+    <label
+      [for]="fileInputId"
+      class="upload-drop-area"
+      [class.disabled]="wizard.directDataFromBankAccounts()"
+    >
+      <span class="upload-icon-wrap">
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </span>
+      <div>
+        <p class="upload-main">Select CSV file</p>
+        <p class="upload-sub">CSV format only</p>
+      </div>
+    </label>
+
+    <input
+      [id]="fileInputId"
+      type="file"
+      accept=".csv,text/csv"
+      class="hidden-file-input"
+      [disabled]="wizard.directDataFromBankAccounts()"
+      (change)="onFileSelected($event)"
+    />
+  }
+
+  <label class="import-direct-bank-row">
+    <ion-checkbox
+      [checked]="wizard.directDataFromBankAccounts()"
+      (ionChange)="wizard.setDirectDataFromBankAccounts($any($event).detail?.checked === true)"
+    ></ion-checkbox>
+    <p>Direct Data From Bank Accounts</p>
+  </label>
+
+  @if (wizard.isParsing()) {
+    <article class="surface-card parsing-card">
+      <div class="parsing-head">
+        <ion-icon class="parsing-spinner" name="document-text-outline"></ion-icon>
+        <p>Parsing file...</p>
+      </div>
+      <div class="parsing-bars">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </article>
+  }
+
+  @if (wizard.isImportReady() && wizard.importSummary(); as summary) {
+    <article class="surface-card parse-summary-card">
+      <div class="success-head">
+        <span class="success-indicator">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </span>
+        <div>
+          <p class="success-title">File parsed successfully</p>
+          <p class="success-subtitle">{{ wizard.fileName() }}</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-cell">
+          <p>Total rows</p>
+          <h3>{{ summary.totalRows }}</h3>
+        </article>
+        <article class="stat-cell">
+          <p>Valid</p>
+          <h3>{{ summary.validRows }}</h3>
+        </article>
+        <article class="stat-cell">
+          <p>Invalid</p>
+          <h3>{{ summary.invalidRows }}</h3>
+        </article>
+        <article class="stat-cell">
+          <p>Date range</p>
+          <h3>{{ summary.dateRangeLabel }}</h3>
+        </article>
+      </div>
+    </article>
+
+    <article class="surface-card preview-card">
+      <header>
+        <h2>Preview (first 5 rows)</h2>
+      </header>
+
+      <div class="preview-rows">
+        @for (row of wizard.importPreviewRows(); track row.id) {
+          <div class="preview-row">
+            <div>
+              <p class="preview-description">{{ row.description }}</p>
+              <p class="preview-date">{{ row.dateLabel }}</p>
+            </div>
+            <p class="preview-amount">{{ row.amountLabel }}</p>
+          </div>
+        }
+      </div>
+    </article>
+  }
+</section>
