@@ -91,7 +91,11 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
 
     const userId = input.providerUserId?.trim() || (await this.resolveUserId());
     const clientAccessToken = await this.createClientAccessToken(userId);
-    const consentUrl = this.createConsentUrl(clientAccessToken, state);
+    const consentUrl = this.createConsentUrl(
+      clientAccessToken,
+      state,
+      input.redirectUri,
+    );
 
     return {
       authorizeUrl: consentUrl,
@@ -395,16 +399,21 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     }
   }
 
-  private createConsentUrl(clientAccessToken: string, state: string): string {
+  private createConsentUrl(
+    clientAccessToken: string,
+    state: string,
+    explicitRedirectUri?: string,
+  ): string {
     const consentBaseUrl =
       this.config.get<string>('BASIQ_CONSENT_UI_URL')?.trim() ??
       'https://consent.basiq.io/home';
     const action =
       this.config.get<string>('BASIQ_CONSENT_ACTION')?.trim() ?? 'add';
 
-    const redirectUri = this.config
+    const configuredRedirectUri = this.config
       .get<string>('BASIQ_CONSENT_REDIRECT_URI')
       ?.trim();
+    const redirectUri = explicitRedirectUri?.trim() || configuredRedirectUri;
 
     const consentUrl = new URL(consentBaseUrl);
     consentUrl.searchParams.set('token', clientAccessToken);

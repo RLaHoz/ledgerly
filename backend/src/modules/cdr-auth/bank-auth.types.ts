@@ -8,6 +8,7 @@ export interface BankAuthorizeContext {
 export interface CreateAuthorizeUrlInput {
   state: string;
   providerUserId?: string;
+  redirectUri?: string;
 }
 
 export interface CreateProviderUserResult {

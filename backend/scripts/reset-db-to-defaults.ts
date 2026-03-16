@@ -12,7 +12,7 @@ const steps: CommandStep[] = [
   {
     label: 'Reset DB and re-apply migrations',
     command: 'npx',
-    args: ['prisma', 'migrate', 'reset', '--force', '--skip-seed'],
+    args: ['prisma', 'migrate', 'reset', '--force'],
   },
   {
     label: 'Seed default app categories/subcategories',

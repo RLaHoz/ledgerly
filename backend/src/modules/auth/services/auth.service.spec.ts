@@ -213,3 +213,104 @@ describe('AuthService.completeOnboarding', () => {
     expect(prisma.user.update).not.toHaveBeenCalled();
   });
 });
+
+describe('AuthService consent redirect routing', () => {
+  const originalEnv = {
+    BASIQ_CONSENT_REDIRECT_URI: process.env.BASIQ_CONSENT_REDIRECT_URI,
+    BASIQ_CONSENT_REDIRECT_URI_WEB: process.env.BASIQ_CONSENT_REDIRECT_URI_WEB,
+    BASIQ_CONSENT_REDIRECT_URI_NATIVE:
+      process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE,
+  };
+
+  const makeService = () =>
+    new AuthService(
+      {
+        bankConsentAttempt: {
+          findUnique: jest.fn(),
+        },
+      } as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+  afterEach(() => {
+    process.env.BASIQ_CONSENT_REDIRECT_URI =
+      originalEnv.BASIQ_CONSENT_REDIRECT_URI;
+    process.env.BASIQ_CONSENT_REDIRECT_URI_WEB =
+      originalEnv.BASIQ_CONSENT_REDIRECT_URI_WEB;
+    process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE =
+      originalEnv.BASIQ_CONSENT_REDIRECT_URI_NATIVE;
+  });
+
+  it('adds explicit web client query to public callback bridge redirect', () => {
+    process.env.BASIQ_CONSENT_REDIRECT_URI =
+      'https://example.ngrok-free.dev/api/auth/callback';
+    const service = makeService();
+
+    const redirectUri = (service as any).resolveConsentRedirectUri('web');
+
+    expect(redirectUri).toBe(
+      'https://example.ngrok-free.dev/api/auth/callback?client=web',
+    );
+  });
+
+  it('adds explicit native client query to native redirect uri', () => {
+    delete process.env.BASIQ_CONSENT_REDIRECT_URI;
+    process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE = 'ledgerly://auth/callback';
+    const service = makeService();
+
+    const redirectUri = (service as any).resolveConsentRedirectUri('native');
+
+    expect(redirectUri).toBe('ledgerly://auth/callback?client=native');
+  });
+
+  it('resolves persisted client from authorize url redirect_uri query', async () => {
+    const prisma = {
+      bankConsentAttempt: {
+        findUnique: jest.fn().mockResolvedValue({
+          authorizeUrl:
+            'https://consent.basiq.io/home?token=abc&state=s1&redirect_uri=' +
+            encodeURIComponent(
+              'https://example.ngrok-free.dev/api/auth/callback?client=web',
+            ),
+        }),
+      },
+    };
+    const service = new AuthService(
+      prisma as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    const client = await service.resolveConsentAttemptClient('state-1');
+
+    expect(client).toBe('web');
+  });
+
+  it('falls back to native when persisted redirect uri uses ledgerly scheme', async () => {
+    const prisma = {
+      bankConsentAttempt: {
+        findUnique: jest.fn().mockResolvedValue({
+          authorizeUrl:
+            'https://consent.basiq.io/home?token=abc&state=s2&redirect_uri=' +
+            encodeURIComponent('ledgerly://auth/callback'),
+        }),
+      },
+    };
+    const service = new AuthService(
+      prisma as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+
+    const client = await service.resolveConsentAttemptClient('state-2');
+
+    expect(client).toBe('native');
+  });
+});

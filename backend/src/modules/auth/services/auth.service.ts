@@ -93,6 +93,7 @@ export class AuthService {
 
   async createBankAuthorizeUrl(
     userId: string,
+    client: 'web' | 'native' = 'web',
   ): Promise<BankAuthorizeUrlResponse> {
     const provider = await this.getOrCreateBasiqProvider();
     const bankProviderUser = await this.getOrCreateBankProviderUser(
@@ -101,10 +102,12 @@ export class AuthService {
     );
 
     const state = randomUUID();
+    const redirectUri = this.resolveConsentRedirectUri(client);
 
     const authContext = await this.bankAuth.createAuthorizeUrl({
       state,
       providerUserId: bankProviderUser.providerUserId,
+      redirectUri,
     });
 
     await this.prisma.bankConsentAttempt.create({
@@ -122,6 +125,62 @@ export class AuthService {
       authorizeUrl: authContext.authorizeUrl,
       state,
     };
+  }
+
+  async resolveConsentAttemptClient(
+    state: string | undefined,
+  ): Promise<'web' | 'native' | null> {
+    const normalizedState = state?.trim();
+    if (!normalizedState) {
+      return null;
+    }
+
+    const attempt = await this.prisma.bankConsentAttempt.findUnique({
+      where: { state: normalizedState },
+      select: { authorizeUrl: true },
+    });
+
+    if (!attempt?.authorizeUrl) {
+      return null;
+    }
+
+    return extractClientFromAuthorizeUrl(attempt.authorizeUrl);
+  }
+
+  private resolveConsentRedirectUri(
+    client: 'web' | 'native',
+  ): string | undefined {
+    const normalize = (value?: string): string | undefined => {
+      const trimmed = value?.trim();
+      return trimmed ? trimmed : undefined;
+    };
+
+    const bridgeRedirectUri = normalize(process.env.BASIQ_CONSENT_REDIRECT_URI);
+    if (bridgeRedirectUri && /^https?:\/\//i.test(bridgeRedirectUri)) {
+      return appendClientQueryParam(bridgeRedirectUri, client);
+    }
+
+    const legacyRedirectUri = normalize(process.env.BASIQ_CONSENT_REDIRECT_URI);
+    const webRedirectUri = normalize(
+      process.env.BASIQ_CONSENT_REDIRECT_URI_WEB,
+    );
+    const nativeRedirectUri = normalize(
+      process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE,
+    );
+
+    if (client === 'native') {
+      if (nativeRedirectUri) {
+        return appendClientQueryParam(nativeRedirectUri, client);
+      }
+
+      if (legacyRedirectUri?.startsWith('ledgerly://')) {
+        return appendClientQueryParam(legacyRedirectUri, client);
+      }
+
+      return appendClientQueryParam('ledgerly://auth/callback', client);
+    }
+
+    return appendClientQueryParam(webRedirectUri ?? legacyRedirectUri, client);
   }
 
   async verifyBankConsent(input: {
@@ -438,5 +497,54 @@ export class AuthService {
         },
       });
     }
+  }
+}
+
+function appendClientQueryParam(
+  redirectUri: string | undefined,
+  client: 'web' | 'native',
+): string | undefined {
+  if (!redirectUri) {
+    return undefined;
+  }
+
+  try {
+    const parsed = new URL(redirectUri);
+    parsed.searchParams.set('client', client);
+    return parsed.toString();
+  } catch {
+    return redirectUri;
+  }
+}
+
+function extractClientFromAuthorizeUrl(
+  authorizeUrl: string,
+): 'web' | 'native' | null {
+  try {
+    const parsedAuthorizeUrl = new URL(authorizeUrl);
+    const redirectUri = parsedAuthorizeUrl.searchParams.get('redirect_uri');
+
+    if (!redirectUri) {
+      return null;
+    }
+
+    const parsedRedirectUri = new URL(redirectUri);
+    const explicitClient = parsedRedirectUri.searchParams.get('client');
+
+    if (explicitClient === 'web' || explicitClient === 'native') {
+      return explicitClient;
+    }
+
+    if (parsedRedirectUri.protocol === 'ledgerly:') {
+      return 'native';
+    }
+
+    if (/^https?:$/i.test(parsedRedirectUri.protocol)) {
+      return 'web';
+    }
+
+    return null;
+  } catch {
+    return null;
   }
 }

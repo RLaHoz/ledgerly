@@ -5,12 +5,20 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const allowedOrigins = (
-    process.env.CORS_ORIGINS ?? 'http://localhost:8100,http://localhost:4200'
-  )
+  const defaultAllowedOrigins = [
+    'http://localhost:8100',
+    'http://localhost:4200',
+    'http://localhost',
+    'capacitor://localhost',
+    'ionic://localhost',
+  ];
+  const configuredOrigins = (process.env.CORS_ORIGINS ?? '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+  const allowedOrigins = [
+    ...new Set([...defaultAllowedOrigins, ...configuredOrigins]),
+  ];
 
   app.enableCors({
     origin: (
