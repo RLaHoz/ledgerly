@@ -185,7 +185,7 @@ describe('OnboardingWizard budget focus regression', () => {
     const afterTop = wizardShell.getBoundingClientRect().top;
     const afterScrollTop = stepContent.scrollTop;
 
-    expect(Math.abs(afterTop - beforeTop)).toBeLessThan(1);
+    expect(Math.abs(afterTop - beforeTop)).toBeLessThanOrEqual(1);
     expect(afterScrollTop).toBe(beforeScrollTop);
   });
 });

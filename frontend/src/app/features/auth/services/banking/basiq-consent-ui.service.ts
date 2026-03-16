@@ -1,15 +1,18 @@
 // frontend/src/app/features/auth/services/bank-consent-flow.service.ts
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 import { defer, from, Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BasiqConsentCallbackEvent } from '../../models/bank.models';
+import { RuntimeConfigService } from 'src/app/core/config/runtime-config.service';
 
+const BROWSER_FINISHED_CANCEL_DELAY_MS = 750;
 
 @Injectable({ providedIn: 'root' })
 export class BasiqConsentUiService {
+  private readonly runtimeConfig = inject(RuntimeConfigService);
   // Stream for successful callback URL receptions.
   private readonly callbackSubject = new Subject<BasiqConsentCallbackEvent>();
 
@@ -18,6 +21,8 @@ export class BasiqConsentUiService {
 
   private appUrlOpenHandle?: PluginListenerHandle;
   private browserFinishedHandle?: PluginListenerHandle;
+  private browserFinishedCancelTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private suppressNextBrowserFinishedCancellation = false;
   private initialized = false;
 
   readonly callback$ = this.callbackSubject.asObservable();
@@ -30,20 +35,31 @@ export class BasiqConsentUiService {
 
       this.appUrlOpenHandle = await App.addListener('appUrlOpen', ({ url }) => {
         const event = this.parseCallbackUrl(url);
-        if (event) this.callbackSubject.next(event);
+        if (event) {
+          this.emitCallbackEvent(event);
+        }
       });
 
       if (Capacitor.isNativePlatform()) {
         this.browserFinishedHandle = await Browser.addListener(
           'browserFinished',
-          () => this.cancelledSubject.next(),
+          () => {
+            if (this.suppressNextBrowserFinishedCancellation) {
+              this.suppressNextBrowserFinishedCancellation = false;
+              return;
+            }
+
+            this.scheduleBrowserFinishedCancellation();
+          },
         );
       }
 
       const launch = await App.getLaunchUrl();
       if (launch?.url) {
         const launchEvent = this.parseCallbackUrl(launch.url);
-        if (launchEvent) this.callbackSubject.next(launchEvent);
+        if (launchEvent) {
+          this.emitCallbackEvent(launchEvent);
+        }
       }
     }).pipe(map(() => void 0));
   }
@@ -65,11 +81,13 @@ export class BasiqConsentUiService {
 
   closeConsent(): Observable<void> {
     if (!Capacitor.isNativePlatform()) return of(void 0);
+    this.suppressNextBrowserFinishedCancellation = true;
     return from(Browser.close()).pipe(map(() => void 0));
   }
 
   destroy(): Observable<void> {
     return defer(async () => {
+      this.clearPendingBrowserFinishedCancellation();
       await this.appUrlOpenHandle?.remove();
       await this.browserFinishedHandle?.remove();
       this.appUrlOpenHandle = undefined;
@@ -85,6 +103,8 @@ export class BasiqConsentUiService {
   private parseCallbackUrl(url: string): BasiqConsentCallbackEvent | null {
     const parsed = new URL(url);
     const normalizedPath = this.normalizePathname(parsed.pathname);
+    const allowedUniversalLinkOrigins =
+      this.runtimeConfig.getUniversalLinkOrigins();
 
     const isNativeCallback =
       parsed.protocol === 'ledgerly:' &&
@@ -94,8 +114,14 @@ export class BasiqConsentUiService {
     const isWebCallback =
       parsed.origin === window.location.origin &&
       normalizedPath === '/auth/callback';
+    const isUniversalLinkCallback =
+      /^https?:$/i.test(parsed.protocol) &&
+      normalizedPath === '/auth/callback' &&
+      allowedUniversalLinkOrigins.includes(parsed.origin);
 
-    if (!isNativeCallback && !isWebCallback) return null;
+    if (!isNativeCallback && !isWebCallback && !isUniversalLinkCallback) {
+      return null;
+    }
 
     const jobIdsRaw = parsed.searchParams.getAll('jobIds');
     const parsedJobIds = jobIdsRaw
@@ -121,5 +147,27 @@ export class BasiqConsentUiService {
     return pathname.endsWith('/') && pathname.length > 1
       ? pathname.slice(0, -1)
       : pathname;
+  }
+
+  private emitCallbackEvent(event: BasiqConsentCallbackEvent): void {
+    this.clearPendingBrowserFinishedCancellation();
+    this.callbackSubject.next(event);
+  }
+
+  private scheduleBrowserFinishedCancellation(): void {
+    this.clearPendingBrowserFinishedCancellation();
+    this.browserFinishedCancelTimeoutId = setTimeout(() => {
+      this.browserFinishedCancelTimeoutId = null;
+      this.cancelledSubject.next();
+    }, BROWSER_FINISHED_CANCEL_DELAY_MS);
+  }
+
+  private clearPendingBrowserFinishedCancellation(): void {
+    if (this.browserFinishedCancelTimeoutId === null) {
+      return;
+    }
+
+    clearTimeout(this.browserFinishedCancelTimeoutId);
+    this.browserFinishedCancelTimeoutId = null;
   }
 }

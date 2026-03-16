@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import {
   BankAuthorizeUrlResponse,
   BankConsentVerificationResponse,
@@ -11,13 +11,18 @@ import {
   CompleteOnboardingResponse,
   SessionResponse,
 } from '../models/auth.models';
+import { RuntimeConfigService } from 'src/app/core/config/runtime-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
+  private readonly runtimeConfig = inject(RuntimeConfigService);
+
+  get baseUrl(): string {
+    return this.runtimeConfig.getApiUrl();
+  }
 
   createAnonymousSession(deviceId?: string): Observable<SessionResponse> {
     return this.http.post<SessionResponse>(
@@ -39,7 +44,14 @@ export class AuthService {
   }
 
   getBankAuthorizeUrl(): Observable<BankAuthorizeUrlResponse> {
-    return this.http.get<BankAuthorizeUrlResponse>(`${this.baseUrl}/auth/bankLoginUrl`);
+    const client = Capacitor.isNativePlatform() ? 'native' : 'web';
+    return this.http.get<BankAuthorizeUrlResponse>(
+      `${this.baseUrl}/auth/bankLoginUrl`,
+      {
+        params: { client },
+        headers: { 'x-client-source': client },
+      },
+    );
   }
 
   verifyBankConsent(

@@ -1,11 +1,25 @@
 import { DestroyRef, Injectable, Injector, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { EMPTY } from 'rxjs';
-import { catchError, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs/operators';
+import { EMPTY, timer } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  expand,
+  filter,
+  last,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { AuthStore } from '../../store/auth.store';
 import { BasiqConsentUiService } from './basiq-consent-ui.service';
 import { AuthService } from '../auth.service';
+
+const CONSENT_VERIFY_RETRY_DELAY_MS = 1500;
+const CONSENT_VERIFY_MAX_ATTEMPTS = 20;
 
 @Injectable({ providedIn: 'root' })
 export class BankLinkCoordinatorService {
@@ -79,16 +93,27 @@ export class BankLinkCoordinatorService {
     jobIds: string[];
   }): void {
     const expectedState = this.authStore.pendingConsentState();
+    const allowNativeStateRecovery = Capacitor.isNativePlatform() && !expectedState;
 
-    if (!event.state || !expectedState || event.state !== expectedState) {
+    if (
+      !event.state ||
+      (!allowNativeStateRecovery && (!expectedState || event.state !== expectedState))
+    ) {
       console.warn('[BankLink] Invalid consent callback state', {
         callbackState: event.state,
         expectedState,
+        allowNativeStateRecovery,
       });
       this.authStore.setBankLinkError('Invalid consent callback state');
       this.lastOpenedAuthorizeUrl = null;
       void this.router.navigateByUrl('/auth', { replaceUrl: true });
       return;
+    }
+
+    if (allowNativeStateRecovery) {
+      console.info('[BankLink] Proceeding with native callback despite missing local pending state', {
+        callbackState: event.state,
+      });
     }
 
     const jobIds = [...new Set([...(event.jobIds ?? []), ...(event.jobId ? [event.jobId] : [])])];
@@ -100,8 +125,17 @@ export class BankLinkCoordinatorService {
       return;
     }
 
-    this.authService
-      .verifyBankConsent({ state: event.state, jobIds })
+    if (Capacitor.isNativePlatform()) {
+      this.consentUi
+        .closeConsent()
+        .pipe(
+          take(1),
+          catchError(() => EMPTY),
+        )
+        .subscribe();
+    }
+
+    this.verifyBankConsentUntilSettled(event.state, jobIds)
       .pipe(
         take(1),
         tap((result) => {
@@ -174,4 +208,43 @@ export class BankLinkCoordinatorService {
       )
       .subscribe();
   }
+
+  private verifyBankConsentUntilSettled(state: string, jobIds: string[]) {
+    const payload = { state, jobIds };
+
+    return this.authService.verifyBankConsent(payload).pipe(
+      expand((result, attemptIndex) => {
+        const shouldRetry =
+          isPendingVerificationResult(result) &&
+          attemptIndex + 1 < CONSENT_VERIFY_MAX_ATTEMPTS;
+
+        if (!shouldRetry) {
+          return EMPTY;
+        }
+
+        return timer(CONSENT_VERIFY_RETRY_DELAY_MS).pipe(
+          switchMap(() => this.authService.verifyBankConsent(payload)),
+        );
+      }),
+      last(),
+      map((result) => {
+        if (!isPendingVerificationResult(result)) {
+          return result;
+        }
+
+        return {
+          ...result,
+          message:
+            'Consent verification is taking longer than expected. Please retry in a moment.',
+        };
+      }),
+    );
+  }
+}
+
+function isPendingVerificationResult(result: {
+  success: boolean;
+  pendingJobIds: string[];
+}): boolean {
+  return !result.success && result.pendingJobIds.length > 0;
 }

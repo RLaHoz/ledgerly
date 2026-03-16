@@ -1,7 +1,8 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, EMPTY, exhaustMap, of, pipe, tap } from 'rxjs';
+import { Capacitor } from '@capacitor/core';
+import { catchError, EMPTY, exhaustMap, of, pipe, tap, timeout, TimeoutError } from 'rxjs';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { AuthService } from '../services/auth.service';
 import { SessionResponse } from '../models/auth.models';
@@ -14,9 +15,11 @@ import {
   LS_ONBOARDING_CURRENT_STEP_KEY,
   LS_PENDING_CONSENT_STATE_KEY,
 } from './auth.state';
+import { RuntimeConfigService } from 'src/app/core/config/runtime-config.service';
 
 const ONBOARDING_STEPS = ['import', 'categories', 'budgets', 'confirm'] as const;
 type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
+const AUTH_REQUEST_TIMEOUT_MS = 15000;
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
@@ -37,6 +40,37 @@ export const AuthStore = signalStore(
   withMethods((store) => {
     const authService = inject(AuthService);
     const tokenService = inject(SessionTokenService);
+    const runtimeConfig = inject(RuntimeConfigService);
+    const resolveNetworkAwareErrorMessage = (
+      err: unknown,
+      fallback: string,
+    ): string => {
+      if (err instanceof TimeoutError) {
+        return `Request timed out after ${AUTH_REQUEST_TIMEOUT_MS / 1000}s. Check backend connectivity at ${runtimeConfig.getApiUrl()}.`;
+      }
+
+      const status =
+        typeof err === 'object' &&
+        err !== null &&
+        'status' in err &&
+        typeof err.status === 'number'
+          ? err.status
+          : null;
+
+      if (status === 0 && Capacitor.isNativePlatform()) {
+        if (runtimeConfig.isLocalhostApiUrl()) {
+          return 'Cannot reach backend from native app using localhost. Set LEDGERLY_API_URL_NATIVE to your Mac LAN IP before build.';
+        }
+
+        return `Cannot reach backend at ${runtimeConfig.getApiUrl()}. Ensure iPhone and Mac are on the same Wi-Fi, backend is running, and port 3000 is reachable.`;
+      }
+
+      if (err instanceof Error && err.message.trim().length > 0) {
+        return err.message;
+      }
+
+      return fallback;
+    };
 
     const persistBoolean = (key: string, value: boolean): void => {
       localStorage.setItem(key, value ? 'true' : 'false');
@@ -117,9 +151,11 @@ export const AuthStore = signalStore(
             : authService.createAnonymousSession();
 
           return request$.pipe(
+            timeout(AUTH_REQUEST_TIMEOUT_MS),
             tap((session) => applySession(session)),
             catchError(() => {
               return authService.createAnonymousSession().pipe(
+                timeout(AUTH_REQUEST_TIMEOUT_MS),
                 tap((session) => applySession(session)),
                 catchError((err: unknown) => {
                   tokenService.clearTokens();
@@ -127,7 +163,10 @@ export const AuthStore = signalStore(
                   patchState(store, {
                     isLoggedIn: false,
                     status: 'error',
-                    error: err instanceof Error ? err.message : 'Unable to initialize session',
+                    error: resolveNetworkAwareErrorMessage(
+                      err,
+                      'Unable to initialize session',
+                    ),
                   });
                   return EMPTY;
                 }),
@@ -143,6 +182,7 @@ export const AuthStore = signalStore(
         tap(() => patchState(store, { status: 'loading', error: null })),
         exhaustMap(() =>
           authService.getBankAuthorizeUrl().pipe(
+            timeout(AUTH_REQUEST_TIMEOUT_MS),
             tap(({ authorizeUrl, state }) => {
               localStorage.setItem(LS_PENDING_CONSENT_STATE_KEY, state);
               patchState(store, {
@@ -153,12 +193,16 @@ export const AuthStore = signalStore(
               });
             }),
             catchError((err: unknown) => {
+              const errorMessage = resolveNetworkAwareErrorMessage(
+                err,
+                'Failed to start bank consent',
+              );
               localStorage.removeItem(LS_PENDING_CONSENT_STATE_KEY);
               patchState(store, {
                 status: 'error',
                 bankAuthorizeUrl: null,
                 pendingConsentState: null,
-                error: err instanceof Error ? err.message : 'Failed to start bank consent',
+                error: errorMessage,
               });
               return EMPTY;
             }),

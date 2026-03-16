@@ -3,7 +3,7 @@ import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, EMPTY, exhaustMap, forkJoin, pipe, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { RuntimeConfigService } from 'src/app/core/config/runtime-config.service';
 import {
   AssignmentType,
   CategoryFilter,
@@ -459,7 +459,8 @@ export const OnboardingWizardStore = signalStore(
   })),
   withMethods((store) => {
     const http = inject(HttpClient);
-    const baseUrl = environment.apiUrl;
+    const runtimeConfig = inject(RuntimeConfigService);
+    const resolveBaseUrl = () => runtimeConfig.getApiUrl();
 
     const loadUserTransactions = rxMethod<void>(
       pipe(
@@ -473,10 +474,10 @@ export const OnboardingWizardStore = signalStore(
         exhaustMap(() =>
           forkJoin({
             transactions: http.get<BackendCurrentMonthGroupedResponse>(
-              `${baseUrl}/transactions/current?forceSync=true`,
+              `${resolveBaseUrl()}/transactions/current?forceSync=true`,
             ),
             userCategories: http.get<BackendUserCategoriesResponse>(
-              `${baseUrl}/categories/user-categories`,
+              `${resolveBaseUrl()}/categories/user-categories`,
             ),
           })
             .pipe(
@@ -633,7 +634,7 @@ export const OnboardingWizardStore = signalStore(
 
           return http
             .patch<BackendAssignTransactionsResponse>(
-              `${baseUrl}/categories/transactions/assign`,
+              `${resolveBaseUrl()}/categories/transactions/assign`,
               requestPayload,
             )
             .pipe(

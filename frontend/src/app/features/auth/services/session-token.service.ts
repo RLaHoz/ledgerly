@@ -1,9 +1,9 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, map, Observable, of, shareReplay } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { LS_ACCESS_TOKEN_KEY, LS_REFRESH_TOKEN_KEY } from '../store/auth.state';
 import { SessionResponse } from '../models/auth.models';
+import { RuntimeConfigService } from 'src/app/core/config/runtime-config.service';
 
 
 
@@ -11,6 +11,7 @@ import { SessionResponse } from '../models/auth.models';
 export class SessionTokenService {
   private readonly httpBackend = inject(HttpBackend);
   private readonly refreshTokenHttpInstance = new HttpClient(this.httpBackend);
+  private readonly runtimeConfig = inject(RuntimeConfigService);
   private refreshInFlight$: Observable<string | null> | null = null;
 
   readonly accessToken = signal<string | null>(localStorage.getItem(LS_ACCESS_TOKEN_KEY));
@@ -40,7 +41,10 @@ export class SessionTokenService {
     }
 
     this.refreshInFlight$ = this.refreshTokenHttpInstance
-      .post<SessionResponse>(`${environment.apiUrl}/auth/session/refresh`, { refreshToken })
+      .post<SessionResponse>(
+        `${this.runtimeConfig.getApiUrl()}/auth/session/refresh`,
+        { refreshToken },
+      )
       .pipe(
         map((session) => {
           this.setTokens(session);

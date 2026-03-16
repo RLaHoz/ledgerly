@@ -5,10 +5,14 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
+    "prepare:runtime-config": "node ./scripts/write-runtime-config.mjs",
+    "prestart": "npm run prepare:runtime-config",
     "start": "ng serve",
+    "prebuild": "npm run prepare:runtime-config",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "pretest": "npm run prepare:runtime-config",
     "test": "ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint"
   },
