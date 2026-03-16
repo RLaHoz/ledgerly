@@ -76,9 +76,11 @@ export class AuthController {
       /Mobile\//i.test(userAgent) &&
       !/^https?:\/\//i.test(origin);
     const isNativeRequest =
-      source === 'native' || query.client === 'native' || isNativeOrigin || isLikelyIosWebView;
-    const client: AuthClientSource =
-      isNativeRequest ? 'native' : 'web';
+      source === 'native' ||
+      query.client === 'native' ||
+      isNativeOrigin ||
+      isLikelyIosWebView;
+    const client: AuthClientSource = isNativeRequest ? 'native' : 'web';
     return this.authService.createBankAuthorizeUrl(user.id, client);
   }
 
@@ -97,9 +99,10 @@ export class AuthController {
       userAgent,
       this.authService,
     );
-    const targetBaseUrl = client === 'native'
-      ? resolveNativeBridgeTarget()
-      : resolveWebBridgeTarget();
+    const targetBaseUrl =
+      client === 'native'
+        ? resolveNativeBridgeTarget()
+        : resolveWebBridgeTarget();
     const redirectUrl = appendQueryToTarget(targetBaseUrl, query);
 
     res.redirect(302, redirectUrl);
