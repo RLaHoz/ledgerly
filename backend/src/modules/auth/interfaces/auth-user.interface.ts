@@ -45,7 +45,7 @@ interface SessionResponseBase {
   hasConnectedBank: boolean;
 }
 
-export interface AppSessionResponse extends SessionResponseBase {}
+export type AppSessionResponse = SessionResponseBase;
 
 export interface IssuedSessionResponse extends SessionResponseBase {
   refreshToken: string;

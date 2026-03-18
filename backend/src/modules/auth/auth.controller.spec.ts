@@ -154,23 +154,36 @@ describe('AuthController', () => {
 
   it('marks Google auth endpoints as public', () => {
     const reflector = new Reflector();
+    const startGoogleAuth = Reflect.get(AuthController.prototype, 'startGoogleAuth');
+    const googleCallbackBridge = Reflect.get(
+      AuthController.prototype,
+      'googleCallbackBridge',
+    );
+    const completeGoogleAuth = Reflect.get(
+      AuthController.prototype,
+      'completeGoogleAuth',
+    );
 
     expect(
-      reflector.get<boolean>(IS_PUBLIC_KEY, AuthController.prototype.startGoogleAuth),
+      reflector.get<boolean>(IS_PUBLIC_KEY, startGoogleAuth),
     ).toBe(true);
     expect(
-      reflector.get<boolean>(IS_PUBLIC_KEY, AuthController.prototype.googleCallbackBridge),
+      reflector.get<boolean>(IS_PUBLIC_KEY, googleCallbackBridge),
     ).toBe(true);
     expect(
-      reflector.get<boolean>(IS_PUBLIC_KEY, AuthController.prototype.completeGoogleAuth),
+      reflector.get<boolean>(IS_PUBLIC_KEY, completeGoogleAuth),
     ).toBe(true);
   });
 
   it('keeps bank-consent verify protected', () => {
     const reflector = new Reflector();
+    const verifyBankConsent = Reflect.get(
+      AuthController.prototype,
+      'verifyBankConsent',
+    );
     const isPublic = reflector.get<boolean>(
       IS_PUBLIC_KEY,
-      AuthController.prototype.verifyBankConsent,
+      verifyBankConsent,
     );
 
     expect(isPublic).toBeUndefined();

@@ -365,8 +365,14 @@ function appendQueryToTarget(
 function toPublicSessionResponse(
   session: IssuedSessionResponse,
 ): AppSessionResponse {
-  const { refreshToken: _refreshToken, ...publicSession } = session;
-  return publicSession;
+  return {
+    user: session.user,
+    accessToken: session.accessToken,
+    accessTokenExpiresInSeconds: session.accessTokenExpiresInSeconds,
+    onboardingCompleted: session.onboardingCompleted,
+    bankConnectionState: session.bankConnectionState,
+    hasConnectedBank: session.hasConnectedBank,
+  };
 }
 
 function toPublicBankConsentResponse(
