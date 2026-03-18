@@ -1,0 +1,11 @@
+<article class="danger-card">
+  <div class="danger-copy">
+    <h3>{{ title() }}</h3>
+    <p>{{ description() }}</p>
+  </div>
+
+  <ion-button class="danger-action" fill="outline" type="button" (click)="onActionClick()">
+    <ion-icon slot="start" name="log-out-outline"></ion-icon>
+    {{ actionLabel() }}
+  </ion-button>
+</article>

@@ -1,0 +1,105 @@
+:host {
+  display: block;
+}
+
+.priority {
+  display: grid;
+  gap: 10px;
+}
+
+.section-title {
+  color: var(--home-section, var(--text-text-secondary));
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  padding: 0 2px;
+  text-transform: uppercase;
+}
+
+.priority-card {
+  background: var(--home-card-bg, #eff3f8);
+  border: 1px solid var(--home-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--home-card-shadow, var(--shadow-sm));
+  overflow: hidden;
+  padding: 16px 20px;
+}
+
+.priority-item {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.priority-item + .priority-item {
+  border-top: 1px solid var(--home-divider, var(--border));
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+.priority-left {
+  align-items: center;
+  display: inline-flex;
+  gap: 12px;
+  min-width: 0;
+}
+
+.priority-left p {
+  color: var(--home-strong, var(--text-text-primary));
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.dot {
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 6px;
+  height: 6px;
+  width: 6px;
+}
+
+.dot-danger {
+  background: var(--home-danger-dot, var(--text-critical));
+}
+
+.dot-warning {
+  background: var(--home-warning-dot, var(--text-warning));
+}
+
+.priority-action {
+  background: transparent;
+  border: 0;
+  color: var(--home-accent, var(--text-accent));
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+}
+
+:host-context(.theme-dark) .section-title {
+  color: var(--home-section, var(--text-text-secondary));
+}
+
+:host-context(.theme-dark) .priority-card {
+  background: var(--home-card-bg, var(--bg-surface));
+  border-color: var(--home-card-border, var(--border));
+  box-shadow: var(--home-card-shadow, var(--shadow-sm));
+}
+
+:host-context(.theme-dark) .priority-item + .priority-item {
+  border-top-color: var(--home-divider, var(--border));
+}
+
+:host-context(.theme-dark) .priority-left p {
+  color: var(--home-strong, var(--text-text-primary));
+}

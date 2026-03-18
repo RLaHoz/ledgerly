@@ -1,0 +1,76 @@
+:host {
+  display: block;
+}
+
+.rules-section-title {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin: 0 0 10px;
+  padding-inline: 2px;
+}
+
+.rules-quick-grid {
+  display: flex;
+  gap: 8px;
+}
+
+.rules-quick-card {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  min-height: 100px;
+  padding: 16px;
+  transition: background-color 150ms ease;
+}
+
+.rules-quick-card:active {
+  background: var(--surface-secondary);
+}
+
+.rules-quick-icon {
+  align-items: center;
+  border-radius: 12px;
+  display: inline-flex;
+  flex: 0 0 40px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.rules-quick-icon ion-icon {
+  font-size: 20px;
+}
+
+.rules-quick-icon.auto {
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  color: var(--primary);
+}
+
+.rules-quick-icon.alert {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.rules-quick-icon.anomaly {
+  background: var(--critical-soft);
+  color: var(--critical);
+}
+
+.rules-quick-label {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}

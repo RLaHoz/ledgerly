@@ -1,0 +1,22 @@
+<section class="rules-activity-section" aria-label="Recent activity">
+  <header class="rules-activity-header">
+    <h2 class="rules-section-title">{{ title() }}</h2>
+    <p class="rules-activity-range">{{ summary() }}</p>
+  </header>
+
+  <article class="rules-activity-card">
+    @for (item of items(); track item.id) {
+      <section class="rules-activity-row">
+        <span class="rules-activity-icon" [class.tag]="item.icon === 'tag'" [class.bell]="item.icon === 'bell'">
+          <ion-icon [name]="iconName(item.icon)"></ion-icon>
+        </span>
+
+        <div class="rules-activity-copy">
+          <p>{{ item.title }}</p>
+        </div>
+
+        <span class="rules-activity-time">{{ item.ageLabel }}</span>
+      </section>
+    }
+  </article>
+</section>

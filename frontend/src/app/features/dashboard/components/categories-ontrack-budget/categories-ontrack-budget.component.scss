@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.dashboard-ontrack-cta {
+  align-items: center;
+  background: var(--success-soft);
+  border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
+  border-radius: 12px;
+  color: var(--success);
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.dashboard-ontrack-cta-icon,
+.dashboard-ontrack-cta-chevron {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.dashboard-ontrack-cta-icon ion-icon,
+.dashboard-ontrack-cta-chevron ion-icon {
+  font-size: 16px;
+}
+
+.dashboard-ontrack-cta-text {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.dashboard-ontrack-cta-chevron {
+  opacity: 0.6;
+}

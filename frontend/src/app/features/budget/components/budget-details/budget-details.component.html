@@ -1,0 +1,151 @@
+<ion-content [fullscreen]="true">
+  <section class="budget-detail-page">
+    @if (details(); as detail) {
+      <header class="detail-header">
+        <div class="detail-title-group">
+          <span class="detail-icon" [class]="'tone-' + detail.iconTone">
+            <ion-icon [name]="detail.iconName"></ion-icon>
+          </span>
+
+          <div class="detail-title-copy">
+            <h2>{{ detail.categoryName }}</h2>
+            <span class="detail-status-pill" [class]="'status-' + detail.statusTone">{{ detail.statusLabel }}</span>
+          </div>
+        </div>
+
+        <button class="adjust-btn" type="button" (click)="openAdjustModal()">
+          <ion-icon name="create-outline"></ion-icon>
+          <span>Adjust</span>
+        </button>
+      </header>
+
+      <article class="summary-card">
+        <div class="summary-grid">
+          <section>
+            <p>Budget</p>
+            <strong>{{ detail.budgetLabel }}</strong>
+          </section>
+          <section>
+            <p>Spent</p>
+            <strong>{{ detail.spentLabel }}</strong>
+          </section>
+          <section>
+            <p>Remaining</p>
+            <strong>{{ detail.remainingLabel }}</strong>
+          </section>
+        </div>
+
+        <span class="summary-track" aria-hidden="true">
+          <span class="summary-fill" [class]="'tone-' + detail.statusTone" [style.width.%]="detail.usedPercent"></span>
+        </span>
+
+        <footer class="summary-footer">
+          <div class="summary-legend">
+            <span><i class="legend-dot safe"></i>Safe</span>
+            <span><i class="legend-dot caution"></i>Caution</span>
+            <span><i class="legend-dot over"></i>Over</span>
+          </div>
+          <strong>{{ detail.usedPercent | number: '1.0-0' }}%</strong>
+        </footer>
+
+        <p class="summary-advice">{{ detail.dailySpendAdviceLabel }}</p>
+      </article>
+
+      <article class="subcategories-card">
+        <header class="section-card-header">
+          <h3>Subcategories ({{ detail.subcategories.length }})</h3>
+        </header>
+
+        <div class="subcategories-list">
+          @for (item of detail.subcategories; track item.id) {
+            <section class="subcategory-row">
+              <div class="subcategory-head">
+                <strong>{{ item.name }}</strong>
+                <span class="subcategory-left" [class]="'tone-' + item.tone">{{ item.leftLabel }}</span>
+              </div>
+
+              <span class="subcategory-track" aria-hidden="true">
+                <span class="subcategory-fill" [class]="'tone-' + item.tone" [style.width.%]="item.progressPercent"></span>
+              </span>
+
+              <p>{{ item.spentLabel }} / {{ item.limitLabel }}</p>
+            </section>
+          }
+        </div>
+      </article>
+
+      <article class="suggestion-card">
+        <p>
+          <ion-icon name="bulb-outline"></ion-icon>
+          <span>Based on your 3-month average ({{ detail.averageLabel }}), we recommend a budget of <strong>{{ detail.recommendedBudgetLabel }}</strong>.</span>
+        </p>
+
+        <button type="button" (click)="onApplySuggestion()">Apply suggestion</button>
+      </article>
+
+      <article class="history-card">
+        <header class="section-card-header section-card-header-split">
+          <h3>Last 3 months</h3>
+          <span class="history-status">Stable</span>
+        </header>
+
+        <div class="history-list">
+          @for (item of detail.history; track item.monthLabel) {
+            <section class="history-row">
+              <p [class.current]="item.monthLabel === 'Feb 2026'">{{ item.monthLabel }}</p>
+              <span class="history-track" aria-hidden="true">
+                <span class="history-fill" [class]="'tone-' + item.tone" [style.width.%]="item.progressPercent"></span>
+              </span>
+              <strong [class.current]="item.monthLabel === 'Feb 2026'">{{ item.amountLabel }}</strong>
+            </section>
+          }
+        </div>
+      </article>
+
+      <article class="transactions-card">
+        <header class="section-card-header section-card-header-split">
+          <h3>Recent transactions</h3>
+          <button type="button">View all <ion-icon name="chevron-forward-outline"></ion-icon></button>
+        </header>
+
+        <div class="transactions-list">
+          @for (item of detail.recentTransactions; track item.id) {
+            <section class="transaction-row">
+              <div>
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.dateLabel }}</p>
+              </div>
+              <span>{{ item.amountLabel }}</span>
+            </section>
+          }
+        </div>
+      </article>
+    } @else {
+      <article class="missing-card">
+        <h2>Budget not found</h2>
+        <p>That category does not exist.</p>
+        <button type="button" (click)="onBackToBudgets()">Back to budgets</button>
+      </article>
+    }
+  </section>
+
+  @if (details(); as detail) {
+    <app-adjust-budget-modal
+      [isOpen]="isAdjustModalOpen()"
+      [title]="'Adjust ' + detail.categoryName + ' Budget'"
+      [description]="'Update your monthly budget and see the impact on your daily allowance.'"
+      [currentBudgetLabel]="detail.budgetLabel"
+      [adjustAmount]="adjustAmountInput()"
+      [recommendedBudgetLabel]="detail.recommendedBudgetLabel"
+      [subcategories]="detail.subcategories"
+      [balanceLabel]="'Subcategory total: ' + detail.budgetLabel"
+      [balanceStatusLabel]="'Balanced'"
+      [canSave]="canSaveAdjust()"
+      (dismissed)="closeAdjustModal()"
+      (amountChanged)="onAdjustAmountInput($event)"
+      (recommendedSelected)="setRecommendedAmount()"
+      (canceled)="closeAdjustModal()"
+      (saved)="onSaveAdjust()"
+    />
+  }
+</ion-content>

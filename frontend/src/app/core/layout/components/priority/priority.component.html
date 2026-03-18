@@ -1,0 +1,16 @@
+<section class="priority" aria-label="Priority actions">
+  <h2 class="section-title">{{ title() }}</h2>
+
+  <article class="priority-card">
+    @for (item of items(); track item.id) {
+      <div class="priority-item">
+        <div class="priority-left">
+          <span class="dot" [class]="'dot-' + item.tone"></span>
+          <p>{{ item.title }}</p>
+        </div>
+
+        <button type="button" class="priority-action">{{ item.actionLabel }}</button>
+      </div>
+    }
+  </article>
+</section>

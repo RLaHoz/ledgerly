@@ -1,0 +1,26 @@
+<app-auth-screen-shell
+  title="Sign in"
+  subtitle="Continue with Google to access your Ledgerly account"
+  [showBackButton]="true"
+  backLink="/auth/signup"
+  [compactTopBar]="true"
+>
+  <button type="button" class="login-google" [disabled]="isLoading()" (click)="continueWithGoogle()">
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="login-google__icon">
+      <path fill="#EA4335" d="M12.24 10.285v3.821h5.445c-.24 1.229-.96 2.27-2.04 2.97l3.3 2.56c1.92-1.77 3.03-4.38 3.03-7.49 0-.72-.06-1.41-.18-2.08h-9.555Z"/>
+      <path fill="#4285F4" d="M12.24 22c2.73 0 5.01-.9 6.68-2.44l-3.3-2.56c-.9.6-2.07.96-3.38.96-2.61 0-4.83-1.77-5.625-4.14H3.21v2.64A10.08 10.08 0 0 0 12.24 22Z"/>
+      <path fill="#FBBC05" d="M6.615 13.82A6.07 6.07 0 0 1 6.3 12c0-.63.105-1.23.315-1.82V7.54H3.21A10.18 10.18 0 0 0 2.16 12c0 1.64.39 3.18 1.05 4.46l3.405-2.64Z"/>
+      <path fill="#34A853" d="M12.24 6.04c1.47 0 2.79.51 3.825 1.5l2.865-2.865C17.25 3.11 14.97 2 12.24 2A10.08 10.08 0 0 0 3.21 7.54l3.405 2.64c.795-2.37 3.015-4.14 5.625-4.14Z"/>
+    </svg>
+    <span>{{ isLoading() ? 'Connecting to Google' : 'Continue with Google' }}</span>
+  </button>
+
+  <p class="login-link-row">
+    New here?
+    <a routerLink="/auth/signup">Create account</a>
+  </p>
+
+  @if (authStore.isError() && authStore.error(); as errorMessage) {
+    <p class="login-error">{{ errorMessage }}</p>
+  }
+</app-auth-screen-shell>

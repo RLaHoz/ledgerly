@@ -1,0 +1,69 @@
+:host {
+  display: block;
+}
+
+.login-google {
+  align-items: center;
+  animation: fade-in-up 0.4s ease-out 0.1s both;
+  background: var(--text-primary);
+  border: 0;
+  border-radius: 9999px;
+  color: var(--background);
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 500;
+  gap: 10px;
+  inline-size: 100%;
+  justify-content: center;
+  min-block-size: 52px;
+  padding: 0 20px;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.login-google:active {
+  transform: scale(0.98);
+}
+
+.login-google:disabled {
+  opacity: 0.7;
+}
+
+.login-google__icon {
+  block-size: 20px;
+  inline-size: 20px;
+}
+
+.login-link-row {
+  animation: fade-in-up 0.4s ease-out 0.15s both;
+  color: var(--text-tertiary);
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 32px 0 0;
+  text-align: center;
+}
+
+.login-link-row a {
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-error {
+  color: #d44c5a;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

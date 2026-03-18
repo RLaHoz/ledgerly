@@ -1,0 +1,33 @@
+name: Technical Task
+description: Engineering work item (refactor/chore/infrastructure)
+labels: [tech-debt, needs-triage]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What technical outcome is expected?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: In-scope and out-of-scope
+    validations:
+      required: true
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Notes
+      description: Constraints, design, dependencies
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      placeholder: |
+        - [ ] lint/typecheck/tests/build pass
+        - [ ] tests cover happy + edge + error
+        - [ ] docs updated
+    validations:
+      required: true

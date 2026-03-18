@@ -1,0 +1,14 @@
+<section class="rules-quick-section" aria-label="Quick create">
+  <h2 class="rules-section-title">{{ title() }}</h2>
+
+  <div class="rules-quick-grid">
+    @for (item of cards(); track item.id) {
+      <button type="button" class="rules-quick-card" (click)="onSelect(item.id)">
+        <span class="rules-quick-icon" [class.auto]="item.tone === 'auto'" [class.alert]="item.tone === 'alert'" [class.anomaly]="item.tone === 'anomaly'">
+          <ion-icon [name]="iconName(item.tone)"></ion-icon>
+        </span>
+        <span class="rules-quick-label">{{ item.title }}</span>
+      </button>
+    }
+  </div>
+</section>

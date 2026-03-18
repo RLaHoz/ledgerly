@@ -1,0 +1,73 @@
+<ion-modal
+  [cssClass]="'adjust-budget-modal'"
+  class="adjust-budget-modal"
+  [isOpen]="isOpen()"
+  [showBackdrop]="true"
+  [backdropDismiss]="true"
+  (didDismiss)="dismissed.emit()"
+>
+  <ng-template>
+    <div class="modal-center-layer">
+      <article class="adjust-modal-card" aria-label="Adjust budget">
+        <header class="adjust-modal-header">
+          <div class="adjust-modal-copy">
+            <h3>{{ title() }}</h3>
+            <p>{{ description() }}</p>
+          </div>
+
+          <button type="button" aria-label="Close" (click)="dismissed.emit()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </header>
+
+        <section class="current-budget-card">
+          <span>Current budget</span>
+          <strong>{{ currentBudgetLabel() }}</strong>
+        </section>
+
+        <label class="adjust-field">
+          <span>New Monthly Budget</span>
+          <div class="adjust-input-wrap">
+            <strong>$</strong>
+            <input
+              type="number"
+              inputmode="decimal"
+              step="1"
+              autocomplete="off"
+              [value]="adjustAmount()"
+              (input)="amountChanged.emit($event)"
+            />
+          </div>
+        </label>
+
+        <button class="recommend-btn" type="button" (click)="recommendedSelected.emit()">
+          Set to recommended: {{ recommendedBudgetLabel() }}
+        </button>
+
+        <section class="adjust-subcategories">
+          <h4>Subcategory Budgets</h4>
+
+          @for (item of subcategories(); track item.id) {
+            <div class="adjust-subcategory-row">
+              <span>{{ item.name }}</span>
+              <div class="adjust-subcategory-input">
+                <span>$</span>
+                <input type="text" [value]="item.limitLabel.replace('$', '')" readonly />
+              </div>
+            </div>
+          }
+        </section>
+
+        <div class="balance-indicator">
+          <span>{{ balanceLabel() }}</span>
+          <span>{{ balanceStatusLabel() }}</span>
+        </div>
+
+        <footer class="adjust-actions">
+          <button type="button" class="btn-cancel" (click)="canceled.emit()">Cancel</button>
+          <button type="button" class="btn-save" [disabled]="!canSave()" (click)="saved.emit()">Save</button>
+        </footer>
+      </article>
+    </div>
+  </ng-template>
+</ion-modal>

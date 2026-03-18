@@ -1,0 +1,26 @@
+<section class="step-block">
+  <div class="section-intro">
+    <h1 class="section-title">Import your transactions</h1>
+    <p class="section-description">Upload your monthly statement to start setup.</p>
+  </div>
+
+  @if (wizard.loadUserTransactionsError(); as loadError) {
+    <article class="warning-banner">
+      <ion-icon name="warning-outline"></ion-icon>
+      <p>{{ loadError }}</p>
+    </article>
+  }
+
+  <app-transactions-resumen
+    [directDataFromBankAccounts]="wizard.directDataFromBankAccounts()"
+    [isParsing]="wizard.isParsing()"
+    [isImportReady]="wizard.isImportReady()"
+    [summary]="wizard.importSummary()"
+    [fileName]="wizard.fileName()"
+    (directDataFromBankAccountsChange)="wizard.setDirectDataFromBankAccounts($event)"
+  />
+
+  @if (wizard.isImportReady()) {
+    <app-onboarding-preview [rows]="wizard.importPreviewRows()" />
+  }
+</section>

@@ -1,0 +1,69 @@
+:host {
+  display: block;
+}
+
+.overview-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+}
+
+.overview-card h2 {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.metrics-grid {
+  display: flex;
+  gap: 16px;
+}
+
+.metric {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.label,
+.value {
+  margin: 0;
+}
+
+.label {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.value {
+  color: var(--text-primary);
+  font-feature-settings: 'tnum';
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.overview-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.overview-footer p {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0;
+}

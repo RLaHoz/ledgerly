@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.dashboard-page {
+  --dashboard-home: #3b82f6;
+  --dashboard-gym: #6366f1;
+  --dashboard-shopping: #ec4899;
+  --dashboard-transport: #f59e0b;
+  --dashboard-baby: #e879a8;
+  --dashboard-groceries: #22c55e;
+  --dashboard-entertainment: #f97316;
+  --dashboard-health: #ef4444;
+
+  display: grid;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 430px;
+  padding:
+    calc(var(--app-shell-header-offset, 60px) + 12px)
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 52px) + 44px)
+    max(20px, env(safe-area-inset-left, 0px));
+}

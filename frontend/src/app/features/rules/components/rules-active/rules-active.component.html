@@ -1,0 +1,42 @@
+<section class="rules-list-section" aria-label="Your rules">
+  <header class="rules-list-header">
+    <h2 class="rules-section-title">{{ title() }}</h2>
+    <button type="button" class="rules-list-add" (click)="addRequested.emit()">
+      <ion-icon name="add-outline"></ion-icon>
+      <span>{{ addLabel() }}</span>
+    </button>
+  </header>
+
+  <article class="rules-list-card">
+    @for (item of items(); track item.id) {
+      <section class="rules-list-row" [class.is-disabled]="!item.enabled">
+        <span class="rules-list-icon" [class.auto]="item.icon === 'tag'" [class.alert]="item.icon === 'bell'" [class.anomaly]="item.icon === 'warning'">
+          <ion-icon [name]="iconName(item.icon)"></ion-icon>
+        </span>
+
+        <div class="rules-list-copy">
+          <div class="rules-list-title-row">
+            <h3>{{ item.title }}</h3>
+          </div>
+
+          @if (item.enabled) {
+            <p class="rules-list-status-row enabled">
+              <ion-icon name="checkmark-outline"></ion-icon>
+              <span>{{ item.activity }}</span>
+            </p>
+          } @else {
+            <p class="rules-list-status-row paused">
+              <span>{{ item.activity }}</span>
+            </p>
+          }
+        </div>
+
+        <ion-toggle
+          aria-label="Toggle rule"
+          [checked]="item.enabled"
+          (ionChange)="onToggle(item.id, $event)"
+        />
+      </section>
+    }
+  </article>
+</section>

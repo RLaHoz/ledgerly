@@ -1,0 +1,76 @@
+<article class="data-source-card" [class.menu-open]="isFrequencyMenuOpen()" aria-label="Data sources">
+  <header class="card-header">
+    <h2>{{ model().title }}</h2>
+  </header>
+
+  <section class="sources-list">
+    @for (item of model().items; track item.id) {
+      <article class="source-row">
+        <div class="source-main">
+          <span class="source-icon" aria-hidden="true">
+            <ion-icon [name]="item.iconName"></ion-icon>
+          </span>
+
+          <div class="source-copy">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.subtitle }}</p>
+          </div>
+        </div>
+
+        <p class="source-status">
+          <ion-icon name="checkmark-outline" aria-hidden="true"></ion-icon>
+          <span>{{ item.statusLabel }}</span>
+        </p>
+      </article>
+    }
+  </section>
+
+  <div class="actions-row">
+    <button type="button" class="action-secondary" (click)="connectBankClicked.emit()">
+      <ion-icon name="business-outline" aria-hidden="true"></ion-icon>
+      <span>{{ model().connectBankLabel }}</span>
+    </button>
+
+    <button type="button" class="action-primary" (click)="uploadClicked.emit()">
+      <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
+      <span>{{ model().uploadLabel }}</span>
+    </button>
+  </div>
+
+  <div class="sync-row">
+    <p class="sync-label">
+      <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+      <span>{{ model().syncFrequencyLabel }}</span>
+    </p>
+
+    <div class="frequency-select-wrap" [class.open]="isFrequencyMenuOpen()">
+      <button
+        type="button"
+        class="frequency-select-trigger"
+        aria-label="Sync frequency"
+        (click)="toggleFrequencyMenu()"
+      >
+        <span>{{ model().selectedFrequencyLabel }}</span>
+        <ion-icon [name]="isFrequencyMenuOpen() ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+      </button>
+
+      @if (isFrequencyMenuOpen()) {
+        <ion-list class="frequency-options-menu" lines="none">
+          @for (option of model().frequencyOptions; track option) {
+            <ion-item
+              button
+              detail="false"
+              [class.selected]="option === model().selectedFrequencyLabel"
+              (click)="onFrequencyChange(option)"
+            >
+              <ion-label>{{ option }}</ion-label>
+              @if (option === model().selectedFrequencyLabel) {
+                <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+              }
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </div>
+  </div>
+</article>

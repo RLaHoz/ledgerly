@@ -1,0 +1,112 @@
+:host {
+  --dashboard-detail-link-color: var(--accent);
+  --dashboard-detail-focus: var(--focus-ring);
+
+  display: block;
+}
+
+.dashboard-categories-section {
+  display: grid;
+  gap: 12px;
+}
+
+.dashboard-section-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.dashboard-section-title {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  margin: 0;
+}
+
+.dashboard-link {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 2px;
+  padding: 0;
+}
+
+.dashboard-link ion-icon {
+  font-size: 12px;
+}
+
+.dashboard-categories-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.dashboard-category-row + .dashboard-category-row {
+  border-top: 1px solid var(--border);
+}
+
+.dashboard-category-row.is-expanded {
+  background: var(--surface);
+}
+
+.dashboard-category-trigger {
+  cursor: pointer;
+}
+
+.dashboard-category-trigger:focus-visible {
+  outline: 2px solid var(--dashboard-detail-focus);
+  outline-offset: -2px;
+}
+
+.dashboard-category-detail {
+  display: grid;
+  gap: 6px;
+  padding: 0 16px 14px 60px;
+}
+
+.dashboard-category-detail-summary,
+.dashboard-category-detail-recommendation {
+  line-height: 1.4;
+  margin: 0;
+}
+
+.dashboard-category-detail-summary {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dashboard-category-detail-recommendation {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dashboard-category-detail-link {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--dashboard-detail-link-color);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 4px;
+  margin-top: 2px;
+  padding: 0;
+  width: fit-content;
+}
+
+.dashboard-category-detail-link ion-icon {
+  font-size: 12px;
+}

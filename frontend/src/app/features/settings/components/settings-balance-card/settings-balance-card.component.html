@@ -1,0 +1,12 @@
+<article class="balance-card">
+  <div class="balance-copy">
+    <p class="balance-title">{{ balance().title }}</p>
+    <h3 class="balance-amount">{{ balance().amountLabel }}</h3>
+    <p class="balance-detail">{{ balance().detail }}</p>
+  </div>
+
+  <ion-button class="balance-action" type="button" (click)="onSettleClick()">
+    <ion-icon slot="start" name="paper-plane-outline"></ion-icon>
+    {{ balance().actionLabel }}
+  </ion-button>
+</article>

@@ -1,0 +1,25 @@
+<article class="main-budget-card" aria-label="Main budget summary">
+  <p class="month">{{ model().monthLabel }}</p>
+
+  <div class="amount-row">
+    <p class="amount">
+      <strong>{{ model().spentLabel }}</strong>
+      <span>/ {{ model().totalLabel }}</span>
+    </p>
+    <p class="percent">{{ model().usagePercentLabel }}</p>
+  </div>
+
+  <p class="remaining">{{ model().remainingLabel }} <span aria-hidden="true">&middot;</span> {{ model().daysLeftLabel }}</p>
+
+  <span class="progress-track" aria-hidden="true">
+    <span class="progress-fill" [style.width.%]="progressPercent()"></span>
+  </span>
+
+  <div class="projection-row">
+    <p class="projection">{{ model().projectionLabel }}</p>
+    <button class="action" type="button">{{ model().actionLabel }}</button>
+  </div>
+
+  <p class="pace">{{ model().paceLabel }}</p>
+  <p class="variance">{{ model().varianceLabel }}</p>
+</article>

@@ -1,0 +1,91 @@
+:host {
+  display: block;
+  width: min(384px, calc(100vw - 48px));
+}
+
+.unassigned-modal-card {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--bg-surface, #fff) 82%, #f4ce8e 18%),
+    color-mix(in srgb, var(--bg-surface, #fff) 92%, #fff 8%)
+  );
+  border: 1px solid color-mix(in srgb, var(--warning, #e39a3b) 28%, transparent);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg, 0 22px 50px rgb(2 6 23 / 34%));
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.modal-head {
+  align-items: flex-start;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.modal-icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--warning, #e39a3b) 16%, transparent);
+  border-radius: 12px;
+  color: var(--text-warning, #e39a3b);
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.modal-icon ion-icon {
+  font-size: 18px;
+}
+
+.modal-copy h2 {
+  color: var(--text-text-primary, #0b1220);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.modal-copy p {
+  color: var(--text-text-secondary, #4b5565);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+  margin: 8px 0 0;
+}
+
+.modal-actions {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.modal-actions ion-button {
+  --border-radius: 12px;
+  --height: 44px;
+  --text-transform: none;
+  margin: 0;
+}
+
+.modal-actions ion-button::part(native) {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+  margin: 0;
+}
+
+.btn-secondary {
+  --background: color-mix(in srgb, var(--bg-surface-secondary, #f2f4f8) 88%, #fff);
+  --border-color: var(--border, #e6eaf2);
+  --border-style: solid;
+  --border-width: 1px;
+  --color: var(--text-text-primary, #0b1220);
+}
+
+.btn-primary {
+  --background: var(--primary, #1e3a5f);
+  --color: var(--primary-foreground, #fff);
+}

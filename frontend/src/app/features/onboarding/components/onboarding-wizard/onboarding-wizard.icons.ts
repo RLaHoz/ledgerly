@@ -1,0 +1,86 @@
+import { addIcons } from 'ionicons';
+import {
+  alertCircleOutline,
+  airplaneOutline,
+  arrowBackOutline,
+  bagHandleOutline,
+  barbellOutline,
+  bodyOutline,
+  briefcaseOutline,
+  cardOutline,
+  cashOutline,
+  cartOutline,
+  checkmarkOutline,
+  chevronBackOutline,
+  chevronForwardOutline,
+  closeOutline,
+  cloudUploadOutline,
+  documentTextOutline,
+  ellipseOutline,
+  filmOutline,
+  flashOutline,
+  giftOutline,
+  happyOutline,
+  heartOutline,
+  homeOutline,
+  carOutline,
+  medkitOutline,
+  pawOutline,
+  peopleOutline,
+  pricetagOutline,
+  repeatOutline,
+  schoolOutline,
+  shieldCheckmarkOutline,
+  searchOutline,
+  shieldOutline,
+  sparklesOutline,
+  warningOutline,
+} from 'ionicons/icons';
+
+let onboardingIconsRegistered = false;
+
+export function registerOnboardingIcons(): void {
+  if (onboardingIconsRegistered) {
+    return;
+  }
+
+  addIcons({
+    'arrow-back-outline': arrowBackOutline,
+    'cloud-upload-outline': cloudUploadOutline,
+    'checkmark-outline': checkmarkOutline,
+    'document-text-outline': documentTextOutline,
+    'pricetag-outline': pricetagOutline,
+    'ellipse-outline': ellipseOutline,
+    'flash-outline': flashOutline,
+    'medkit-outline': medkitOutline,
+    'shield-checkmark-outline': shieldCheckmarkOutline,
+    'airplane-outline': airplaneOutline,
+    'school-outline': schoolOutline,
+    'people-outline': peopleOutline,
+    'paw-outline': pawOutline,
+    'repeat-outline': repeatOutline,
+    'card-outline': cardOutline,
+    'body-outline': bodyOutline,
+    'gift-outline': giftOutline,
+    'briefcase-outline': briefcaseOutline,
+    'cash-outline': cashOutline,
+    'chevron-forward-outline': chevronForwardOutline,
+    'chevron-back-outline': chevronBackOutline,
+    'search-outline': searchOutline,
+    'close-outline': closeOutline,
+    'sparkles-outline': sparklesOutline,
+    'warning-outline': warningOutline,
+    'shield-outline': shieldOutline,
+    'happy-outline': happyOutline,
+    'cart-outline': cartOutline,
+    'home-outline': homeOutline,
+    'car-outline': carOutline,
+    'barbell-outline': barbellOutline,
+    'bag-handle-outline': bagHandleOutline,
+    'film-outline': filmOutline,
+    'heart-outline': heartOutline,
+    'alert-circle-outline': alertCircleOutline,
+  });
+
+  onboardingIconsRegistered = true;
+}

@@ -1,0 +1,26 @@
+:host {
+  display: inline-flex;
+}
+
+.brand-mark {
+  block-size: 48px;
+  inline-size: 48px;
+}
+
+.brand-mark__tile {
+  fill: #dfe6f0;
+}
+
+.brand-mark__glyph,
+.brand-mark__accent {
+  fill: #1e2633;
+}
+
+:host-context(.theme-dark) .brand-mark__tile {
+  fill: #dfe6f0;
+}
+
+:host-context(.theme-dark) .brand-mark__glyph,
+:host-context(.theme-dark) .brand-mark__accent {
+  fill: #1b2432;
+}

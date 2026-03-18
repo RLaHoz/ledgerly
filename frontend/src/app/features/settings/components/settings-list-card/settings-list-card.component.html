@@ -1,0 +1,68 @@
+<article class="list-card">
+  @if (title()) {
+    <header class="list-header">
+      <h2>{{ title() }}</h2>
+    </header>
+  }
+
+  <section class="rows" [attr.aria-label]="title() || 'settings rows'">
+    @for (row of rows(); track trackById($index, row)) {
+      <article class="row" [class.row-with-icon]="!!leadingIcon()">
+        <div class="row-main">
+          @if (leadingIcon()) {
+            <span class="row-icon" aria-hidden="true">
+              <ion-icon [name]="leadingIcon()"></ion-icon>
+            </span>
+          }
+
+          <div class="row-copy">
+            <h3 class="row-title" [class.row-title-danger]="row.tone === 'danger'">{{ row.label }}</h3>
+
+            @if (row.description) {
+              <p class="row-description">{{ row.description }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="row-trailing">
+          @switch (row.type) {
+            @case ('value') {
+              <span class="row-value">{{ row.value }}</span>
+            }
+            @case ('toggle') {
+              <ion-toggle
+                class="row-toggle"
+                [checked]="row.checked"
+                (ionChange)="onToggleChange(row.id, $event)"
+                [aria-label]="row.label"
+              />
+            }
+            @case ('action') {
+              <button
+                class="row-action"
+                type="button"
+                [class.row-action-danger]="row.tone === 'danger'"
+                (click)="onActionClick(row.id)"
+              >
+                {{ row.actionLabel }}
+              </button>
+            }
+            @case ('select') {
+              <ion-select
+                class="row-select"
+                [value]="row.value"
+                interface="popover"
+                [aria-label]="row.label"
+                (ionChange)="onSelectChange(row.id, $event)"
+              >
+                @for (option of row.options; track option.value) {
+                  <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+                }
+              </ion-select>
+            }
+          }
+        </div>
+      </article>
+    }
+  </section>
+</article>

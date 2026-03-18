@@ -1,0 +1,21 @@
+<section class="signals-grid" aria-label="Budget signals">
+  @for (item of items(); track trackById($index, item)) {
+    <article class="signal-card" [class]="'signal-' + item.tone">
+      <div class="signal-number">
+        <ion-icon
+          class="signal-icon"
+          [name]="item.tone === 'on-track' ? 'checkmark-circle-outline' : item.tone === 'watch' ? 'warning-outline' : 'close-circle-outline'"
+        />
+        <div>
+          <p class="count">{{ item.count }}</p>
+        </div>
+      </div>
+
+
+      <div class="signal-copy">
+
+        <p class="label">{{ item.label }}</p>
+      </div>
+    </article>
+  }
+</section>

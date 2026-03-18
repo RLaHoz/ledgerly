@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.nontifications-card {
+  background: var(--settings-card-bg, #eff3f8);
+  border: 1px solid var(--settings-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--settings-card-shadow, var(--shadow-sm));
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom: 1px solid var(--settings-divider, var(--border));
+  padding: 14px 20px;
+}
+
+.card-header h2 {
+  color: var(--settings-section-title, #4c586b);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.rows {
+  display: grid;
+}
+
+.row {
+  align-items: center;
+  border-top: 1px solid var(--settings-divider, var(--border));
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.row:first-child {
+  border-top: 0;
+}
+
+.row-main {
+  align-items: center;
+  display: inline-flex;
+  gap: 10px;
+  min-width: 0;
+}
+
+.row-icon {
+  align-items: center;
+  color: var(--settings-icon, #8693a8);
+  display: inline-flex;
+  font-size: 16px;
+  justify-content: center;
+  width: 16px;
+}
+
+.row-copy {
+  min-width: 0;
+}
+
+.row-copy h3,
+.row-copy p {
+  margin: 0;
+}
+
+.row-copy h3 {
+  color: var(--settings-text-primary, #1b2334);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.08;
+}
+
+.row-copy p {
+  color: var(--settings-text-secondary, #7f8ca1);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.08;
+  margin-top: 4px;
+}
+
+.switch {
+  background: var(--settings-switch-off, #c4cfde);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  height: 18px;
+  padding: 2px;
+  transition: background 150ms ease;
+  width: 32px;
+}
+
+.switch-handle {
+  background: var(--settings-switch-handle, #f4f8fd);
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(25, 36, 56, 0.2);
+  display: block;
+  height: 14px;
+  transition: transform 150ms ease;
+  width: 14px;
+}
+
+.switch.is-on {
+  background: var(--settings-switch-on, #243f66);
+}
+
+.switch.is-on .switch-handle {
+  background: var(--settings-switch-on-handle, #f4f8fd);
+  transform: translateX(14px);
+}
+
+.row.is-off .row-icon,
+.row.is-off .row-copy h3 {
+  color: var(--settings-text-disabled, #8b98ab);
+}

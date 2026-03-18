@@ -1,0 +1,47 @@
+<ion-content [fullscreen]="true">
+  <section class="dashboard-page">
+    <app-dashboard-month-selector
+      [monthLabel]="monthLabel()"
+      (previousMonth)="onPreviousMonth()"
+      (nextMonth)="onNextMonth()"
+    />
+
+    <app-categories-over-budget
+      [categories]="overBudgetCategories"
+      (urgentCta)="onUrgentCta()"
+    />
+
+    <app-categories-ontrack-budget
+      [categories]="onTrackCategories"
+      (urgentCta)="onUrgentCta()"
+    />
+
+    <app-budget-card
+      [heroSpentLabel]="heroSpentLabel"
+      [heroBudgetLabel]="heroBudgetLabel"
+      [heroPercentageLabel]="heroPercentageLabel"
+      [heroPercentageTone]="heroPercentageTone"
+      [heroProgressPercent]="heroProgressPercent"
+      [heroRemainingLabel]="heroRemainingLabel"
+      [heroDaysRemainingLabel]="heroDaysRemainingLabel"
+      [heroForecastValueLabel]="heroForecastValueLabel"
+      [heroForecastSecondaryLabel]="heroForecastSecondaryLabel"
+      [heroForecastValueTone]="heroForecastValueTone"
+      [heroForecastActionLabel]="heroForecastActionLabel"
+      (forecastAdjust)="onForecastAdjust()"
+    />
+
+    <app-daily-spend-card
+      [dailySpendLabel]="dailySpendLabel"
+      [dailySpendValueLabel]="dailySpendValueLabel"
+      [currentPaceLabel]="currentPaceLabel"
+      [currentPaceValueLabel]="currentPaceValueLabel"
+      [currentPaceTone]="currentPaceTone"
+    />
+
+    <app-budget-categories-tracking
+      [items]="categoryItems"
+      (seeAll)="onSeeAll()"
+    />
+  </section>
+</ion-content>

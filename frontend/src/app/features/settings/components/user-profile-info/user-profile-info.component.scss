@@ -1,0 +1,89 @@
+:host {
+  display: block;
+}
+
+.profile-card {
+  align-items: center;
+  background: var(--settings-card-bg, #eff3f8);
+  border: 1px solid var(--settings-card-border, var(--border));
+  border-radius: 18px;
+  box-shadow: var(--settings-card-shadow, var(--shadow-sm));
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  padding: 20px;
+}
+
+.avatar {
+  align-items: center;
+  background: var(--settings-avatar-bg, #24477a);
+  border-radius: 999px;
+  color: var(--settings-avatar-text, #f0f5ff);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 700;
+  height: 44px;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1;
+  width: 44px;
+}
+
+.profile-copy {
+  min-width: 0;
+}
+
+.profile-copy h2,
+.profile-copy p {
+  margin: 0;
+}
+
+.profile-copy h2 {
+  color: var(--settings-text-strong, #111b30);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.08;
+}
+
+.profile-copy p {
+  color: var(--settings-text-secondary, #7f8ca1);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.08;
+  margin-top: 5px;
+}
+
+.profile-logout-button {
+  align-items: center;
+  align-self: start;
+  background: var(--settings-logout-bg, transparent);
+  border: 1px solid var(--settings-logout-border, var(--settings-card-border, var(--border)));
+  border-radius: 12px;
+  color: var(--settings-logout-text, var(--critical));
+  cursor: pointer;
+  display: inline-flex;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.profile-logout-button ion-icon {
+  font-size: 16px;
+}
+
+.profile-logout-button span {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.profile-logout-button:active {
+  background: var(--settings-logout-active-bg, var(--critical-soft));
+  border-color: var(--settings-logout-active-border, color-mix(in srgb, var(--critical) 28%, transparent));
+}

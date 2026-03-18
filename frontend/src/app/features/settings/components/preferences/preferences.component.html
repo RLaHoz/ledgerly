@@ -1,0 +1,152 @@
+<article class="preferences-card" [class.menu-open]="openDropdown() !== null" aria-label="Preferences">
+  <header class="card-header">
+    <h2>{{ model().title }}</h2>
+  </header>
+
+  <section class="rows">
+    <article class="row">
+      <div class="row-main">
+        <span class="row-icon" aria-hidden="true">
+          <ion-icon name="globe-outline"></ion-icon>
+        </span>
+
+        <div class="row-copy">
+          <h3>Currency</h3>
+          <p>Display currency</p>
+        </div>
+      </div>
+
+      <div class="row-select-wrap" [class.open]="isDropdownOpen('currency')">
+        <button type="button" class="row-select-trigger" aria-label="Currency" (click)="toggleDropdown('currency')">
+          <span>{{ model().currencyValue }}</span>
+          <ion-icon [name]="isDropdownOpen('currency') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+        </button>
+
+        @if (isDropdownOpen('currency')) {
+          <ion-list class="row-options-menu" lines="none">
+            @for (option of model().currencyOptions; track option) {
+              <ion-item
+                button
+                detail="false"
+                [class.selected]="option === model().currencyValue"
+                (click)="onCurrencyChange(option)"
+              >
+                <ion-label>{{ option }}</ion-label>
+                @if (option === model().currencyValue) {
+                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+                }
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </div>
+    </article>
+
+    <article class="row">
+      <div class="row-main">
+        <span class="row-icon" aria-hidden="true">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </span>
+
+        <div class="row-copy">
+          <h3>Month Start</h3>
+          <p>Budget cycle day</p>
+        </div>
+      </div>
+
+      <div class="row-select-wrap" [class.open]="isDropdownOpen('monthStart')">
+        <button type="button" class="row-select-trigger" aria-label="Month start" (click)="toggleDropdown('monthStart')">
+          <span>{{ model().monthStartValue }}</span>
+          <ion-icon [name]="isDropdownOpen('monthStart') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+        </button>
+
+        @if (isDropdownOpen('monthStart')) {
+          <ion-list class="row-options-menu" lines="none">
+            @for (option of model().monthStartOptions; track option) {
+              <ion-item
+                button
+                detail="false"
+                [class.selected]="option === model().monthStartValue"
+                (click)="onMonthStartChange(option)"
+              >
+                <ion-label>{{ option }}</ion-label>
+                @if (option === model().monthStartValue) {
+                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+                }
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </div>
+    </article>
+
+    <article class="row" [class.is-off]="!model().familyModeEnabled">
+      <div class="row-main">
+        <span class="row-icon" aria-hidden="true">
+          <ion-icon name="people-outline"></ion-icon>
+        </span>
+
+        <div class="row-copy">
+          <h3>Family Mode</h3>
+          <p>Share with partner</p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="switch"
+        [class.is-on]="model().familyModeEnabled"
+        aria-label="Family mode"
+        [attr.aria-pressed]="model().familyModeEnabled"
+        (click)="onFamilyModeToggle()"
+      >
+        <span class="switch-handle"></span>
+      </button>
+    </article>
+
+    <article class="row">
+      <div class="row-main">
+        <span class="row-icon" aria-hidden="true">
+          <ion-icon name="sunny-outline"></ion-icon>
+        </span>
+
+        <div class="row-copy">
+          <h3>Theme</h3>
+          <p>Appearance</p>
+        </div>
+      </div>
+
+      <div class="theme-segment" role="group" aria-label="Theme mode">
+        <button
+          type="button"
+          class="theme-option"
+          [class.is-active]="isThemeActive('light')"
+          (click)="themeModeChanged.emit('light')"
+        >
+          <ion-icon name="sunny-outline"></ion-icon>
+          <span>Light</span>
+        </button>
+
+        <button
+          type="button"
+          class="theme-option"
+          [class.is-active]="isThemeActive('dark')"
+          (click)="themeModeChanged.emit('dark')"
+        >
+          <ion-icon name="moon-outline"></ion-icon>
+          <span>Dark</span>
+        </button>
+
+        <button
+          type="button"
+          class="theme-option"
+          [class.is-active]="isThemeActive('auto')"
+          (click)="themeModeChanged.emit('auto')"
+        >
+          <ion-icon name="desktop-outline"></ion-icon>
+          <span>Auto</span>
+        </button>
+      </div>
+    </article>
+  </section>
+</article>

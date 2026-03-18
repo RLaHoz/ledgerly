@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--background);
+  color: var(--text-primary);
+}
+
+.budget-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 430px;
+  padding:
+    calc(var(--app-shell-header-offset, 60px) + 12px)
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 52px) + 44px)
+    max(20px, env(safe-area-inset-left, 0px));
+}

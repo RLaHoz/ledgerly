@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.balance-card {
+  align-items: center;
+  background: var(--settings-input-bg, color-mix(in srgb, var(--app-card) 92%, transparent));
+  border: 0;
+  border-radius: calc(var(--app-radius-md) + 4px);
+  box-shadow: var(--settings-card-shadow);
+  column-gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 14px 16px;
+}
+
+.balance-copy {
+  min-width: 0;
+}
+
+.balance-title {
+  color: var(--app-text-2);
+  font-size: 11px;
+  line-height: 14px;
+  margin: 0;
+}
+
+.balance-amount {
+  color: var(--app-text-1);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.02em;
+  margin: 4px 0 3px;
+}
+
+.balance-detail {
+  color: var(--app-text-2);
+  font-size: 10px;
+  line-height: 14px;
+  margin: 0;
+}
+
+.balance-action {
+  --background: var(--settings-tab-active-bg, var(--app-tab-active));
+  --border-radius: 15px;
+  --box-shadow: none;
+  --color: #f8fbff;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}

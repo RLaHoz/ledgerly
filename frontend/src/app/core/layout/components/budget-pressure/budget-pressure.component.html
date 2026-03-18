@@ -1,0 +1,14 @@
+<section class="budget-pressure" aria-label="Budget pressure categories">
+  <header class="section-head">
+    <h2 class="section-title">{{ title() }}</h2>
+    <button class="view-all" type="button" (click)="viewAllRequested.emit()">{{ viewAllLabel() }} &#8250;</button>
+  </header>
+
+  <article class="pressure-card">
+    @for (item of items(); track item.id) {
+      <div class="pressure-row">
+        <app-budget-item [item]="item" [editable]="editable()" (itemAction)="onItemAction($event)" />
+      </div>
+    }
+  </article>
+</section>

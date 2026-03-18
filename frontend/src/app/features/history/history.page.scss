@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--app-bg);
+  color: var(--app-text-1);
+}
+
+.feature-page {
+  padding:
+    var(--app-shell-header-offset, 112px)
+    max(16px, env(safe-area-inset-right, 0px))
+    calc(var(--app-shell-tabs-offset, 58px) + 16px)
+    max(16px, env(safe-area-inset-left, 0px));
+}

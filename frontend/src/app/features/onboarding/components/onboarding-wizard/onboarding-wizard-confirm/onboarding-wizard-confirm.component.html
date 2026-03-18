@@ -1,0 +1,94 @@
+<section class="step-block">
+  <div class="section-intro">
+    <h1 class="section-title">Review your setup</h1>
+    <p class="section-description">Confirm everything before finishing.</p>
+  </div>
+
+  <article class="surface-card review-card">
+    <h2>Imported data</h2>
+    <div class="summary-row"><p>Transactions processed</p><p>{{ wizard.allTransactionsProcessed() }}</p></div>
+    <div class="summary-row"><p>Invalid / skipped</p><p>{{ wizard.importSummary()?.invalidRows ?? 0 }}</p></div>
+    <div class="summary-row"><p>Uncategorized</p><p class="warning">{{ wizard.uncategorizedCount() }}</p></div>
+    <div class="summary-row">
+      <p>Date range</p>
+      <p>{{ wizard.importSummary()?.dateRangeLabel ?? '-' }}</p>
+    </div>
+  </article>
+
+  <article class="surface-card review-card">
+    <h2>Category assignment</h2>
+    <div class="summary-row"><p>Categories used</p><p>{{ wizard.usedCategories().length }}</p></div>
+    <div class="summary-row"><p>Auto-assigned</p><p>{{ wizard.autoAssignedCount() }}</p></div>
+    <div class="summary-row"><p>Manually assigned</p><p>{{ wizard.manualAssignedCount() }}</p></div>
+    <div class="summary-row"><p>Still uncategorized</p><p class="warning">{{ wizard.uncategorizedCount() }}</p></div>
+  </article>
+
+  <article class="surface-card review-card">
+    <h2>Budget overview</h2>
+    <div class="summary-row">
+      <p>Monthly target</p>
+      <p>
+        @if (wizard.monthlyTarget() === null) {
+          Sum of categories
+        } @else {
+          {{ formatMoney(wizard.monthlyTarget() ?? 0) }}
+        }
+      </p>
+    </div>
+    <div class="summary-row"><p>Assigned total</p><p>{{ formatMoney(wizard.assignedTotal()) }}</p></div>
+  </article>
+
+  <article class="surface-card planned-card">
+    <h2>Planned by category</h2>
+    <div class="planned-rows">
+      @for (category of wizard.usedCategories(); track category.slug) {
+        <div class="planned-row">
+          <span class="cat-icon" [style.background]="category.colorHex + '18'">
+            <ion-icon [name]="category.iconName" [style.color]="category.colorHex"></ion-icon>
+          </span>
+          <div class="cat-copy">
+            <p class="cat-name">{{ category.name }}</p>
+            <p class="cat-imported">
+              Imported: {{ formatMoney(wizard.importedAmountBySlug(category.slug)) }}
+            </p>
+          </div>
+          <p class="planned-value">{{ formatMoney(wizard.categoryBudgetBySlug(category.slug)) }}</p>
+        </div>
+      }
+    </div>
+  </article>
+
+  <article class="surface-card starter-rules-card">
+    <h2>Starter rules</h2>
+    @for (rule of wizard.starterRules(); track rule.id) {
+      <div class="rule-row">
+        <div class="rule-main">
+          <ion-icon [name]="rule.iconName"></ion-icon>
+          <p>{{ rule.label }}</p>
+        </div>
+        <ion-toggle
+          [checked]="rule.enabled"
+          (ionChange)="wizard.toggleRule(rule.id, $any($event).detail?.checked === true)"
+        ></ion-toggle>
+      </div>
+    }
+  </article>
+
+  @if (hasUncategorized()) {
+    <article class="warning-banner">
+      <ion-icon name="warning-outline"></ion-icon>
+      <p>
+        {{ wizard.uncategorizedCount() }} transactions still uncategorized. You can go back to fix or
+        finish anyway.
+      </p>
+    </article>
+  }
+
+  <label class="confirm-row">
+    <ion-checkbox
+      [checked]="wizard.confirmAccepted()"
+      (ionChange)="wizard.setConfirmAccepted($any($event).detail?.checked === true)"
+    ></ion-checkbox>
+    <p>I confirm these categories and budgets.</p>
+  </label>
+</section>

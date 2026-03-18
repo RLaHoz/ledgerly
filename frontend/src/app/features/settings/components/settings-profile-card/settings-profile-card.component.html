@@ -1,0 +1,40 @@
+<article class="profile-card">
+  <header class="profile-header">
+    <div class="avatar">{{ profileInitials() }}</div>
+
+    <div class="profile-identity">
+      <h3>{{ profileName() }}</h3>
+      <p>{{ profile().email }}</p>
+    </div>
+
+    <button class="profile-actions" type="button" aria-label="Profile settings">
+      <ion-icon name="settings-outline"></ion-icon>
+    </button>
+  </header>
+
+  <form class="profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="field-grid">
+      <label class="field">
+        <span>First Name</span>
+        <ion-input class="field-input" fill="outline" formControlName="firstName"></ion-input>
+      </label>
+
+      <label class="field">
+        <span>Last Name</span>
+        <ion-input class="field-input" fill="outline" formControlName="lastName"></ion-input>
+      </label>
+    </div>
+
+    <label class="field">
+      <span>Email</span>
+      <ion-input class="field-input" fill="outline" formControlName="email" type="email"></ion-input>
+    </label>
+
+    <label class="field">
+      <span>Phone</span>
+      <ion-input class="field-input" fill="outline" formControlName="phone" type="tel"></ion-input>
+    </label>
+
+    <ion-button class="save-button" type="submit" expand="block">Save Profile</ion-button>
+  </form>
+</article>

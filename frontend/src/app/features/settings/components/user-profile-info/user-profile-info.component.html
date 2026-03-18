@@ -1,0 +1,13 @@
+<article class="profile-card" aria-label="Profile">
+  <span class="avatar">{{ model().initials }}</span>
+
+  <div class="profile-copy">
+    <h2>{{ model().fullName }}</h2>
+    <p>{{ model().email }}</p>
+  </div>
+
+  <button class="profile-logout-button" type="button" (click)="onLogoutClick()">
+    <ion-icon name="log-out-outline" aria-hidden="true"></ion-icon>
+    <span>Logout</span>
+  </button>
+</article>

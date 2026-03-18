@@ -1,0 +1,37 @@
+<ion-content [fullscreen]="true">
+  <section class="budget-page">
+    <app-budget-overview [model]="overview()" />
+
+    <app-budget-category
+      [title]="'CATEGORY BUDGETS'"
+      [editLabel]="'Add category'"
+      [items]="categoryCards()"
+      (editRequested)="onEditBudgets()"
+      (itemAction)="onCategoryItemAction($event)"
+    />
+  </section>
+
+  <ion-modal
+    [cssClass]="'new-budget-modal'"
+    class="new-budget-modal"
+    [isOpen]="store.isNewBudgetModalOpen()"
+    [showBackdrop]="true"
+    [backdropDismiss]="true"
+    (didDismiss)="onCloseNewBudget()"
+  >
+    <ng-template>
+      <div class="modal-center-layer">
+        <app-new-budget
+          [categoryName]="store.newBudgetNameInput()"
+          [monthlyBudget]="store.newBudgetAmountInput()"
+          [canAdd]="store.canCreateNewBudget()"
+          (closed)="onCloseNewBudget()"
+          (canceled)="onCloseNewBudget()"
+          (categoryNameChanged)="onNewBudgetNameInput($event)"
+          (monthlyBudgetChanged)="onNewBudgetAmountInput($event)"
+          (addRequested)="onAddNewBudget()"
+        />
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

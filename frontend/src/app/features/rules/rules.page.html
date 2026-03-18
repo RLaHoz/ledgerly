@@ -1,0 +1,66 @@
+<ion-content [fullscreen]="true">
+  <section class="rules-page">
+    <app-rules-health-summary
+      [title]="summaryTitle"
+      [subtitle]="summarySubtitle()"
+      [stats]="summaryStats()"
+    />
+
+    <app-rules-quick-template
+      [title]="store.quickTemplatesTitle()"
+      [items]="store.quickTemplates()"
+      (selected)="onQuickCreateSelected($event)"
+    />
+
+    <app-rules-active
+      [title]="store.activeTitle()"
+      [addLabel]="store.addLabel()"
+      [items]="rulesListItems()"
+      (addRequested)="onOpenAddRule()"
+      (toggled)="onRuleToggle($event)"
+    />
+
+    <app-rules-triggered-alerts
+      [title]="store.triggeredTitle()"
+      [summary]="store.triggeredSummary()"
+      [items]="store.triggeredAlerts()"
+    />
+  </section>
+
+  <ion-modal
+    [cssClass]="'rules-add-modal'"
+    class="rules-add-modal"
+    [isOpen]="store.isAddRuleModalOpen()"
+    [showBackdrop]="true"
+    [backdropDismiss]="true"
+    (didDismiss)="onCloseAddRule()"
+  >
+    <ng-template>
+      <div class="modal-center-layer">
+        <app-rules-add-item
+          [ruleName]="store.addDraft().ruleName"
+          [ruleType]="store.addDraft().ruleType"
+          [conditionField]="store.addDraft().conditionField"
+          [conditionValue]="store.addDraft().conditionValue"
+          [actionType]="store.addDraft().actionType"
+          [actionValue]="store.addDraft().actionValue"
+          [showTypeSelector]="showTypeSelector()"
+          [ruleTypeOptions]="store.ruleTypeOptions()"
+          [conditionFieldOptions]="store.conditionFieldOptions()"
+          [actionTypeOptions]="store.actionTypeOptions()"
+          [actionValueOptions]="store.actionValueOptions()"
+          [canCreate]="store.canCreateRule()"
+          (closed)="onCloseAddRule()"
+          (canceled)="onCloseAddRule()"
+          (created)="onCreateRule()"
+          (ruleNameChanged)="onRuleNameChanged($event)"
+          (ruleTypeChanged)="onRuleTypeChanged($event)"
+          (conditionFieldChanged)="onConditionFieldChanged($event)"
+          (conditionValueChanged)="onConditionValueChanged($event)"
+          (actionTypeChanged)="onActionTypeChanged($event)"
+          (actionValueChanged)="onActionValueChanged($event)"
+        />
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>
