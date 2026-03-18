@@ -1,21 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import type { BankAuthClient, BankAuthorizeContext } from './bank-auth.types';
+import type {
+  BankAuthClient,
+  BankAuthorizeContext,
+  CreateAuthorizeUrlInput,
+} from './bank-auth.types';
 
 @Injectable()
 export class MockCdrClient implements BankAuthClient {
   constructor(private readonly config: ConfigService) {}
 
-  createAuthorizeUrl(): Promise<BankAuthorizeContext> {
+  createAuthorizeUrl(
+    input: CreateAuthorizeUrlInput,
+  ): Promise<BankAuthorizeContext> {
     const clientId = this.config.getOrThrow<string>('CDR_CLIENT_ID');
-    const redirectUri = this.config.getOrThrow<string>('CDR_REDIRECT_URI');
+    const redirectUri =
+      input.redirectUri?.trim() ||
+      this.config.getOrThrow<string>('CDR_REDIRECT_URI');
     const scope = this.config.getOrThrow<string>('CDR_SCOPE');
     const authorizeEndpoint =
       this.config.get<string>('CDR_MOCK_AUTHORIZE_ENDPOINT')?.trim() ||
       'http://localhost:3000/api/auth/mock/authorize';
 
-    const state = randomUUID();
+    const state = input.state;
     const nonce = randomUUID();
     const codeVerifier = base64Url(randomBytes(32));
     const codeChallenge = base64Url(

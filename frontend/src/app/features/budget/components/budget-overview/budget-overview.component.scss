@@ -1,20 +1,19 @@
 :host {
   display: block;
-  padding-top: 15px;
 }
 
 .overview-card {
-  background: var(--budget-card-bg, #eff3f8);
-  border: 1px solid var(--budget-card-border, var(--border));
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  box-shadow: var(--budget-card-shadow, var(--shadow-sm));
+  box-shadow: var(--shadow-sm);
   display: grid;
-  gap: 24px;
+  gap: 12px;
   padding: 20px;
 }
 
 .overview-card h2 {
-  color: var(--budget-section-title, #4b576a);
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -39,18 +38,32 @@
 }
 
 .label {
-  color: var(--budget-muted, #7f8ca1);
-  font-size: 12px;
+  color: var(--text-tertiary);
+  font-size: 11px;
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .value {
-  color: var(--budget-strong, #111b30);
+  color: var(--text-primary);
   font-feature-settings: 'tnum';
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 650;
   letter-spacing: 0;
-  line-height: 1.08;
+  line-height: 1.2;
   margin-top: 2px;
+}
+
+.overview-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.overview-footer p {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0;
 }

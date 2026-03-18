@@ -1,11 +1,35 @@
 import { DestroyRef, Injectable, Injector, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { EMPTY } from 'rxjs';
-import { catchError, distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs/operators';
+import { EMPTY, timer } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  expand,
+  filter,
+  last,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { AuthStore } from '../../store/auth.store';
 import { BasiqConsentUiService } from './basiq-consent-ui.service';
 import { AuthService } from '../auth.service';
+import { AuthFlowLoggerService } from '../auth-flow-logger.service';
+import {
+  isPendingVerificationResult,
+  validateConsentCallbackEvent,
+} from './bank-link-coordinator.util';
+import {
+  BankConsentVerificationResponse,
+  BasiqConsentCallbackEvent,
+} from '../../models/bank.models';
+import { AUTH_CONNECT_BANK_ROUTE } from '../../store/auth-route.constants';
+
+const CONSENT_VERIFY_RETRY_DELAY_MS = 1500;
+const CONSENT_VERIFY_MAX_ATTEMPTS = 20;
 
 @Injectable({ providedIn: 'root' })
 export class BankLinkCoordinatorService {
@@ -15,6 +39,7 @@ export class BankLinkCoordinatorService {
   private readonly authStore = inject(AuthStore);
   private readonly authService = inject(AuthService);
   private readonly consentUi = inject(BasiqConsentUiService);
+  private readonly logger = inject(AuthFlowLoggerService);
 
   private initialized = false;
   private lastOpenedAuthorizeUrl: string | null = null;
@@ -73,89 +98,43 @@ export class BankLinkCoordinatorService {
       .subscribe();
   }
 
-  private processConsentCallback(event: {
-    state: string | null;
-    jobId: string | null;
-    jobIds: string[];
-  }): void {
+  private processConsentCallback(event: BasiqConsentCallbackEvent): void {
     const expectedState = this.authStore.pendingConsentState();
+    const allowNativeStateRecovery = Capacitor.isNativePlatform() && !expectedState;
+    const validation = validateConsentCallbackEvent(
+      event,
+      expectedState,
+      allowNativeStateRecovery,
+    );
 
-    if (!event.state || !expectedState || event.state !== expectedState) {
-      console.warn('[BankLink] Invalid consent callback state', {
+    if (!validation.ok) {
+      this.failConsentFlow(validation.message);
+      return;
+    }
+
+    if (allowNativeStateRecovery) {
+      this.logger.info('Proceeding with native callback despite missing local pending state', {
         callbackState: event.state,
-        expectedState,
       });
-      this.authStore.setBankLinkError('Invalid consent callback state');
-      this.lastOpenedAuthorizeUrl = null;
-      void this.router.navigateByUrl('/auth', { replaceUrl: true });
-      return;
     }
 
-    const jobIds = [...new Set([...(event.jobIds ?? []), ...(event.jobId ? [event.jobId] : [])])];
-
-    if (jobIds.length === 0) {
-      this.authStore.setBankLinkError('No consent jobs returned by provider');
-      this.lastOpenedAuthorizeUrl = null;
-      void this.router.navigateByUrl('/auth', { replaceUrl: true });
-      return;
+    if (Capacitor.isNativePlatform()) {
+      this.closeNativeConsentUi();
     }
 
-    this.authService
-      .verifyBankConsent({ state: event.state, jobIds })
+    this.verifyBankConsentUntilSettled(validation.state, validation.jobIds)
       .pipe(
         take(1),
-        tap((result) => {
-          if (!result.success) {
-            console.warn('[BankLink] Consent verification failed', {
-              state: event.state,
-              jobIds,
-              failedJobIds: result.failedJobIds,
-              pendingJobIds: result.pendingJobIds,
-              message: result.message,
-            });
-            this.authStore.setBankLinkError(result.message);
-            this.lastOpenedAuthorizeUrl = null;
-            void this.router.navigateByUrl('/auth', { replaceUrl: true });
-            return;
-          }
-
-          console.info('[BankLink] Consent verification succeeded', {
-            state: event.state,
-            jobIds,
-            appUserId: result.context?.appUserId ?? this.authStore.user()?.id,
-            providerCode: result.context?.providerCode,
-            providerUserId: result.context?.providerUserId,
-            providerConnectionIds: result.context?.providerConnectionIds ?? [],
-            isFirstSuccessfulConsentForUser:
-              result.context?.isFirstSuccessfulConsentForUser ?? false,
-            isFirstBankConnectionForUser:
-              result.context?.isFirstBankConnectionForUser ?? false,
-            userConsentProfile:
-              result.context?.isFirstSuccessfulConsentForUser
-                ? 'first_time_user'
-                : 'returning_user',
-            // Use these IDs in your backend transaction sync/fetch endpoint.
-            transactionApiContext: result.context,
+        tap((result) =>
+          this.handleConsentVerificationResult(result, validation.state, validation.jobIds),
+        ),
+        catchError((error) => {
+          this.logger.error('Consent verification request failed', {
+            state: validation.state,
+            jobIds: validation.jobIds,
+            error,
           });
-
-          this.authStore.markBankConnected({
-            isFirstBankConnectionForUser:
-              result.context?.isFirstBankConnectionForUser ?? null,
-          });
-          this.lastOpenedAuthorizeUrl = null;
-          const targetRoute =
-            this.authStore.getBootstrapTargetRoute('/auth') ?? '/auth';
-
-          void this.router.navigateByUrl(targetRoute, { replaceUrl: true });
-        }),
-        catchError(() => {
-          console.error('[BankLink] Consent verification request failed', {
-            state: event.state,
-            jobIds,
-          });
-          this.authStore.setBankLinkError('Unable to verify consent');
-          this.lastOpenedAuthorizeUrl = null;
-          void this.router.navigateByUrl('/auth', { replaceUrl: true });
+          this.failConsentFlow('Unable to verify consent');
           return EMPTY;
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -171,6 +150,105 @@ export class BankLinkCoordinatorService {
           this.lastOpenedAuthorizeUrl = null;
         }),
         takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+
+  private verifyBankConsentUntilSettled(state: string, jobIds: string[]) {
+    const payload = { state, jobIds };
+
+    return this.authService.verifyBankConsent(payload).pipe(
+      expand((result, attemptIndex) => {
+        const shouldRetry =
+          isPendingVerificationResult(result) &&
+          attemptIndex + 1 < CONSENT_VERIFY_MAX_ATTEMPTS;
+
+        if (!shouldRetry) {
+          return EMPTY;
+        }
+
+        return timer(CONSENT_VERIFY_RETRY_DELAY_MS).pipe(
+          switchMap(() => this.authService.verifyBankConsent(payload)),
+        );
+      }),
+      last(),
+      map((result) => {
+        if (!isPendingVerificationResult(result)) {
+          return result;
+        }
+
+        return {
+          ...result,
+          message:
+            'Consent verification is taking longer than expected. Please retry in a moment.',
+        };
+      }),
+    );
+  }
+
+  private handleConsentVerificationResult(
+    result: BankConsentVerificationResponse,
+    state: string,
+    jobIds: string[],
+  ): void {
+    if (!result.success) {
+      this.logger.warn('Consent verification failed', {
+        state,
+        jobIds,
+        failedJobIds: result.failedJobIds,
+        pendingJobIds: result.pendingJobIds,
+        message: result.message,
+      });
+      this.failConsentFlow(result.message);
+      return;
+    }
+
+    this.logger.info('Consent verification succeeded', {
+      state,
+      jobIds,
+      appUserId: result.session?.user.id ?? result.context?.appUserId,
+      providerCode: result.context?.providerCode,
+      providerUserId: result.context?.providerUserId,
+      providerConnectionIds: result.context?.providerConnectionIds ?? [],
+      isFirstSuccessfulConsentForUser:
+        result.context?.isFirstSuccessfulConsentForUser ?? false,
+      wasFirstSuccessfulBankConnection:
+        result.context?.wasFirstSuccessfulBankConnection ?? false,
+      hasConnectedBank: result.context?.hasConnectedBank ?? false,
+      bankConnectionState:
+        result.session?.bankConnectionState ?? result.context?.bankConnectionState ?? null,
+      userConsentProfile:
+        result.context?.isFirstSuccessfulConsentForUser
+          ? 'first_time_user'
+          : 'returning_user',
+      onboardingCompleted: result.session?.onboardingCompleted ?? null,
+      transactionApiContext: result.context,
+    });
+
+    if (!result.session) {
+      this.failConsentFlow('Consent verification did not return a session');
+      return;
+    }
+
+    this.authStore.adoptSession(result.session);
+    this.lastOpenedAuthorizeUrl = null;
+
+    const targetRoute = this.authStore.getPostAuthTargetRoute();
+    void this.router.navigateByUrl(targetRoute, { replaceUrl: true });
+  }
+
+  private failConsentFlow(message: string): void {
+    this.authStore.setBankLinkError(message);
+    this.lastOpenedAuthorizeUrl = null;
+    void this.router.navigateByUrl(AUTH_CONNECT_BANK_ROUTE, { replaceUrl: true });
+  }
+
+  private closeNativeConsentUi(): void {
+    this.consentUi
+      .closeConsent()
+      .pipe(
+        take(1),
+        catchError(() => EMPTY),
       )
       .subscribe();
   }

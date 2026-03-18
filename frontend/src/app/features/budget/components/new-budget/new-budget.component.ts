@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { closeOutline } from 'ionicons/icons';
+import { addOutline, closeOutline, trashOutline } from 'ionicons/icons';
+
+type DraftSubcategory = {
+  id: number;
+  name: string;
+  amount: string;
+};
 
 @Component({
   selector: 'app-new-budget',
@@ -22,9 +28,13 @@ export class NewBudgetComponent {
   readonly canceled = output<void>();
   readonly addRequested = output<void>();
 
+  readonly subcategories = signal<readonly DraftSubcategory[]>([{ id: 1, name: '', amount: '' }]);
+
   constructor() {
     addIcons({
+      'add-outline': addOutline,
       'close-outline': closeOutline,
+      'trash-outline': trashOutline,
     });
   }
 
@@ -36,5 +46,33 @@ export class NewBudgetComponent {
   onMonthlyBudgetInput(event: Event): void {
     const target = event.target as HTMLInputElement | null;
     this.monthlyBudgetChanged.emit(target?.value ?? '');
+  }
+
+  onAddSubcategory(): void {
+    const nextId = this.subcategories().reduce((maxId, item) => Math.max(maxId, item.id), 0) + 1;
+    this.subcategories.update((items) => [...items, { id: nextId, name: '', amount: '' }]);
+  }
+
+  onSubcategoryNameInput(id: number, event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    this.subcategories.update((items) =>
+      items.map((item) => (item.id === id ? { ...item, name: target?.value ?? '' } : item)),
+    );
+  }
+
+  onSubcategoryAmountInput(id: number, event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    const nextAmount = (target?.value ?? '').replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');
+
+    this.subcategories.update((items) =>
+      items.map((item) => (item.id === id ? { ...item, amount: nextAmount } : item)),
+    );
+  }
+
+  onDeleteSubcategory(id: number): void {
+    this.subcategories.update((items) => {
+      const nextItems = items.filter((item) => item.id !== id);
+      return nextItems.length > 0 ? nextItems : [{ id: Date.now(), name: '', amount: '' }];
+    });
   }
 }

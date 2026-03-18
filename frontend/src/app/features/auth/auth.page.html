@@ -1,10 +1,1 @@
-<app-backing-authentication
-  [isIdle]="authStore.isIdle()"
-  [isLoading]="isBankLinkLoading()"
-  [isSuccess]="authStore.isSuccess()"
-  [isError]="authStore.isError()"
-  [errorMessage]="authStore.error()"
-  [themeIcon]="themeStore.themeIcon()"
-  (chageTheme)="onToggleTheme()"
-  (connectWithBank)="onConnectWithBank()"
- />
+<router-outlet />

@@ -1,17 +1,19 @@
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
-import { IonCheckbox, IonIcon } from '@ionic/angular/standalone';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { IonIcon } from '@ionic/angular/standalone';
+import { OnboardingPreviewComponent } from '../../onboarding-preview/onboarding-preview.component';
 import { OnboardingWizardStore } from '../../../store/onboarding-wizard.store';
+import { TransactionsResumenComponent } from '../../transactions-resumen/transactions-resumen.component';
 
 @Component({
   selector: 'app-onboarding-wizard-import',
   standalone: true,
-  imports: [IonIcon, IonCheckbox],
+  imports: [IonIcon, TransactionsResumenComponent, OnboardingPreviewComponent],
   templateUrl: './onboarding-wizard-import.component.html',
   styleUrl: './onboarding-wizard-import.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingWizardImportComponent {
-  @Input({ required: true }) fileInputId!: string;
+  readonly fileInputId = input.required<string>();
 
   readonly wizard = inject(OnboardingWizardStore);
 

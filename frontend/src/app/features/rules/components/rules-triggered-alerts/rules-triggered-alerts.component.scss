@@ -2,145 +2,98 @@
   display: block;
 }
 
-.triggered-section {
-  display: grid;
-  gap: 8px;
-}
-
-.section-header {
+.rules-activity-header {
   align-items: center;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
+  padding-inline: 2px;
 }
 
-.section-header h2 {
-  color: var(--rules-section-title, #4b576a);
+.rules-section-title,
+.rules-activity-range,
+.rules-activity-copy p,
+.rules-activity-time {
+  margin: 0;
+}
+
+.rules-section-title {
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   line-height: 1;
-  margin: 0;
-  text-transform: uppercase;
 }
 
-.count-pill {
-  align-items: center;
-  background: var(--rules-count-bg, #e3e8ef);
-  border: 1px solid var(--rules-count-border, #d4dce7);
-  border-radius: 999px;
-  color: var(--rules-count-text, #647288);
-  display: inline-flex;
+.rules-activity-range {
+  color: var(--text-tertiary);
   font-size: 11px;
-  font-weight: 700;
-  justify-content: center;
-  line-height: 1;
-  min-width: 0;
-  padding: 3px 8px;
-}
-
-.summary {
-  color: var(--rules-muted, #7f8ca1);
-  font-size: 13px;
   font-weight: 500;
-  line-height: 1.2;
-  margin: 0;
-  margin-bottom: 12px;
+  line-height: 1;
 }
 
-.alerts-card {
-  background: var(--rules-card-bg, #eff3f8);
-  border: 1px solid var(--rules-card-border, var(--border));
+.rules-activity-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  box-shadow: var(--rules-card-shadow, var(--shadow-sm));
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
-.alert-row {
+.rules-activity-row {
   align-items: center;
-  background: transparent;
-  border: 0;
-  border-top: 1px solid var(--rules-divider, var(--border));
-  cursor: pointer;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  margin: 0;
-  padding: 14px 20px;
-  position: relative;
-  text-align: left;
-  width: 100%;
+  gap: 12px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 12px 16px;
 }
 
-.alert-row:first-child {
-  border-top: 0;
+.rules-activity-row + .rules-activity-row {
+  border-top: 1px solid var(--border);
 }
 
-.alert-row::before {
-  border-radius: 999px;
-  content: '';
-  inset: 12px auto 12px 0;
-  position: absolute;
-  width: 3px;
+.rules-activity-icon {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  flex: 0 0 32px;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
 }
 
-.alert-row.warning::before {
-  background: var(--rules-warning, #ea9d34);
+.rules-activity-icon ion-icon {
+  font-size: 16px;
 }
 
-.alert-row.critical::before {
-  background: var(--rules-critical, #df5159);
+.rules-activity-icon.tag {
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  color: var(--primary);
 }
 
-.copy {
-  display: grid;
-  gap: 7px;
+.rules-activity-icon.bell {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.rules-activity-copy {
   min-width: 0;
 }
 
-.copy h3 {
-  color: var(--rules-title, #121b30);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: 1.24;
-  margin: 0;
-  padding-left: 4px;
-}
-
-.meta-row {
-  align-items: center;
-  column-gap: 8px;
-  display: inline-flex;
-  margin: 0;
-}
-
-.severity-pill {
-  border-radius: 999px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  padding: 2px 8px;
-  text-transform: uppercase;
-}
-
-.severity-pill.warning {
-  background: var(--rules-warning-soft, #f2e5d5);
-  color: var(--rules-warning, #ea9d34);
-}
-
-.severity-pill.critical {
-  background: var(--rules-critical-soft, #f1dade);
-  color: var(--rules-critical, #df5159);
-}
-
-.age {
-  color: var(--rules-muted, #7f8ca1);
-  font-size: 12px;
+.rules-activity-copy p {
+  color: var(--text-primary);
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.alert-row ion-icon {
-  color: var(--rules-row-chevron, #a2afc1);
-  font-size: 16px;
+.rules-activity-time {
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
 }

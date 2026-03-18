@@ -1,8 +1,16 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { IonIcon, IonToggle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, notificationsOutline, pricetagOutline, warningOutline } from 'ionicons/icons';
-import { RuleIconKind, RulesActiveItem } from '../../models/rules.models';
+import { addOutline, checkmarkOutline, notificationsOutline, pricetagOutline, warningOutline } from 'ionicons/icons';
+import { RuleIconKind } from '../../models/rules.models';
+
+export interface RulesListItem {
+  id: string;
+  icon: RuleIconKind;
+  title: string;
+  activity: string;
+  enabled: boolean;
+}
 
 @Component({
   selector: 'app-rules-active',
@@ -14,9 +22,8 @@ import { RuleIconKind, RulesActiveItem } from '../../models/rules.models';
 })
 export class RulesActiveComponent {
   readonly title = input.required<string>();
-  readonly summary = input.required<string>();
   readonly addLabel = input.required<string>();
-  readonly items = input.required<readonly RulesActiveItem[]>();
+  readonly items = input.required<readonly RulesListItem[]>();
 
   readonly addRequested = output<void>();
   readonly toggled = output<{ id: string; enabled: boolean }>();
@@ -24,6 +31,7 @@ export class RulesActiveComponent {
   constructor() {
     addIcons({
       'add-outline': addOutline,
+      'checkmark-outline': checkmarkOutline,
       'pricetag-outline': pricetagOutline,
       'notifications-outline': notificationsOutline,
       'warning-outline': warningOutline,

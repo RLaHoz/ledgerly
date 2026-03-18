@@ -1,25 +1,22 @@
-<section class="triggered-section">
-  <header class="section-header">
-    <h2>{{ title() }}</h2>
-    <span class="count-pill">{{ count() }}</span>
+<section class="rules-activity-section" aria-label="Recent activity">
+  <header class="rules-activity-header">
+    <h2 class="rules-section-title">{{ title() }}</h2>
+    <p class="rules-activity-range">{{ summary() }}</p>
   </header>
 
-  <p class="summary">{{ summary() }}</p>
-
-  <article class="alerts-card">
+  <article class="rules-activity-card">
     @for (item of items(); track item.id) {
-      <button type="button" class="alert-row" [class.warning]="item.severity === 'warning'" [class.critical]="item.severity === 'critical'" (click)="onSelect(item.id)">
-        <div class="copy">
-          <h3>{{ item.title }}</h3>
+      <section class="rules-activity-row">
+        <span class="rules-activity-icon" [class.tag]="item.icon === 'tag'" [class.bell]="item.icon === 'bell'">
+          <ion-icon [name]="iconName(item.icon)"></ion-icon>
+        </span>
 
-          <p class="meta-row">
-            <span class="severity-pill" [class.warning]="item.severity === 'warning'" [class.critical]="item.severity === 'critical'">{{ item.severityLabel }}</span>
-            <span class="age">{{ item.ageLabel }}</span>
-          </p>
+        <div class="rules-activity-copy">
+          <p>{{ item.title }}</p>
         </div>
 
-        <ion-icon name="chevron-forward-outline"></ion-icon>
-      </button>
+        <span class="rules-activity-time">{{ item.ageLabel }}</span>
+      </section>
     }
   </article>
 </section>

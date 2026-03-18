@@ -1,186 +1,197 @@
-<article class="add-card" aria-label="Create rule">
-  <header class="card-header">
-    <h2>Create rule</h2>
+<article class="rules-dialog-card" aria-label="Create rule">
+  <header class="rules-dialog-header">
+    <div class="rules-dialog-heading">
+      <h2>{{ title() }}</h2>
+      <p>{{ description() }}</p>
+    </div>
 
-    <button type="button" class="close-btn" aria-label="Close" (click)="closed.emit()">
+    <button type="button" class="rules-dialog-close" aria-label="Close" (click)="closed.emit()">
       <ion-icon name="close-outline"></ion-icon>
     </button>
   </header>
 
-  <label class="field">
-    <span>Rule Name</span>
-    <input
-      type="text"
-      autocomplete="off"
-      placeholder="e.g., Auto-categorize Starbucks"
-      [value]="ruleName()"
-      (input)="onTextInput($event, ruleNameChanged)"
-    />
-    <small>Optional -- used for identification</small>
-  </label>
-
-  <section class="field">
-    <span>Type</span>
-    <div class="select-wrap compact" [class.open]="isDropdownOpen('ruleType')">
-      <button type="button" class="select-trigger" (click)="toggleDropdown('ruleType')">
-        <span>{{ ruleType() }}</span>
-        <ion-icon [name]="isDropdownOpen('ruleType') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-      </button>
-
-      @if (isDropdownOpen('ruleType')) {
-        <ion-list class="options-menu" lines="none">
-          @for (option of ruleTypeOptions(); track option) {
-            <ion-item
-              button
-              detail="false"
-              [class.selected]="option === ruleType()"
-              (click)="selectRuleType(option)"
-            >
-              <ion-label>{{ option }}</ion-label>
-              @if (option === ruleType()) {
-                <ion-icon slot="end" name="checkmark-outline"></ion-icon>
-              }
-            </ion-item>
-          }
-        </ion-list>
-      }
-    </div>
-  </section>
-
-  <section class="panel">
-    <h3>Condition</h3>
-
-    <div class="panel-row">
-      <strong>IF</strong>
-
-      <div class="select-wrap compact" [class.open]="isDropdownOpen('conditionField')">
-        <button type="button" class="select-trigger" (click)="toggleDropdown('conditionField')">
-          <span>{{ conditionField() }}</span>
-          <ion-icon [name]="isDropdownOpen('conditionField') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-        </button>
-
-        @if (isDropdownOpen('conditionField')) {
-          <ion-list class="options-menu" lines="none">
-            @for (option of conditionFieldOptions(); track option) {
-              <ion-item
-                button
-                detail="false"
-                [class.selected]="option === conditionField()"
-                (click)="selectConditionField(option)"
-              >
-                <ion-label>{{ option }}</ion-label>
-                @if (option === conditionField()) {
-                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
-                }
-              </ion-item>
-            }
-          </ion-list>
-        }
-      </div>
-
+  <section class="rules-dialog-form">
+    <label class="rules-field">
+      <span class="rules-field-label">Name</span>
       <input
+        class="rules-input"
         type="text"
         autocomplete="off"
-        placeholder="keyword"
-        [value]="conditionValue()"
-        (input)="onTextInput($event, conditionValueChanged)"
+        [placeholder]="namePlaceholder()"
+        [value]="ruleName()"
+        (input)="onTextInput($event, ruleNameChanged)"
       />
-    </div>
-  </section>
+    </label>
 
-  <section class="panel">
-    <h3>Action</h3>
+    @if (showTypeSelector()) {
+      <section class="rules-field">
+        <span class="rules-field-label">Type</span>
+        <div class="rules-select-shell compact" [class.open]="isDropdownOpen('ruleType')">
+          <button type="button" class="rules-select-trigger" (click)="toggleDropdown('ruleType')">
+            <span class="rules-select-icon auto">
+              <ion-icon [name]="typeIconName(ruleType())"></ion-icon>
+            </span>
+            <span class="rules-select-value">{{ typeLabel() }}</span>
+            <ion-icon class="rules-select-chevron" name="chevron-down-outline"></ion-icon>
+          </button>
 
-    <div class="panel-row">
-      <strong>THEN</strong>
-
-      <div class="select-wrap compact" [class.open]="isDropdownOpen('actionType')">
-        <button type="button" class="select-trigger" (click)="toggleDropdown('actionType')">
-          <span>{{ actionType() }}</span>
-          <ion-icon [name]="isDropdownOpen('actionType') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-        </button>
-
-        @if (isDropdownOpen('actionType')) {
-          <ion-list class="options-menu" lines="none">
-            @for (option of actionTypeOptions(); track option) {
-              <ion-item
-                button
-                detail="false"
-                [class.selected]="option === actionType()"
-                (click)="selectActionType(option)"
-              >
-                <ion-label>{{ option }}</ion-label>
-                @if (option === actionType()) {
-                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
-                }
-              </ion-item>
-            }
-          </ion-list>
-        }
-      </div>
-
-      <div class="select-wrap" [class.open]="isDropdownOpen('actionValue')">
-        <button type="button" class="select-trigger" (click)="toggleDropdown('actionValue')">
-          <span>{{ actionValue() }}</span>
-          <ion-icon [name]="isDropdownOpen('actionValue') ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-        </button>
-
-        @if (isDropdownOpen('actionValue')) {
-          <ion-list class="options-menu" lines="none">
-            @for (option of actionValueOptions(); track option) {
-              <ion-item
-                button
-                detail="false"
-                [class.selected]="option === actionValue()"
-                (click)="selectActionValue(option)"
-              >
-                <ion-label>{{ option }}</ion-label>
-                @if (option === actionValue()) {
-                  <ion-icon slot="end" name="checkmark-outline"></ion-icon>
-                }
-              </ion-item>
-            }
-          </ion-list>
-        }
-      </div>
-    </div>
-  </section>
-
-  <section class="impact">
-    <h4>Impact preview</h4>
-    <p>Would have applied to 12 transactions in the last 30 days.</p>
-  </section>
-
-  <button type="button" class="advanced-btn" (click)="toggleAdvanced()">
-    <span>Advanced options</span>
-    <ion-icon [name]="advancedOpen() ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-  </button>
-
-  @if (advancedOpen()) {
-    <section class="advanced-panel">
-      <div class="advanced-field">
-        <span>Amount range</span>
-        <div class="range-row">
-          <input type="text" autocomplete="off" placeholder="Min $" />
-          <p>to</p>
-          <input type="text" autocomplete="off" placeholder="Max $" />
+          @if (isDropdownOpen('ruleType')) {
+            <div class="rules-select-menu" role="listbox">
+              @for (option of ruleTypeOptions(); track option) {
+                <button type="button" class="rules-select-option" [class.selected]="option === ruleType()" (click)="selectRuleType(option)">
+                  <span class="rules-select-icon" [class.auto]="option === 'Auto-classification'" [class.alert]="option === 'Threshold alert'" [class.anomaly]="option === 'Anomaly detection'">
+                    <ion-icon [name]="typeIconName(option)"></ion-icon>
+                  </span>
+                  <span>{{ option === 'Auto-classification' ? 'Auto-tag' : option === 'Threshold alert' ? 'Threshold alert' : 'Anomaly detection' }}</span>
+                  @if (option === ruleType()) {
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                  }
+                </button>
+              }
+            </div>
+          }
         </div>
-      </div>
+      </section>
+    }
 
-      <label class="advanced-field">
-        <span>Exclude merchant</span>
-        <input type="text" autocomplete="off" placeholder="e.g., Amazon" />
-      </label>
+    @if (variant() === 'auto') {
+      <section class="rules-condition-box">
+        <p class="rules-condition-label">When merchant contains</p>
+        <input
+          class="rules-condition-input"
+          type="text"
+          autocomplete="off"
+          [placeholder]="autoMerchantPlaceholder"
+          [value]="conditionValue()"
+          (input)="onTextInput($event, conditionValueChanged)"
+        />
+      </section>
 
-      <label class="toggle-row">
-        <ion-toggle [checked]="recurringOnly()" (ionChange)="onRecurringToggle($event)"></ion-toggle>
-        <span>Apply only to recurring</span>
-      </label>
-    </section>
-  }
+      <section class="rules-condition-box">
+        <p class="rules-condition-label">Assign to category</p>
+        <div class="rules-select-shell compact" [class.open]="isDropdownOpen('autoCategory')">
+          <button type="button" class="rules-select-trigger" (click)="toggleDropdown('autoCategory')">
+            <span class="rules-select-value" [class.placeholder]="!actionValue()">{{ actionValue() || 'Select category' }}</span>
+            <ion-icon class="rules-select-chevron" name="chevron-down-outline"></ion-icon>
+          </button>
 
-  <footer class="actions">
-    <button type="button" class="btn-cancel" (click)="canceled.emit()">Cancel</button>
-    <button type="button" class="btn-create" [disabled]="!canCreate()" (click)="created.emit()">Create</button>
+          @if (isDropdownOpen('autoCategory')) {
+            <div class="rules-select-menu" role="listbox">
+              @for (option of categoryOptions(); track option) {
+                <button type="button" class="rules-select-option" [class.selected]="option === actionValue()" (click)="selectAutoCategory(option)">
+                  <span>{{ option }}</span>
+                  @if (option === actionValue()) {
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (variant() === 'alert') {
+      <section class="rules-condition-box">
+        <p class="rules-condition-label">Alert when</p>
+        <div class="rules-alert-row">
+          <div class="rules-select-shell grow" [class.open]="isDropdownOpen('alertCategory')">
+            <button type="button" class="rules-select-trigger" (click)="toggleDropdown('alertCategory')">
+              <span class="rules-select-value" [class.placeholder]="!actionValue()">{{ actionValue() || 'Category' }}</span>
+              <ion-icon class="rules-select-chevron" name="chevron-down-outline"></ion-icon>
+            </button>
+
+            @if (isDropdownOpen('alertCategory')) {
+              <div class="rules-select-menu" role="listbox">
+                @for (option of categoryOptions(); track option) {
+                  <button type="button" class="rules-select-option" [class.selected]="option === actionValue()" (click)="selectAlertCategory(option)">
+                    <span>{{ option }}</span>
+                    @if (option === actionValue()) {
+                      <ion-icon name="checkmark-outline"></ion-icon>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+
+          <span class="rules-alert-copy">reaches</span>
+
+          <div class="rules-select-shell threshold" [class.open]="isDropdownOpen('alertThreshold')">
+            <button type="button" class="rules-select-trigger" (click)="toggleDropdown('alertThreshold')">
+              <span class="rules-select-value">{{ conditionValue() || '75%' }}</span>
+              <ion-icon class="rules-select-chevron" name="chevron-down-outline"></ion-icon>
+            </button>
+
+            @if (isDropdownOpen('alertThreshold')) {
+              <div class="rules-select-menu" role="listbox">
+                @for (option of thresholdOptions; track option) {
+                  <button type="button" class="rules-select-option" [class.selected]="option === conditionValue()" (click)="selectAlertThreshold(option)">
+                    <span>{{ option }}</span>
+                    @if (option === conditionValue()) {
+                      <ion-icon name="checkmark-outline"></ion-icon>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+    }
+
+    @if (variant() === 'anomaly') {
+      <section class="rules-condition-box">
+        <p class="rules-condition-label">Detect when</p>
+        <div class="rules-select-shell grow" [class.open]="isDropdownOpen('anomalyCondition')">
+          <button type="button" class="rules-select-trigger" (click)="toggleDropdown('anomalyCondition')">
+            <span class="rules-select-value">{{ conditionValue() || anomalyOptions[1] }}</span>
+            <ion-icon class="rules-select-chevron" name="chevron-down-outline"></ion-icon>
+          </button>
+
+          @if (isDropdownOpen('anomalyCondition')) {
+            <div class="rules-select-menu" role="listbox">
+              @for (option of anomalyOptions; track option) {
+                <button type="button" class="rules-select-option" [class.selected]="option === conditionValue()" (click)="selectAnomalyCondition(option)">
+                  <span>{{ option }}</span>
+                  @if (option === conditionValue()) {
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <article class="rules-impact-preview">
+      <ion-icon name="trending-up-outline"></ion-icon>
+      <p>{{ impactText() }}</p>
+    </article>
+
+    <button type="button" class="rules-advanced-toggle" (click)="toggleAdvanced()">
+      <span>Advanced options</span>
+      <ion-icon name="chevron-down-outline" [class.open]="advancedOpen()"></ion-icon>
+    </button>
+
+    @if (advancedOpen()) {
+      <section class="rules-advanced-panel">
+        <label class="rules-advanced-row">
+          <ion-toggle [checked]="recurringOnly()" (ionChange)="onRecurringToggle($event)" aria-label="Apply to recurring only"></ion-toggle>
+          <span>Apply to recurring only</span>
+        </label>
+
+        <label class="rules-advanced-row">
+          <ion-toggle [checked]="excludeSmallAmounts()" (ionChange)="onExcludeSmallAmountsToggle($event)" aria-label="Exclude small amounts"></ion-toggle>
+          <span>Exclude small amounts (&lt;$5)</span>
+        </label>
+      </section>
+    }
+  </section>
+
+  <footer class="rules-dialog-footer">
+    <button type="button" class="rules-dialog-button secondary" (click)="canceled.emit()">Cancel</button>
+    <button type="button" class="rules-dialog-button primary" [disabled]="!canCreate()" (click)="created.emit()">Create rule</button>
   </footer>
 </article>

@@ -3,7 +3,6 @@
     [routerLink]="['/dashboard']"
     routerLinkActive="tab-selected"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="navigateTo('/dashboard', $event)"
   >
     <ion-icon name="grid-outline"></ion-icon>
     <ion-label>Home</ion-label>
@@ -13,7 +12,6 @@
     [routerLink]="['/budgets']"
     routerLinkActive="tab-selected"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="navigateTo('/budgets', $event)"
   >
     <ion-icon name="wallet-outline"></ion-icon>
     <ion-label>Budgets</ion-label>
@@ -23,7 +21,6 @@
     [routerLink]="['/rules']"
     routerLinkActive="tab-selected"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="navigateTo('/rules', $event)"
   >
     <ion-icon name="flash-outline"></ion-icon>
     <ion-label>Rules</ion-label>
@@ -33,7 +30,6 @@
     [routerLink]="['/settings']"
     routerLinkActive="tab-selected"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="navigateTo('/settings', $event)"
   >
     <ion-icon name="settings-outline"></ion-icon>
     <ion-label>Settings</ion-label>

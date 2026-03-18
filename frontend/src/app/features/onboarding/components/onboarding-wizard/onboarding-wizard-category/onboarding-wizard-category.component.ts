@@ -1,51 +1,23 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { IonButton, IonCheckbox, IonIcon, IonInput, IonItem, IonList } from '@ionic/angular/standalone';
-import { CategoryFilter, OnboardingTransaction } from '../../../models/onboarding.models';
+import { IonButton, IonCheckbox, IonIcon } from '@ionic/angular/standalone';
+import { CategoryFilter } from '../../../models/onboarding.models';
 import { OnboardingWizardStore } from '../../../store/onboarding-wizard.store';
-import {
-  formatDateShort,
-  formatMoney as formatMoneyValue,
-} from '../onboarding-wizard-format.util';
+import { OnboardingCategorySheetComponent } from '../onboarding-category-sheet.component';
 
 @Component({
   selector: 'app-onboarding-wizard-category',
   standalone: true,
-  imports: [IonButton, IonCheckbox, IonIcon, IonInput, IonItem, IonList],
+  imports: [IonButton, IonCheckbox, IonIcon, OnboardingCategorySheetComponent],
   templateUrl: './onboarding-wizard-category.component.html',
   styleUrl: './onboarding-wizard-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingWizardCategoryComponent {
   readonly wizard = inject(OnboardingWizardStore);
+  readonly transactionRows = this.wizard.filteredTransactionRows;
 
   onFilterChange(filter: CategoryFilter): void {
     this.wizard.setFilter(filter);
-  }
-
-  formatMoney(value: number): string {
-    return formatMoneyValue(value);
-  }
-
-  formatDate(value: Date): string {
-    return formatDateShort(value);
-  }
-
-  categoryName(tx: OnboardingTransaction): string {
-    return (
-      this.wizard.subcategoryById(tx.subcategoryId)?.name ??
-      this.wizard.categoryById(tx.categoryId)?.name ??
-      this.wizard.categoryBySlug(tx.categorySlug)?.name ??
-      'Uncategorized'
-    );
-  }
-
-  categoryIcon(tx: OnboardingTransaction): string {
-    return (
-      this.wizard.subcategoryById(tx.subcategoryId)?.iconName ??
-      this.wizard.categoryById(tx.categoryId)?.iconName ??
-      this.wizard.categoryBySlug(tx.categorySlug)?.iconName ??
-      'alert-circle-outline'
-    );
   }
 
   onCategorySearchInput(value: string | number | null | undefined): void {

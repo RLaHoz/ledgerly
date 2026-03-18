@@ -8,6 +8,7 @@ import { PkceService } from './pkce.service';
 import type {
   BankAuthClient,
   BankAuthorizeContext,
+  CreateAuthorizeUrlInput,
 } from '../cdr-auth/bank-auth.types';
 
 type ParResponse = { request_uri: string; expires_in?: number };
@@ -20,9 +21,13 @@ export class CdrClient implements BankAuthClient {
     private readonly pkce: PkceService,
   ) {}
 
-  async createAuthorizeUrl(): Promise<BankAuthorizeContext> {
+  async createAuthorizeUrl(
+    input: CreateAuthorizeUrlInput,
+  ): Promise<BankAuthorizeContext> {
     const clientId = this.config.getOrThrow<string>('CDR_CLIENT_ID');
-    const redirectUri = this.config.getOrThrow<string>('CDR_REDIRECT_URI');
+    const redirectUri =
+      input.redirectUri?.trim() ||
+      this.config.getOrThrow<string>('CDR_REDIRECT_URI');
     const scope = this.config.getOrThrow<string>('CDR_SCOPE');
     const parEndpoint = this.config.getOrThrow<string>('CDR_PAR_ENDPOINT');
     const authorizeEndpoint = this.config.getOrThrow<string>(
@@ -31,7 +36,7 @@ export class CdrClient implements BankAuthClient {
     const allowParFallback =
       this.config.get<string>('CDR_PAR_FALLBACK_TO_AUTHORIZE') === 'true';
 
-    const state = randomUUID();
+    const state = input.state;
     const nonce = randomUUID();
 
     const codeVerifier = this.pkce.generateVerifier();

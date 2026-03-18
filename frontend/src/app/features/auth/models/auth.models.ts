@@ -3,15 +3,23 @@ export type AuthStatus = 'booting' | 'idle' | 'loading' | 'authenticated' | 'err
 export interface AuthUser {
   id: string;
   roles: string[];
+  email: string;
+  fullName: string;
+  avatarUrl: string | null;
 }
+
+export type BankConnectionState =
+  | 'never_connected'
+  | 'connected'
+  | 'reconnect_required';
 
 export interface SessionResponse {
   user: AuthUser;
   accessToken: string;
-  refreshToken: string;
   accessTokenExpiresInSeconds: number;
   onboardingCompleted: boolean;
-  isFirstBankConnectionForUser: boolean;
+  bankConnectionState: BankConnectionState;
+  hasConnectedBank: boolean;
 }
 
 export interface CompleteOnboardingResponse {
@@ -24,9 +32,9 @@ export interface AuthState {
   status: AuthStatus;
   user: AuthUser | null;
   accessToken: string | null;
-  refreshToken: string | null;
-  isLoggedIn: boolean;
-  isFirstBankConnectionForUser: boolean | null;
+  googleAuthorizeUrl: string | null;
+  pendingGoogleState: string | null;
+  bankConnectionState: BankConnectionState | null;
   onboardingCompleted: boolean;
   onboardingCurrentStep: string | null;
   bankAuthorizeUrl: string | null;

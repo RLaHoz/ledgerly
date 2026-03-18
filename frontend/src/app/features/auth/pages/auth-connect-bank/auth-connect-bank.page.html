@@ -1,0 +1,47 @@
+<app-auth-screen-shell
+  title="Connect your bank"
+  subtitle="Import transactions automatically"
+>
+  <div class="bank-connect-actions">
+    <button
+      type="button"
+      class="bank-connect-button"
+      [class.bank-connect-button--success]="isConnected()"
+      [disabled]="isDisabled()"
+      [attr.aria-busy]="isLoading() ? 'true' : 'false'"
+      (click)="connectBank()"
+    >
+      @if (!isLoading() && !isConnected()) {
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.75 9.75h16.5M5.25 9.75V18m4.5-8.25V18m4.5-8.25V18m4.5-8.25V18M2.25 18.75h19.5M4.5 6.75 12 3l7.5 3.75v1.5h-15v-1.5Z" />
+        </svg>
+      }
+
+      @if (isLoading()) {
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="bank-connect-button__spinner">
+          <circle cx="12" cy="12" r="9" />
+        </svg>
+      }
+
+      @if (isConnected()) {
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m5 12.5 4.2 4.2L19 7" />
+        </svg>
+      }
+
+      <span>
+        @if (isLoading()) {
+          Connecting bank
+        } @else if (isConnected()) {
+          Bank connected
+        } @else {
+          Connect Bank
+        }
+      </span>
+    </button>
+  </div>
+
+  @if (authStore.isError() && authStore.error(); as errorMessage) {
+    <p class="bank-connect-error">{{ errorMessage }}</p>
+  }
+</app-auth-screen-shell>

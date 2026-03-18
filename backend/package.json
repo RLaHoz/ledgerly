@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "node --loader ts-node/esm prisma/seed.ts",
+    "seed": "tsx prisma/seed.ts",
     "seed:app-categories": "tsx scripts/seed-app-categories-and-subcategories.ts",
     "seed:rules:templates": "tsx scripts/seed-rule-templates.ts",
     "seed:rules:defaults": "tsx scripts/seed-default-classification-rules.ts",
@@ -40,6 +40,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "csv-parse": "^6.1.0",
+    "google-auth-library": "^10.6.2",
     "pg": "^8.19.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -84,6 +85,9 @@
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

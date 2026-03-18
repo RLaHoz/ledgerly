@@ -47,7 +47,7 @@
 
             <div class="cat-copy">
               <p class="cat-name">{{ category.name }}</p>
-              <p class="cat-imported">Imported: {{ formatMoney(category.importedAmount) }}</p>
+              <p class="cat-imported">Imported: {{ category.importedAmountLabel }}</p>
             </div>
 
             <p class="cat-status">Near history</p>
@@ -58,7 +58,7 @@
             <ion-input
               type="text"
               inputmode="decimal"
-              [value]="wizard.categoryBudgetBySlug(category.slug)"
+              [value]="category.budgetValue"
               (ionInput)="onCategoryBudgetChange(category.slug, $any($event).detail?.value)"
             ></ion-input>
           </div>
@@ -74,7 +74,7 @@
                     <div>
                       <p class="subcategory-name">{{ subcategory.name }}</p>
                       <p class="subcategory-imported">
-                        Imported: {{ formatMoney(subcategory.importedAmount) }}
+                        Imported: {{ subcategory.importedAmountLabel }}
                       </p>
                     </div>
                   </div>
@@ -84,7 +84,7 @@
                     <ion-input
                       type="text"
                       inputmode="decimal"
-                      [value]="wizard.subcategoryBudgetById(subcategory.id)"
+                      [value]="subcategory.budgetValue"
                       (ionInput)="onSubcategoryBudgetChange(subcategory.id, $any($event).detail?.value)"
                     ></ion-input>
                   </div>

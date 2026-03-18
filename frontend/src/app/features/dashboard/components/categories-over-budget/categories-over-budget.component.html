@@ -1,0 +1,11 @@
+@if (categories().length > 0) {
+  <button class="dashboard-urgent-cta" type="button" (click)="onClick()">
+    <span class="dashboard-urgent-cta-icon">
+      <ion-icon name="alert-outline"></ion-icon>
+    </span>
+    <span class="dashboard-urgent-cta-text">{{ message() }}</span>
+    <span class="dashboard-urgent-cta-chevron">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </span>
+  </button>
+}

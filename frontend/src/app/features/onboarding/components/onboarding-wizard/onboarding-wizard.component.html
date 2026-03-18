@@ -29,7 +29,7 @@
         }
 
         @if (currentStep() === 'categories') {
-          <app-onboarding-wizard-category />
+          <app-onboarding-wizard-category  />
         }
 
         @if (currentStep() === 'budgets') {
@@ -61,7 +61,7 @@
         </ion-button>
       </footer>
 
-      @if (currentStep() === 'confirm' && wizard.saveClassificationsError(); as saveError) {
+      @if (currentStep() === 'confirm' && wizardStore.saveClassificationsError(); as saveError) {
         <article class="warning-banner save-error-banner">
           <ion-icon name="warning-outline"></ion-icon>
           <p>{{ saveError }}</p>
@@ -97,7 +97,7 @@
 </ion-modal>
 
 <ion-loading
-  [isOpen]="wizard.isSavingClassifications() || authStore.isCompletingOnboarding()"
+  [isOpen]="wizardStore.isSavingClassifications() || authStore.isCompletingOnboarding()"
   message="Actualizando preferencias..."
   spinner="crescent"
 ></ion-loading>

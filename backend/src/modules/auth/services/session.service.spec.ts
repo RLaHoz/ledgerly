@@ -8,114 +8,29 @@ jest.mock(
 
 import { SessionService } from './session.service';
 
-describe('SessionService.createAnonymousSession', () => {
+describe('SessionService.issueSessionForUser', () => {
   const makeService = () => {
     const prisma = {
-      user: {
-        create: jest.fn<Promise<{ id: string }>, [unknown]>(),
+      userSession: {
+        create: jest.fn<Promise<{ id: string; userId: string }>, [unknown]>(),
+        findUnique: jest.fn<Promise<{ id: string; status: string } | null>, [unknown]>(),
+        update: jest.fn<Promise<unknown>, [unknown]>(),
       },
-    };
-
-    const service = new SessionService(
-      prisma as never,
-      {} as never,
-      {
-        get: jest.fn(),
-        getOrThrow: jest.fn(),
-      } as never,
-    );
-
-    return {
-      service,
-      prisma,
-    };
-  };
-
-  it('creates anonymous user and then creates a session', async () => {
-    const { service, prisma } = makeService();
-    prisma.user.create.mockResolvedValue({ id: 'user-1' });
-
-    const createSessionSpy = jest
-      .spyOn(service as any, 'createSessionForUser')
-      .mockResolvedValue({
-        user: { id: 'user-1', roles: [] },
-        accessToken: 'a',
-        refreshToken: 'r',
-        accessTokenExpiresInSeconds: 900,
-        onboardingCompleted: false,
-        isFirstBankConnectionForUser: true,
-      });
-
-    await service.createAnonymousSession({
-      deviceId: 'dev-1',
-      userAgent: 'ua',
-      ipAddress: '127.0.0.1',
-    });
-
-    expect(createSessionSpy).toHaveBeenCalledWith({
-      userId: 'user-1',
-      deviceId: 'dev-1',
-      userAgent: 'ua',
-      ipAddress: '127.0.0.1',
-    });
-  });
-
-  it('supports anonymous session creation without optional metadata', async () => {
-    const { service, prisma } = makeService();
-    prisma.user.create.mockResolvedValue({ id: 'user-2' });
-
-    const createSessionSpy = jest
-      .spyOn(service as any, 'createSessionForUser')
-      .mockResolvedValue({
-        user: { id: 'user-2', roles: [] },
-        accessToken: 'a',
-        refreshToken: 'r',
-        accessTokenExpiresInSeconds: 900,
-        onboardingCompleted: false,
-        isFirstBankConnectionForUser: true,
-      });
-
-    await service.createAnonymousSession({});
-
-    expect(createSessionSpy).toHaveBeenCalledWith({
-      userId: 'user-2',
-      deviceId: undefined,
-      userAgent: undefined,
-      ipAddress: undefined,
-    });
-  });
-
-  it('propagates user creation errors and does not create a session', async () => {
-    const { service, prisma } = makeService();
-    prisma.user.create.mockRejectedValue(new Error('create user failed'));
-
-    const createSessionSpy = jest
-      .spyOn(service as any, 'createSessionForUser')
-      .mockResolvedValue({
-        user: { id: 'user-3', roles: [] },
-        accessToken: 'a',
-        refreshToken: 'r',
-        accessTokenExpiresInSeconds: 900,
-        onboardingCompleted: false,
-        isFirstBankConnectionForUser: true,
-      });
-
-    await expect(service.createAnonymousSession({})).rejects.toThrow(
-      'create user failed',
-    );
-    expect(createSessionSpy).not.toHaveBeenCalled();
-  });
-});
-
-describe('SessionService.getUserSessionFlags', () => {
-  const makeService = () => {
-    const prisma = {
+      bankConnection: {
+        count: jest.fn<Promise<number>, [unknown]>(),
+      },
       user: {
         findUnique: jest.fn<
-          Promise<{
-            onboardingCompletedAt: Date | null;
-            _count: { bankConnections: number };
-          } | null>,
+          Promise<
+            | {
+                id: string;
+                email: string;
+                fullName: string;
+                avatarUrl: string | null;
+                onboardingCompletedAt: Date | null;
+              }
+            | null
+          >,
           [unknown]
         >(),
       },
@@ -130,48 +45,117 @@ describe('SessionService.getUserSessionFlags', () => {
       } as never,
     );
 
-    return {
-      service,
-      prisma,
-    };
+    return { service, prisma };
   };
 
-  it('returns onboarding and bank-connection flags for existing users', async () => {
+  it('creates a session for a canonical user and returns onboarding flags', async () => {
     const { service, prisma } = makeService();
+    prisma.userSession.create.mockResolvedValue({ id: 'session-1', userId: 'user-1' });
     prisma.user.findUnique.mockResolvedValue({
+      id: 'user-1',
+      email: 'user@example.com',
+      fullName: 'User Example',
+      avatarUrl: null,
       onboardingCompletedAt: new Date('2026-03-10T00:00:00.000Z'),
-      _count: { bankConnections: 2 },
+    });
+    prisma.bankConnection.count.mockResolvedValueOnce(2).mockResolvedValueOnce(2);
+
+    jest.spyOn(service as any, 'issueJwtPair').mockResolvedValue({
+      accessToken: 'access-1',
+      refreshToken: 'refresh-1',
+      refreshExpiresAt: new Date('2026-04-01T00:00:00.000Z'),
+      accessTokenExpiresInSeconds: 900,
     });
 
-    const result = await (service as any).getUserSessionFlags('user-1');
+    const result = await service.issueSessionForUser({ userId: 'user-1' });
 
     expect(result).toEqual({
+      user: {
+        id: 'user-1',
+        roles: [],
+        email: 'user@example.com',
+        fullName: 'User Example',
+        avatarUrl: null,
+      },
+      accessToken: 'access-1',
+      refreshToken: 'refresh-1',
+      accessTokenExpiresInSeconds: 900,
       onboardingCompleted: true,
-      isFirstBankConnectionForUser: false,
+      bankConnectionState: 'connected',
+      hasConnectedBank: true,
     });
   });
 
-  it('marks user as first-bank-connection when no connections exist', async () => {
+  it('reissues an existing active session for the same user', async () => {
     const { service, prisma } = makeService();
+    prisma.userSession.findUnique.mockResolvedValue({ id: 'session-1', status: 'ACTIVE' });
     prisma.user.findUnique.mockResolvedValue({
+      id: 'user-1',
+      email: 'user@example.com',
+      fullName: 'User Example',
+      avatarUrl: null,
       onboardingCompletedAt: null,
-      _count: { bankConnections: 0 },
+    });
+    prisma.bankConnection.count.mockResolvedValueOnce(0).mockResolvedValueOnce(0);
+
+    jest.spyOn(service as any, 'issueJwtPair').mockResolvedValue({
+      accessToken: 'access-2',
+      refreshToken: 'refresh-2',
+      refreshExpiresAt: new Date('2026-04-01T00:00:00.000Z'),
+      accessTokenExpiresInSeconds: 900,
     });
 
-    const result = await (service as any).getUserSessionFlags('user-2');
-
-    expect(result).toEqual({
-      onboardingCompleted: false,
-      isFirstBankConnectionForUser: true,
+    const result = await service.reissueSessionForUser({
+      sessionId: 'session-1',
+      userId: 'user-1',
     });
+
+    expect(prisma.userSession.update).toHaveBeenCalledTimes(1);
+    expect(result.hasConnectedBank).toBe(false);
+    expect(result.bankConnectionState).toBe('never_connected');
+    expect(result.onboardingCompleted).toBe(false);
+  });
+
+  it('marks sessions as reconnect required when only revoked/error bank links remain', async () => {
+    const { service, prisma } = makeService();
+    prisma.userSession.create.mockResolvedValue({ id: 'session-1', userId: 'user-1' });
+    prisma.user.findUnique.mockResolvedValue({
+      id: 'user-1',
+      email: 'user@example.com',
+      fullName: 'User Example',
+      avatarUrl: null,
+      onboardingCompletedAt: null,
+    });
+    prisma.bankConnection.count.mockResolvedValueOnce(0).mockResolvedValueOnce(1);
+
+    jest.spyOn(service as any, 'issueJwtPair').mockResolvedValue({
+      accessToken: 'access-1',
+      refreshToken: 'refresh-1',
+      refreshExpiresAt: new Date('2026-04-01T00:00:00.000Z'),
+      accessTokenExpiresInSeconds: 900,
+    });
+
+    const result = await service.issueSessionForUser({ userId: 'user-1' });
+
+    expect(result.hasConnectedBank).toBe(false);
+    expect(result.bankConnectionState).toBe('reconnect_required');
   });
 
   it('throws when user cannot be found', async () => {
     const { service, prisma } = makeService();
+    prisma.userSession.create.mockResolvedValue({ id: 'session-1', userId: 'missing-user' });
     prisma.user.findUnique.mockResolvedValue(null);
+    prisma.bankConnection.count.mockResolvedValue(0);
 
-    await expect(
-      (service as any).getUserSessionFlags('missing-user'),
-    ).rejects.toThrow('Invalid user session');
+    jest.spyOn(service as any, 'issueJwtPair').mockResolvedValue({
+      accessToken: 'access-1',
+      refreshToken: 'refresh-1',
+      refreshExpiresAt: new Date('2026-04-01T00:00:00.000Z'),
+      accessTokenExpiresInSeconds: 900,
+    });
+
+    await expect(service.issueSessionForUser({ userId: 'missing-user' })).rejects.toThrow(
+      'Invalid user session',
+    );
   });
 });

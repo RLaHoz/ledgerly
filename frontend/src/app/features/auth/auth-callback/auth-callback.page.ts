@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent, IonSpinner } from '@ionic/angular/standalone';
 import { BankLinkCoordinatorService } from '../services/banking/bank-link-coordinator.service';
+import { AUTH_CONNECT_BANK_ROUTE } from '../store/auth-route.constants';
 
 @Component({
   selector: 'app-auth-callback',
@@ -25,7 +26,7 @@ export class AuthCallbackPage {
     const handled = this.coordinator.consumeCallbackUrl(window.location.href);
 
     if (!handled) {
-      void this.router.navigateByUrl('/auth', { replaceUrl: true });
+      void this.router.navigateByUrl(AUTH_CONNECT_BANK_ROUTE, { replaceUrl: true });
     }
   }
 }

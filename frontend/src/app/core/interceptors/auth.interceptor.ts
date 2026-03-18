@@ -6,9 +6,12 @@ import { SessionTokenService } from 'src/app/features/auth/services/session-toke
 
 function isAuthSessionEndpoint(url: string): boolean {
   return (
-    url.includes('/auth/session/anonymous') ||
     url.includes('/auth/session/refresh') ||
-    url.includes('/auth/session/logout')
+    url.includes('/auth/session/logout') ||
+    url.includes('/auth/google/start') ||
+    url.includes('/auth/google/complete') ||
+    url.includes('/auth/bank-consent/start') ||
+    url.includes('/auth/bank-consent/verify')
   );
 }
 

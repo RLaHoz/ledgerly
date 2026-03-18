@@ -22,6 +22,10 @@ class MockOnboardingWizardStore {
     .createSpy('loadUserTransactions')
     .and.callFake(() => undefined);
 
+  readonly loadUserTransactionsIfNeeded = jasmine
+    .createSpy('loadUserTransactionsIfNeeded')
+    .and.callFake(() => undefined);
+
   readonly setFilter = jasmine
     .createSpy('setFilter')
     .and.callFake(() => undefined);
@@ -54,8 +58,9 @@ describe('OnboardingWizardComponent (finish flow)', () => {
   let authStore: {
     setOnboardingCurrentStep: jasmine.Spy;
     completeOnboarding: jasmine.Spy;
-    markBankConnected: jasmine.Spy;
+    setBankConnectionState: jasmine.Spy;
     resetBankLinkFlow: jasmine.Spy;
+    getPostAuthTargetRoute: jasmine.Spy;
     isCompletingOnboarding: () => boolean;
     onboardingCompletionError: () => string | null;
     onboardingCompleted: () => boolean;
@@ -89,12 +94,15 @@ describe('OnboardingWizardComponent (finish flow)', () => {
         .and.callFake(() => {
           isCompletingOnboardingSignal.set(true);
         }),
-      markBankConnected: jasmine
-        .createSpy('markBankConnected')
+      setBankConnectionState: jasmine
+        .createSpy('setBankConnectionState')
         .and.callFake(() => undefined),
       resetBankLinkFlow: jasmine
         .createSpy('resetBankLinkFlow')
         .and.callFake(() => undefined),
+      getPostAuthTargetRoute: jasmine
+        .createSpy('getPostAuthTargetRoute')
+        .and.returnValue('/dashboard'),
       isCompletingOnboarding: () => isCompletingOnboardingSignal(),
       onboardingCompletionError: () => onboardingCompletionErrorSignal(),
       onboardingCompleted: () => onboardingCompletedSignal(),
@@ -140,7 +148,6 @@ describe('OnboardingWizardComponent (finish flow)', () => {
   });
 
   it('opens warning modal when finish is pressed with uncategorized transactions', () => {
-    component.currentStep.set('confirm');
     wizardStore.confirmAccepted.set(true);
     wizardStore.uncategorizedCount.set(2);
 
@@ -185,7 +192,6 @@ describe('OnboardingWizardComponent (finish flow)', () => {
   });
 
   it('saves assignments and navigates to dashboard after successful finish', async () => {
-    component.currentStep.set('confirm');
     wizardStore.confirmAccepted.set(true);
     wizardStore.uncategorizedCount.set(0);
 
@@ -206,11 +212,13 @@ describe('OnboardingWizardComponent (finish flow)', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/dashboard');
+    expect(authStore.getPostAuthTargetRoute).toHaveBeenCalled();
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/dashboard', {
+      replaceUrl: true,
+    });
   });
 
   it('does not navigate when backend save fails', async () => {
-    component.currentStep.set('confirm');
     wizardStore.confirmAccepted.set(true);
     wizardStore.uncategorizedCount.set(0);
 
@@ -231,7 +239,6 @@ describe('OnboardingWizardComponent (finish flow)', () => {
   });
 
   it('ignores a second finish click while saving is in progress', () => {
-    component.currentStep.set('confirm');
     wizardStore.confirmAccepted.set(true);
     wizardStore.uncategorizedCount.set(0);
 
@@ -250,10 +257,11 @@ describe('OnboardingWizardComponent (finish flow)', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(wizardStore.loadUserTransactions).not.toHaveBeenCalled();
+    expect(wizardStore.loadUserTransactionsIfNeeded).toHaveBeenCalledTimes(1);
   });
 
   it('redirects to auth when bank reconnection is required', async () => {
+    authStore.getPostAuthTargetRoute.and.returnValue('/auth/connect-bank');
     wizardStore.bankReconnectionRequired.set(true);
     wizardStore.loadUserTransactionsError.set('reconnect required');
 
@@ -261,10 +269,13 @@ describe('OnboardingWizardComponent (finish flow)', () => {
     await fixture.whenStable();
 
     expect(wizardStore.acknowledgeBankReconnectionRequired).toHaveBeenCalled();
-    expect(authStore.markBankConnected).toHaveBeenCalledWith({
-      isFirstBankConnectionForUser: null,
-    });
+    expect(authStore.setBankConnectionState).toHaveBeenCalledWith(
+      'reconnect_required',
+    );
     expect(authStore.resetBankLinkFlow).toHaveBeenCalled();
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/auth', { replaceUrl: true });
+    expect(authStore.getPostAuthTargetRoute).toHaveBeenCalled();
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/auth/connect-bank', {
+      replaceUrl: true,
+    });
   });
 });

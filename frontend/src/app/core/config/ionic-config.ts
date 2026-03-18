@@ -6,6 +6,7 @@ export function buildIonicConfig(isNativePlatform: boolean): IonicConfig {
   }
 
   return {
+    animated: false,
     // Prevent web input shims from auto-scrolling Ionic content on focus.
     scrollAssist: false,
     inputShims: false,
@@ -14,4 +15,3 @@ export function buildIonicConfig(isNativePlatform: boolean): IonicConfig {
     hideCaretOnScroll: false,
   };
 }
-

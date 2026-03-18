@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.dashboard-urgent-cta {
+  align-items: center;
+  background: var(--critical-soft);
+  border: 1px solid color-mix(in srgb, var(--critical) 20%, transparent);
+  border-radius: 12px;
+  color: var(--critical);
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.dashboard-urgent-cta-icon,
+.dashboard-urgent-cta-chevron {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.dashboard-urgent-cta-icon ion-icon,
+.dashboard-urgent-cta-chevron ion-icon {
+  font-size: 16px;
+}
+
+.dashboard-urgent-cta-text {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.dashboard-urgent-cta-chevron {
+  opacity: 0.6;
+}

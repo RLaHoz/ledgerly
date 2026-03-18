@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.dashboard-daily-card {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.dashboard-card-label {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0 0 4px;
+}
+
+.dashboard-card-value-large {
+  color: var(--text-primary);
+  font-feature-settings: 'tnum';
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.dashboard-daily-pace-right {
+  text-align: right;
+}
+
+.dashboard-card-value-medium {
+  font-feature-settings: 'tnum';
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.dashboard-card-value-success {
+  color: var(--success);
+}
+
+.dashboard-card-value-warning {
+  color: var(--warning);
+}
+
+.dashboard-card-value-critical {
+  color: var(--critical);
+}

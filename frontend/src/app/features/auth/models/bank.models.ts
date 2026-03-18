@@ -20,6 +20,7 @@ export interface BankConsentVerificationResponse {
   failedJobIds: string[];
   pendingJobIds: string[];
   message: string;
+  session?: import('./auth.models').SessionResponse;
   context?: {
     appUserId: string;
     providerCode: string;
@@ -27,6 +28,8 @@ export interface BankConsentVerificationResponse {
     providerConnectionIds: string[];
     jobIds: string[];
     isFirstSuccessfulConsentForUser: boolean;
-    isFirstBankConnectionForUser: boolean;
+    bankConnectionState: import('./auth.models').BankConnectionState;
+    hasConnectedBank: boolean;
+    wasFirstSuccessfulBankConnection: boolean;
   };
 }

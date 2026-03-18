@@ -7,7 +7,14 @@ export interface BankAuthorizeContext {
 
 export interface CreateAuthorizeUrlInput {
   state: string;
-  providerUserId?: string;
+  providerUserId: string;
+  redirectUri?: string;
+}
+
+export interface CreateProviderUserInput {
+  email: string;
+  fullName: string;
+  mobile?: string | null;
 }
 
 export interface CreateProviderUserResult {
@@ -28,7 +35,9 @@ export interface BankAuthClient {
   createAuthorizeUrl(
     input: CreateAuthorizeUrlInput,
   ): Promise<BankAuthorizeContext>;
-  createProviderUser?(): Promise<CreateProviderUserResult>;
+  createProviderUser?(
+    input: CreateProviderUserInput,
+  ): Promise<CreateProviderUserResult>;
   getConsentJobStatus?(jobId: string): Promise<BankConsentJobStatus>;
 }
 

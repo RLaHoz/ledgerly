@@ -1,0 +1,17 @@
+<article class="surface-card preview-card">
+  <header>
+    <h2>Preview (first 5 rows)</h2>
+  </header>
+
+  <div class="preview-rows">
+    @for (row of rows(); track row.id) {
+      <div class="preview-row">
+        <div>
+          <p class="preview-description">{{ row.description }}</p>
+          <p class="preview-date">{{ row.dateLabel }}</p>
+        </div>
+        <p class="preview-amount">{{ row.amountLabel }}</p>
+      </div>
+    }
+  </div>
+</article>

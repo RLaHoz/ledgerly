@@ -1,45 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ThemeStore } from 'src/app/core/store/theme/theme.store';
-import { BankLinkCoordinatorService } from './services/banking/bank-link-coordinator.service';
-import { AuthStore } from './store/auth.store';
 import { AuthPage } from './auth.page';
+import { BankLinkCoordinatorService } from './services/banking/bank-link-coordinator.service';
+import { GoogleAuthCoordinatorService } from './services/google/google-auth-coordinator.service';
 
 describe('AuthPage', () => {
   let component: AuthPage;
   let fixture: ComponentFixture<AuthPage>;
+  let bankCoordinator: jasmine.SpyObj<BankLinkCoordinatorService>;
+  let googleCoordinator: jasmine.SpyObj<GoogleAuthCoordinatorService>;
 
   beforeEach(async () => {
+    bankCoordinator = jasmine.createSpyObj<BankLinkCoordinatorService>('BankLinkCoordinatorService', [
+      'init',
+    ]);
+    googleCoordinator = jasmine.createSpyObj<GoogleAuthCoordinatorService>(
+      'GoogleAuthCoordinatorService',
+      ['init'],
+    );
+
     await TestBed.configureTestingModule({
       imports: [AuthPage],
       providers: [
-        {
-          provide: ThemeStore,
-          useValue: {
-            toggleMode: jasmine.createSpy('toggleMode').and.callFake(() => undefined),
-          },
-        },
-        {
-          provide: AuthStore,
-          useValue: {
-            isLoading: () => false,
-            isIdle: () => true,
-            isError: () => false,
-            isSuccess: () => false,
-          },
-        },
-        {
-          provide: BankLinkCoordinatorService,
-          useValue: {
-            init: jasmine.createSpy('init').and.callFake(() => undefined),
-            startBankLink: jasmine.createSpy('startBankLink').and.callFake(() => undefined),
-          },
-        },
+        { provide: BankLinkCoordinatorService, useValue: bankCoordinator },
+        { provide: GoogleAuthCoordinatorService, useValue: googleCoordinator },
       ],
     })
       .overrideComponent(AuthPage, {
-        set: {
-          template: '<div></div>',
-        },
+        set: { template: '<div></div>' },
       })
       .compileComponents();
 
@@ -50,5 +37,10 @@ describe('AuthPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('initializes auth coordinators once auth shell loads', () => {
+    expect(bankCoordinator.init).toHaveBeenCalledTimes(1);
+    expect(googleCoordinator.init).toHaveBeenCalledTimes(1);
   });
 });

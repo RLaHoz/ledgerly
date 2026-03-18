@@ -1,30 +1,47 @@
 <ion-content [fullscreen]="true">
-  <section class="home-layout-page">
-    <app-budget-health
+  <section class="dashboard-page">
+    <app-dashboard-month-selector
       [monthLabel]="monthLabel()"
-      [monthValue]="selectedMonthDate()"
-      [minMonthDate]="minMonthDate"
-      [maxMonthDate]="maxMonthDate"
-      [healthLabel]="budgetHealthLabel"
-      [updatedLabel]="updatedLabel"
-      [trendLabel]="trendLabel"
-      [stats]="budgetHealthStats"
-      (previousRequested)="onPreviousMonth()"
-      (nextRequested)="onNextMonth()"
-      (monthSelected)="onMonthSelected($event)"
+      (previousMonth)="onPreviousMonth()"
+      (nextMonth)="onNextMonth()"
     />
 
-    <app-main-budget-info [model]="mainBudgetInfo()" />
+    <app-categories-over-budget
+      [categories]="overBudgetCategories"
+      (urgentCta)="onUrgentCta()"
+    />
 
-    <app-safe-place-alerts [model]="safePlaceAlerts" />
+    <app-categories-ontrack-budget
+      [categories]="onTrackCategories"
+      (urgentCta)="onUrgentCta()"
+    />
 
-    <app-priority [items]="priorityItems" />
+    <app-budget-card
+      [heroSpentLabel]="heroSpentLabel"
+      [heroBudgetLabel]="heroBudgetLabel"
+      [heroPercentageLabel]="heroPercentageLabel"
+      [heroPercentageTone]="heroPercentageTone"
+      [heroProgressPercent]="heroProgressPercent"
+      [heroRemainingLabel]="heroRemainingLabel"
+      [heroDaysRemainingLabel]="heroDaysRemainingLabel"
+      [heroForecastValueLabel]="heroForecastValueLabel"
+      [heroForecastSecondaryLabel]="heroForecastSecondaryLabel"
+      [heroForecastValueTone]="heroForecastValueTone"
+      [heroForecastActionLabel]="heroForecastActionLabel"
+      (forecastAdjust)="onForecastAdjust()"
+    />
 
-    <app-budget-pressure
-      [items]="budgetPressureItems"
-      [editable]="false"
-      (viewAllRequested)="onBudgetPressureViewAll()"
-      (itemAction)="onBudgetPressureItemAction($event)"
+    <app-daily-spend-card
+      [dailySpendLabel]="dailySpendLabel"
+      [dailySpendValueLabel]="dailySpendValueLabel"
+      [currentPaceLabel]="currentPaceLabel"
+      [currentPaceValueLabel]="currentPaceValueLabel"
+      [currentPaceTone]="currentPaceTone"
+    />
+
+    <app-budget-categories-tracking
+      [items]="categoryItems"
+      (seeAll)="onSeeAll()"
     />
   </section>
 </ion-content>

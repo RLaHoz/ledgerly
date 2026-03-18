@@ -1,0 +1,40 @@
+<article class="dashboard-hero-card" aria-label="Budget overview">
+  <div class="dashboard-hero-amount-row">
+    <p class="dashboard-hero-amount">
+      <strong>{{ heroSpentLabel() }}</strong>
+      <span>/ {{ heroBudgetLabel() }}</span>
+    </p>
+    <p class="dashboard-hero-percentage" [class]="percentageClass()">
+      {{ heroPercentageLabel() }}
+    </p>
+  </div>
+
+  <span class="dashboard-hero-progress-track" aria-hidden="true">
+    <span
+      class="dashboard-hero-progress-fill"
+      [class]="progressFillClass()"
+      [style.width.%]="progressPercent()"
+    ></span>
+  </span>
+
+  <div class="dashboard-hero-stats-row">
+    <p>{{ heroRemainingLabel() }}</p>
+    <p>{{ heroDaysRemainingLabel() }}</p>
+  </div>
+
+  <div class="dashboard-hero-forecast-panel">
+    <div class="dashboard-hero-forecast-copy">
+      <p class="dashboard-hero-forecast-value" [class]="forecastValueClass()">
+        {{ heroForecastValueLabel() }}
+      </p>
+      <p class="dashboard-hero-forecast-secondary">
+        {{ heroForecastSecondaryLabel() }}
+      </p>
+    </div>
+
+    <button class="dashboard-hero-forecast-link" type="button" (click)="onForecastAdjust()">
+      <span>{{ heroForecastActionLabel() }}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+  </div>
+</article>
