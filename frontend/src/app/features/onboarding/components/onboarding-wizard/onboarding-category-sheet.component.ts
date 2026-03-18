@@ -16,12 +16,12 @@ export class OnboardingCategorySheetComponent {
   readonly searchValue = input('');
   readonly expandedCategoryId = input<string | null>(null);
 
-  readonly close = output<void>();
+  readonly dismissed = output<void>();
   readonly searchChange = output<string>();
   readonly categoryToggle = output<string>();
   readonly subcategorySelect = output<string>();
 
-  readonly onBackdropClick = output<void>();
+  readonly backdropPressed = output<void>();
 
   onSearchInput(value: string | number | null | undefined): void {
     this.searchChange.emit(String(value ?? ''));

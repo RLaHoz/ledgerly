@@ -1,8 +1,8 @@
-<div class="assign-sheet-overlay" (click)="onBackdropClick.emit()">
+<div class="assign-sheet-overlay" (click)="backdropPressed.emit()">
   <div class="assign-sheet" (click)="$event.stopPropagation()">
     <header class="assign-sheet-header">
       <h3>Assign subcategory</h3>
-      <ion-button fill="clear" class="sheet-close" (click)="close.emit()">
+      <ion-button fill="clear" class="sheet-close" (click)="dismissed.emit()">
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </header>
