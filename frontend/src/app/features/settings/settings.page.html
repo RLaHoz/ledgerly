@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <section class="settings-page">
-    <app-user-profile-info [model]="profileInfo()" />
+    <app-user-profile-info [model]="profileInfo()" (logoutClicked)="onLogout()" />
 
     <app-data-source-info
       [model]="dataSourceInfo()"

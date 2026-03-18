@@ -20,7 +20,7 @@
 
     <div class="item-values">
       <p class="item-amount">{{ amountLabel() }}</p>
-      <p class="item-left">{{ item().leftLabel }}</p>
+      <p class="item-left" [class]="statusClass()">{{ item().leftLabel }}</p>
     </div>
 
     <span class="progress-track" aria-hidden="true">

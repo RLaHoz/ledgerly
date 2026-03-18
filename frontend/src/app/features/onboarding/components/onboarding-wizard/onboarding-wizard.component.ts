@@ -1,17 +1,15 @@
 import {
-  ElementRef,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   computed,
   effect,
   inject,
   signal,
   viewChild,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Capacitor } from '@capacitor/core';
 import {
   IonButton,
   IonContent,
@@ -19,45 +17,8 @@ import {
   IonLoading,
   IonModal,
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import {
-  alertCircleOutline,
-  airplaneOutline,
-  arrowBackOutline,
-  bagHandleOutline,
-  barbellOutline,
-  bodyOutline,
-  briefcaseOutline,
-  cardOutline,
-  cashOutline,
-  cartOutline,
-  checkmarkOutline,
-  chevronBackOutline,
-  chevronForwardOutline,
-  closeOutline,
-  cloudUploadOutline,
-  documentTextOutline,
-  ellipseOutline,
-  filmOutline,
-  flashOutline,
-  giftOutline,
-  happyOutline,
-  heartOutline,
-  homeOutline,
-  carOutline,
-  medkitOutline,
-  pawOutline,
-  peopleOutline,
-  pricetagOutline,
-  repeatOutline,
-  schoolOutline,
-  shieldCheckmarkOutline,
-  searchOutline,
-  shieldOutline,
-  sparklesOutline,
-  warningOutline,
-} from 'ionicons/icons';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { OnboardingStepKey } from '../../models/onboarding.models';
 import { OnboardingWizardStore } from '../../store/onboarding-wizard.store';
 import { AuthStore } from '../../../auth/store/auth.store';
@@ -66,6 +27,15 @@ import { OnboardingWizardCategoryComponent } from './onboarding-wizard-category/
 import { OnboardingWizardBudgetComponent } from './onboarding-wizard-budget/onboarding-wizard-budget.component';
 import { OnboardingWizardConfirmComponent } from './onboarding-wizard-confirm/onboarding-wizard-confirm.component';
 import { OnboardingUnassignedModalComponent } from './onboarding-unassigned-modal/onboarding-unassigned-modal.component';
+import { registerOnboardingIcons } from './onboarding-wizard.icons';
+import { OnboardingWizardLayoutService } from './onboarding-wizard-layout.service';
+import {
+  getNextOnboardingStep,
+  getPreviousOnboardingStep,
+  parseOnboardingStep,
+  STEP_LABELS,
+  STEP_ORDER,
+} from './onboarding-wizard-step.util';
 
 @Component({
   selector: 'app-onboarding-wizard',
@@ -87,18 +57,24 @@ import { OnboardingUnassignedModalComponent } from './onboarding-unassigned-moda
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingWizardComponent {
-  private readonly document = inject(DOCUMENT);
   private readonly hostElement = inject(ElementRef<HTMLElement>);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly layoutService = inject(OnboardingWizardLayoutService);
   readonly authStore = inject(AuthStore);
+  readonly wizardStore = inject(OnboardingWizardStore);
 
-  readonly wizard = inject(OnboardingWizardStore);
   private readonly ionContent = viewChild(IonContent);
   private readonly unassignedWarningModal = viewChild(IonModal);
+  private readonly routeStep = toSignal(
+    this.route.paramMap.pipe(map((params) => parseOnboardingStep(params.get('step')))),
+    {
+      initialValue: parseOnboardingStep(this.route.snapshot?.paramMap?.get('step') ?? null),
+    },
+  );
   readonly fileInputId = 'onboarding-file-input';
-  readonly currentStep = signal<OnboardingStepKey>('import');
+  readonly currentStep = computed<OnboardingStepKey>(() => this.routeStep() ?? 'import');
   readonly isUnassignedWarningModalOpen = signal(false);
   private readonly finalizeRequested = signal(false);
   private readonly onboardingCompletionRequested = signal(false);
@@ -108,7 +84,7 @@ export class OnboardingWizardComponent {
   readonly canGoBack = computed(() => this.stepIndex() > 1);
   readonly continueLabel = computed(() =>
     this.currentStep() === 'confirm'
-      ? (this.wizard.isSavingClassifications() || this.authStore.isCompletingOnboarding()
+      ? (this.wizardStore.isSavingClassifications() || this.authStore.isCompletingOnboarding()
           ? 'Saving...'
           : 'Finish Setup')
       : 'Continue',
@@ -118,15 +94,15 @@ export class OnboardingWizardComponent {
 
     if (step === 'import') {
       return (
-        this.wizard.isParsing() ||
-        (!this.wizard.isImportReady() && !this.wizard.directDataFromBankAccounts())
+        this.wizardStore.isParsing() ||
+        (!this.wizardStore.isImportReady() && !this.wizardStore.directDataFromBankAccounts())
       );
     }
 
     if (step === 'confirm') {
       return (
-        !this.wizard.confirmAccepted() ||
-        this.wizard.isSavingClassifications() ||
+        !this.wizardStore.confirmAccepted() ||
+        this.wizardStore.isSavingClassifications() ||
         this.authStore.isCompletingOnboarding()
       );
     }
@@ -137,109 +113,133 @@ export class OnboardingWizardComponent {
   readonly isFinishStep = computed(() => this.currentStep() === 'confirm');
 
   constructor() {
-    addIcons({
-      'arrow-back-outline': arrowBackOutline,
-      'cloud-upload-outline': cloudUploadOutline,
-      'checkmark-outline': checkmarkOutline,
-      'document-text-outline': documentTextOutline,
-      'pricetag-outline': pricetagOutline,
-      'ellipse-outline': ellipseOutline,
-      'flash-outline': flashOutline,
-      'medkit-outline': medkitOutline,
-      'shield-checkmark-outline': shieldCheckmarkOutline,
-      'airplane-outline': airplaneOutline,
-      'school-outline': schoolOutline,
-      'people-outline': peopleOutline,
-      'paw-outline': pawOutline,
-      'repeat-outline': repeatOutline,
-      'card-outline': cardOutline,
-      'body-outline': bodyOutline,
-      'gift-outline': giftOutline,
-      'briefcase-outline': briefcaseOutline,
-      'cash-outline': cashOutline,
-      'chevron-forward-outline': chevronForwardOutline,
-      'chevron-back-outline': chevronBackOutline,
-      'search-outline': searchOutline,
-      'close-outline': closeOutline,
-      'sparkles-outline': sparklesOutline,
-      'warning-outline': warningOutline,
-      'shield-outline': shieldOutline,
-      'happy-outline': happyOutline,
-      'cart-outline': cartOutline,
-      'home-outline': homeOutline,
-      'car-outline': carOutline,
-      'barbell-outline': barbellOutline,
-      'bag-handle-outline': bagHandleOutline,
-      'film-outline': filmOutline,
-      'heart-outline': heartOutline,
-      'alert-circle-outline': alertCircleOutline,
+    registerOnboardingIcons();
+    this.wizardStore.loadUserTransactionsIfNeeded();
+    this.layoutService.lockBodyScroll(this.destroyRef);
+    this.layoutService.installDesktopFocusGuard({
+      destroyRef: this.destroyRef,
+      hostElement: this.hostElement,
+      getIonContent: () => this.ionContent(),
     });
+    this.initializeStepSyncEffect();
+    this.initializeFinalizeEffect();
+    this.initializeBankReconnectEffect();
+  }
 
-    this.loadUserTransactionsIfNeeded();
-    this.document.body.classList.add('onboarding-layout-lock');
-    this.destroyRef.onDestroy(() => {
-      this.document.body.classList.remove('onboarding-layout-lock');
-    });
-
-    if (!Capacitor.isNativePlatform()) {
-      const scrollAnchorY = window.scrollY;
-      const handleFocusIn = (event: FocusEvent) => {
-        const target = event.target;
-        if (!(target instanceof HTMLElement)) {
-          return;
-        }
-
-        if (!this.hostElement.nativeElement.contains(target)) {
-          return;
-        }
-
-        requestAnimationFrame(() => {
-          this.restoreIonContentScrollTop();
-
-          if (window.scrollY !== scrollAnchorY) {
-            window.scrollTo({ top: scrollAnchorY, left: 0, behavior: 'auto' });
-          }
-        });
-      };
-
-      this.document.addEventListener('focusin', handleFocusIn, true);
-      this.destroyRef.onDestroy(() => {
-        this.document.removeEventListener('focusin', handleFocusIn, true);
-      });
+  onHeaderBack(): void {
+    if (this.canGoBack()) {
+      this.goToPreviousStep();
+      return;
     }
 
-    this.route.paramMap
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        const step = params.get('step');
-        if (!isStepKey(step)) {
-          void this.router.navigate(['/onboarding/import'], { replaceUrl: true });
-          return;
-        }
+    void this.router.navigateByUrl('/settings');
+  }
 
-        this.currentStep.set(step);
-        if (step !== 'confirm' && this.isUnassignedWarningModalOpen()) {
-          this.closeUnassignedWarningModal();
-        }
-        this.authStore.setOnboardingCurrentStep(step);
-      });
+  onContinue(): void {
+    if (this.isContinueDisabled()) {
+      return;
+    }
 
+    if (this.currentStep() === 'confirm') {
+      if (this.wizardStore.uncategorizedCount() > 0) {
+        this.isUnassignedWarningModalOpen.set(true);
+        return;
+      }
+
+      this.finalizeOnboarding();
+      return;
+    }
+
+    this.goToNextStep();
+  }
+
+  onBack(): void {
+    this.goToPreviousStep();
+  }
+
+  async onAssignMissingFromModal(): Promise<void> {
+    this.closeUnassignedWarningModal();
+    this.wizardStore.setFilter('uncategorized');
+    await this.router.navigate(['/onboarding', 'categories']);
+  }
+
+  async onSaveAsIsFromModal(): Promise<void> {
+    this.closeUnassignedWarningModal();
+    this.finalizeOnboarding();
+  }
+
+  onDismissUnassignedWarningModal(): void {
+    this.isUnassignedWarningModalOpen.set(false);
+  }
+
+  private goToNextStep(): void {
+    const next = getNextOnboardingStep(this.currentStep());
+    if (next) {
+      void this.router.navigate(['/onboarding', next]);
+    }
+  }
+
+  private goToPreviousStep(): void {
+    const previous = getPreviousOnboardingStep(this.currentStep());
+    if (previous) {
+      void this.router.navigate(['/onboarding', previous]);
+    }
+  }
+
+  private finalizeOnboarding(): void {
+    if (this.wizardStore.isSavingClassifications()) {
+      return;
+    }
+
+    this.wizardStore.resetSaveTransactionAssignmentsState();
+    this.finalizeRequested.set(true);
+    this.onboardingCompletionRequested.set(false);
+    this.wizardStore.saveTransactionAssignments();
+  }
+
+  private closeUnassignedWarningModal(): void {
+    this.isUnassignedWarningModalOpen.set(false);
+    const modal = this.unassignedWarningModal();
+    if (!modal) {
+      return;
+    }
+
+    void modal.dismiss().catch(() => undefined);
+  }
+
+  private initializeStepSyncEffect(): void {
+    effect(() => {
+      const step = this.routeStep();
+      if (!step) {
+        void this.router.navigate(['/onboarding/import'], { replaceUrl: true });
+        return;
+      }
+
+      if (step !== 'confirm' && this.isUnassignedWarningModalOpen()) {
+        this.closeUnassignedWarningModal();
+      }
+
+      this.authStore.setOnboardingCurrentStep(step);
+    });
+  }
+
+  private initializeFinalizeEffect(): void {
     effect(() => {
       if (!this.finalizeRequested()) {
         return;
       }
 
-      if (this.wizard.isSavingClassifications()) {
+      if (this.wizardStore.isSavingClassifications()) {
         return;
       }
 
-      if (this.wizard.saveClassificationsError()) {
+      if (this.wizardStore.saveClassificationsError()) {
         this.finalizeRequested.set(false);
         this.onboardingCompletionRequested.set(false);
         return;
       }
 
-      if (!this.wizard.saveCompletedAt()) {
+      if (!this.wizardStore.saveCompletedAt()) {
         return;
       }
 
@@ -265,141 +265,24 @@ export class OnboardingWizardComponent {
 
       this.finalizeRequested.set(false);
       this.onboardingCompletionRequested.set(false);
-      void this.router.navigateByUrl('/dashboard');
+      void this.router.navigateByUrl(this.authStore.getPostAuthTargetRoute(), {
+        replaceUrl: true,
+      });
     });
+  }
 
+  private initializeBankReconnectEffect(): void {
     effect(() => {
-      if (!this.wizard.bankReconnectionRequired()) {
+      if (!this.wizardStore.bankReconnectionRequired()) {
         return;
       }
 
-      this.wizard.acknowledgeBankReconnectionRequired();
-      this.authStore.markBankConnected({ isFirstBankConnectionForUser: null });
+      this.wizardStore.acknowledgeBankReconnectionRequired();
+      this.authStore.setBankConnectionState('reconnect_required');
       this.authStore.resetBankLinkFlow();
-      void this.router.navigateByUrl('/auth', { replaceUrl: true });
+      void this.router.navigateByUrl(this.authStore.getPostAuthTargetRoute(), {
+        replaceUrl: true,
+      });
     });
   }
-
-  onHeaderBack(): void {
-    if (this.canGoBack()) {
-      this.goToPreviousStep();
-      return;
-    }
-
-    void this.router.navigateByUrl('/settings');
-  }
-
-  onContinue(): void {
-    if (this.isContinueDisabled()) {
-      return;
-    }
-
-    if (this.currentStep() === 'confirm') {
-      if (this.wizard.uncategorizedCount() > 0) {
-        this.isUnassignedWarningModalOpen.set(true);
-        return;
-      }
-
-      this.finalizeOnboarding();
-      return;
-    }
-
-    this.goToNextStep();
-  }
-
-  onBack(): void {
-    this.goToPreviousStep();
-  }
-
-  async onAssignMissingFromModal(): Promise<void> {
-    this.closeUnassignedWarningModal();
-    this.wizard.setFilter('uncategorized');
-    await this.router.navigate(['/onboarding', 'categories']);
-  }
-
-  async onSaveAsIsFromModal(): Promise<void> {
-    this.closeUnassignedWarningModal();
-    this.finalizeOnboarding();
-  }
-
-  onDismissUnassignedWarningModal(): void {
-    this.isUnassignedWarningModalOpen.set(false);
-  }
-
-  private goToNextStep(): void {
-    const index = STEP_ORDER.indexOf(this.currentStep());
-    const next = STEP_ORDER[Math.min(index + 1, STEP_ORDER.length - 1)];
-    if (next) {
-      void this.router.navigate(['/onboarding', next]);
-    }
-  }
-
-  private goToPreviousStep(): void {
-    const index = STEP_ORDER.indexOf(this.currentStep());
-    const previous = STEP_ORDER[Math.max(index - 1, 0)];
-    if (previous) {
-      void this.router.navigate(['/onboarding', previous]);
-    }
-  }
-
-  private finalizeOnboarding(): void {
-    if (this.wizard.isSavingClassifications()) {
-      return;
-    }
-
-    this.wizard.resetSaveTransactionAssignmentsState();
-    this.finalizeRequested.set(true);
-    this.onboardingCompletionRequested.set(false);
-    this.wizard.saveTransactionAssignments();
-  }
-
-  private closeUnassignedWarningModal(): void {
-    this.isUnassignedWarningModalOpen.set(false);
-    const modal = this.unassignedWarningModal();
-    if (!modal) {
-      return;
-    }
-
-    void modal.dismiss().catch(() => undefined);
-  }
-
-  private loadUserTransactionsIfNeeded(): void {
-    if (this.wizard.directDataFromBankAccounts() || this.wizard.isParsing()) {
-      return;
-    }
-
-    this.wizard.loadUserTransactions();
-  }
-
-  private restoreIonContentScrollTop(): void {
-    const content = this.ionContent();
-    if (!content) {
-      return;
-    }
-
-    void content
-      .getScrollElement()
-      .then((scrollElement) => {
-        if (scrollElement.scrollTop !== 0) {
-          scrollElement.scrollTop = 0;
-          return;
-        }
-
-        return content.scrollToTop(0);
-      })
-      .catch(() => undefined);
-  }
-}
-
-const STEP_ORDER: readonly OnboardingStepKey[] = ['import', 'categories', 'budgets', 'confirm'];
-
-const STEP_LABELS: Record<OnboardingStepKey, string> = {
-  import: 'Import',
-  categories: 'Categories',
-  budgets: 'Budgets',
-  confirm: 'Confirm',
-};
-
-function isStepKey(value: string | null): value is OnboardingStepKey {
-  return value === 'import' || value === 'categories' || value === 'budgets' || value === 'confirm';
 }

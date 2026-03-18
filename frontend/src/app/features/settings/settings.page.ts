@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 import { ThemeService } from '../../core/services/theme/theme.service';
 import { ThemeStore } from '../../core/store/theme/theme.store';
+import { AuthStore } from '../auth/store/auth.store';
 import { DataSourceInfoComponent, DataSourceInfoModel } from './components/data-source-info/data-source-info.component';
 import { NontificationItem, NontificationsComponent } from './components/nontifications/nontifications.component';
 import { PreferencesComponent, PreferencesModel, PreferencesThemeMode } from './components/preferences/preferences.component';
@@ -20,6 +21,7 @@ import { SettingsStore } from './store/settings.store';
 })
 export class SettingsPage {
   readonly store = inject(SettingsStore);
+  private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly themeStore = inject(ThemeStore);
   private readonly themeService = inject(ThemeService);
@@ -153,6 +155,11 @@ export class SettingsPage {
 
   onFamilyModeToggle(enabled: boolean): void {
     this.store.toggleCoupleShareInsights(enabled);
+  }
+
+  onLogout(): void {
+    this.authStore.logout();
+    void this.router.navigateByUrl('/auth', { replaceUrl: true });
   }
 }
 

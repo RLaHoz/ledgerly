@@ -42,9 +42,33 @@ class BudgetStepStoreMock {
       ],
     },
   ]);
+  readonly budgetSections = signal([
+    {
+      id: 'cat-1',
+      slug: 'dining',
+      name: 'Dining',
+      iconName: 'pricetag-outline',
+      colorHex: '#F97316',
+      budgetValue: '117',
+      importedAmountLabel: '$116.51',
+      subcategories: [
+        {
+          id: 'sub-1',
+          name: 'Fast Food',
+          iconName: 'ellipse-outline',
+          colorHex: '#F97316',
+          budgetValue: '117',
+          importedAmountLabel: '$116.51',
+        },
+      ],
+    },
+  ]);
 
   readonly loadUserTransactions = jasmine
     .createSpy('loadUserTransactions')
+    .and.callFake(() => undefined);
+  readonly loadUserTransactionsIfNeeded = jasmine
+    .createSpy('loadUserTransactionsIfNeeded')
     .and.callFake(() => undefined);
   readonly setFilter = jasmine.createSpy('setFilter').and.callFake(() => undefined);
   readonly resetSaveTransactionAssignmentsState = jasmine
@@ -129,12 +153,15 @@ describe('OnboardingWizard budget focus regression', () => {
             completeOnboarding: jasmine
               .createSpy('completeOnboarding')
               .and.callFake(() => undefined),
-            markBankConnected: jasmine
-              .createSpy('markBankConnected')
+            setBankConnectionState: jasmine
+              .createSpy('setBankConnectionState')
               .and.callFake(() => undefined),
             resetBankLinkFlow: jasmine
               .createSpy('resetBankLinkFlow')
               .and.callFake(() => undefined),
+            getPostAuthTargetRoute: jasmine
+              .createSpy('getPostAuthTargetRoute')
+              .and.returnValue('/dashboard'),
             isCompletingOnboarding: () => false,
             onboardingCompletionError: () => null,
             onboardingCompleted: () => false,

@@ -9,7 +9,7 @@ const defaultDraft: RulesAddDraft = {
   conditionField: 'merchant contains',
   conditionValue: '',
   actionType: 'set category to',
-  actionValue: 'Category',
+  actionValue: 'Baby',
 };
 
 export const RulesStore = signalStore(
@@ -111,7 +111,7 @@ export const RulesStore = signalStore(
         tone: isAnomaly ? 'anomaly' : isAlert ? 'alert' : 'auto',
         statusLabel: isAnomaly ? 'ANOMALY' : isAlert ? 'ALERT' : 'AUTO',
         condition: `Condition: ${draft.conditionField} "${draft.conditionValue.trim()}"`,
-        activity: isAlert ? 'Triggered 0 times this month' : 'Applied to 0 transactions this month',
+        activity: isAlert ? '0 triggers this month' : '0 tagged this month',
         enabled: true,
       };
 

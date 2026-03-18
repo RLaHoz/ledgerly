@@ -7,9 +7,16 @@ export const routes: Routes = [
       import('./features/auth/auth-callback/auth-callback.page').then((m) => m.AuthCallbackPage),
   },
   {
-    path: 'auth',
+    path: 'auth/google/callback',
     loadComponent: () =>
-      import('./features/auth/auth.page').then((m) => m.AuthPage),
+      import('./features/auth/auth-google-callback/auth-google-callback.page').then(
+        (m) => m.AuthGoogleCallbackPage,
+      ),
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/routes/auth.routes').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'onboarding',
@@ -28,15 +35,13 @@ export const routes: Routes = [
   },
   {
     path: '',
-    loadComponent: () =>
-      import('./core/layout/layout.page').then((m) => m.LayoutPage),
+    loadComponent: () => import('./core/layout/layout.page').then((m) => m.LayoutPage),
     children: [
       {
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/dashboard.page').then((m) => m.DashboardPage),
       },
-      // placeholders (luego los creas)
       {
         path: 'history',
         loadComponent: () =>
@@ -50,12 +55,16 @@ export const routes: Routes = [
       {
         path: 'budget/detail/:type',
         loadComponent: () =>
-          import('./features/budget/components/budget-details/budget-details.component').then((m) => m.BudgetDetailsComponent),
+          import('./features/budget/components/budget-details/budget-details.component').then(
+            (m) => m.BudgetDetailsComponent,
+          ),
       },
       {
         path: 'budgets/detail/:type',
         loadComponent: () =>
-          import('./features/budget/components/budget-details/budget-details.component').then((m) => m.BudgetDetailsComponent),
+          import('./features/budget/components/budget-details/budget-details.component').then(
+            (m) => m.BudgetDetailsComponent,
+          ),
       },
       {
         path: 'budget',

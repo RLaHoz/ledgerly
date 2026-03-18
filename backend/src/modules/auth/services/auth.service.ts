@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/sourceDB/database/prisma.service';
+import type { Prisma } from 'src/generated/prisma/client';
 // auth.service.ts
 import { BANK_AUTH_CLIENT } from 'src/modules/cdr-auth/bank-auth.types';
 import type {
@@ -15,18 +16,21 @@ import type {
 } from 'src/modules/cdr-auth/bank-auth.types';
 import { SessionService } from './session.service';
 import {
-  AppSessionResponse,
   BankAuthorizeUrlResponse,
   CompleteOnboardingResponse,
-  VerifyBankConsentResponse,
+  GoogleAuthorizeUrlResponse,
+  IssuedSessionResponse,
+  VerifyBankConsentResult,
 } from '../interfaces/auth-user.interface';
 import { RuleProvisioningService } from 'src/modules/rules/services/rule-provisioning.service';
 import { CategoryManagementService } from 'src/modules/categories/services/category-management.service';
+import { GoogleOidcService } from './google-oidc.service';
 
 @Injectable()
 export class AuthService {
   private static readonly BASIQ_PROVIDER_CODE = 'BASIQ';
   private static readonly CONSENT_TTL_MS = 15 * 60 * 1000;
+  private static readonly GOOGLE_AUTH_TTL_MS = 10 * 60 * 1000;
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
@@ -34,27 +38,232 @@ export class AuthService {
     private readonly sessionService: SessionService,
     private readonly ruleProvisioningService: RuleProvisioningService,
     private readonly categoryManagementService: CategoryManagementService,
+    private readonly googleOidc: GoogleOidcService,
     @Inject(BANK_AUTH_CLIENT) private readonly bankAuth: BankAuthClient,
   ) {}
-
-  createAnonymousSession(input: {
-    deviceId?: string;
-    userAgent?: string;
-    ipAddress?: string;
-  }): Promise<AppSessionResponse> {
-    return this.sessionService.createAnonymousSession(input);
-  }
 
   refreshSession(input: {
     refreshToken: string;
     userAgent?: string;
     ipAddress?: string;
-  }): Promise<AppSessionResponse> {
+  }): Promise<IssuedSessionResponse> {
     return this.sessionService.refreshSession(input);
   }
 
   revokeSession(refreshToken: string): Promise<void> {
     return this.sessionService.revokeSession(refreshToken);
+  }
+
+  async startGoogleAuth(input: {
+    client: 'web' | 'native';
+    origin: string | null;
+  }): Promise<GoogleAuthorizeUrlResponse> {
+    const state = randomUUID();
+    const nonce = randomUUID();
+    const redirectUri = this.resolveGoogleRedirectUri();
+    const bridgeTargetUrl = this.resolveGoogleBridgeTarget({
+      client: input.client,
+      origin: input.origin,
+    });
+    const authContext = this.googleOidc.createAuthorizationContext({
+      state,
+      nonce,
+      redirectUri,
+    });
+
+    await this.prisma.authAttempt.create({
+      data: {
+        provider: 'GOOGLE',
+        client: input.client === 'native' ? 'NATIVE' : 'WEB',
+        state,
+        nonce,
+        codeVerifier: authContext.codeVerifier,
+        redirectUri,
+        bridgeTargetUrl,
+        expiresAt: new Date(Date.now() + AuthService.GOOGLE_AUTH_TTL_MS),
+      },
+    });
+
+    return {
+      authorizeUrl: authContext.authorizeUrl,
+      state,
+    };
+  }
+
+  async resolveGoogleAuthAttemptBridgeTarget(
+    state: string | undefined,
+  ): Promise<string | null> {
+    const normalizedState = state?.trim();
+    if (!normalizedState) {
+      return null;
+    }
+
+    const attempt = await this.prisma.authAttempt.findUnique({
+      where: { state: normalizedState },
+      select: { bridgeTargetUrl: true },
+    });
+
+    return attempt?.bridgeTargetUrl ?? null;
+  }
+
+  async completeGoogleAuth(input: {
+    state: string;
+    code?: string;
+    error?: string;
+    errorDescription?: string;
+    userAgent?: string;
+    ipAddress?: string;
+  }): Promise<IssuedSessionResponse> {
+    const attempt = await this.prisma.authAttempt.findFirst({
+      where: {
+        state: input.state,
+        provider: 'GOOGLE',
+        status: 'PENDING',
+      },
+      select: {
+        id: true,
+        nonce: true,
+        codeVerifier: true,
+        redirectUri: true,
+        expiresAt: true,
+      },
+    });
+
+    if (!attempt) {
+      throw new UnauthorizedException('Invalid Google auth state');
+    }
+
+    if (attempt.expiresAt <= new Date()) {
+      await this.prisma.authAttempt.update({
+        where: { id: attempt.id },
+        data: {
+          status: 'EXPIRED',
+          completedAt: new Date(),
+          errorMessage: 'Google authentication attempt expired',
+        },
+      });
+      throw new UnauthorizedException('Google authentication expired');
+    }
+
+    if (input.error) {
+      await this.prisma.authAttempt.update({
+        where: { id: attempt.id },
+        data: {
+          status: 'FAILED',
+          completedAt: new Date(),
+          errorMessage: input.errorDescription?.trim() || input.error,
+        },
+      });
+      throw new UnauthorizedException(
+        input.errorDescription?.trim() || 'Google authentication failed',
+      );
+    }
+
+    if (!input.code) {
+      throw new BadRequestException('Google authorization code is required');
+    }
+
+    const googleIdentity = await this.googleOidc.exchangeCodeForIdentity({
+      code: input.code,
+      codeVerifier: attempt.codeVerifier,
+      redirectUri: attempt.redirectUri,
+      expectedNonce: attempt.nonce,
+    });
+
+    const resolved = await this.prisma.$transaction(async (tx) => {
+      const existingIdentity = await tx.userAuthIdentity.findUnique({
+        where: {
+          provider_providerSubject: {
+            provider: 'GOOGLE',
+            providerSubject: googleIdentity.subject,
+          },
+        },
+        select: {
+          userId: true,
+        },
+      });
+
+      const existingUserByEmail =
+        !existingIdentity && googleIdentity.emailVerified
+          ? await tx.user.findUnique({
+              where: { email: googleIdentity.email },
+              select: { id: true },
+            })
+          : null;
+
+      const isNewUser = !existingIdentity && !existingUserByEmail;
+      const user =
+        existingIdentity || existingUserByEmail
+          ? await tx.user.update({
+              where: {
+                id: existingIdentity?.userId ?? existingUserByEmail!.id,
+              },
+              data: {
+                email: googleIdentity.email,
+                fullName: googleIdentity.fullName,
+                avatarUrl: googleIdentity.avatarUrl,
+              },
+              select: { id: true },
+            })
+          : await tx.user.create({
+              data: {
+                email: googleIdentity.email,
+                fullName: googleIdentity.fullName,
+                avatarUrl: googleIdentity.avatarUrl,
+              },
+              select: { id: true },
+            });
+
+      await tx.userAuthIdentity.upsert({
+        where: {
+          provider_providerSubject: {
+            provider: 'GOOGLE',
+            providerSubject: googleIdentity.subject,
+          },
+        },
+        create: {
+          userId: user.id,
+          provider: 'GOOGLE',
+          providerSubject: googleIdentity.subject,
+          email: googleIdentity.email,
+          emailVerified: googleIdentity.emailVerified,
+          displayName: googleIdentity.fullName,
+          avatarUrl: googleIdentity.avatarUrl,
+        },
+        update: {
+          userId: user.id,
+          email: googleIdentity.email,
+          emailVerified: googleIdentity.emailVerified,
+          displayName: googleIdentity.fullName,
+          avatarUrl: googleIdentity.avatarUrl,
+        },
+      });
+
+      await tx.authAttempt.update({
+        where: { id: attempt.id },
+        data: {
+          userId: user.id,
+          status: 'COMPLETED',
+          completedAt: new Date(),
+          errorMessage: null,
+        },
+      });
+
+      return {
+        userId: user.id,
+        isNewUser,
+      };
+    });
+
+    if (resolved.isNewUser) {
+      await this.bootstrapUserDefaults(resolved.userId);
+    }
+
+    return this.sessionService.issueSessionForUser({
+      userId: resolved.userId,
+      userAgent: input.userAgent,
+      ipAddress: input.ipAddress,
+    });
   }
 
   async completeOnboarding(
@@ -91,18 +300,19 @@ export class AuthService {
     };
   }
 
-  async createBankAuthorizeUrl(
-    userId: string,
-    client: 'web' | 'native' = 'web',
+  async startBankConsent(input: {
+    userId: string;
+    client: 'web' | 'native';
+  },
   ): Promise<BankAuthorizeUrlResponse> {
     const provider = await this.getOrCreateBasiqProvider();
-    const bankProviderUser = await this.getOrCreateBankProviderUser(
-      userId,
-      provider.id,
-    );
+    const bankProviderUser = await this.getOrCreateBankProviderUserForUser({
+      userId: input.userId,
+      providerId: provider.id,
+    });
 
     const state = randomUUID();
-    const redirectUri = this.resolveConsentRedirectUri(client);
+    const redirectUri = this.resolveConsentRedirectUri(input.client);
 
     const authContext = await this.bankAuth.createAuthorizeUrl({
       state,
@@ -112,9 +322,10 @@ export class AuthService {
 
     await this.prisma.bankConsentAttempt.create({
       data: {
-        userId,
+        userId: input.userId,
         providerId: provider.id,
         bankProviderUserId: bankProviderUser.id,
+        client: input.client === 'native' ? 'NATIVE' : 'WEB',
         state,
         authorizeUrl: authContext.authorizeUrl,
         expiresAt: new Date(Date.now() + AuthService.CONSENT_TTL_MS),
@@ -137,14 +348,22 @@ export class AuthService {
 
     const attempt = await this.prisma.bankConsentAttempt.findUnique({
       where: { state: normalizedState },
-      select: { authorizeUrl: true },
+      select: { client: true },
     });
 
-    if (!attempt?.authorizeUrl) {
+    if (!attempt) {
       return null;
     }
 
-    return extractClientFromAuthorizeUrl(attempt.authorizeUrl);
+    if (attempt.client === 'WEB') {
+      return 'web';
+    }
+
+    if (attempt.client === 'NATIVE') {
+      return 'native';
+    }
+
+    return null;
   }
 
   private resolveConsentRedirectUri(
@@ -185,9 +404,12 @@ export class AuthService {
 
   async verifyBankConsent(input: {
     userId: string;
+    sessionId: string;
     state: string;
     jobIds: string[];
-  }): Promise<VerifyBankConsentResponse> {
+    userAgent?: string;
+    ipAddress?: string;
+  }): Promise<VerifyBankConsentResult> {
     const normalizedJobIds = [
       ...new Set(input.jobIds.map((v) => v.trim())),
     ].filter(Boolean);
@@ -203,8 +425,8 @@ export class AuthService {
 
     const attempt = await this.prisma.bankConsentAttempt.findFirst({
       where: {
-        userId: input.userId,
         state: input.state,
+        userId: input.userId,
         status: 'PENDING',
       },
       select: {
@@ -300,32 +522,6 @@ export class AuthService {
       };
     }
 
-    const [previousVerifiedAttemptsCount, existingConnectionsCount] =
-      await Promise.all([
-        this.prisma.bankConsentAttempt.count({
-          where: {
-            userId: input.userId,
-            status: 'VERIFIED',
-          },
-        }),
-        this.prisma.bankConnection.count({
-          where: {
-            userId: input.userId,
-            providerId: attempt.providerId,
-          },
-        }),
-      ]);
-
-    const isFirstSuccessfulConsentForUser = previousVerifiedAttemptsCount === 0;
-    const isFirstBankConnectionForUser = existingConnectionsCount === 0;
-
-    await this.upsertConnectionsFromJobs({
-      userId: input.userId,
-      providerId: attempt.providerId,
-      bankProviderUserId: attempt.bankProviderUserId,
-      statuses,
-    });
-
     const providerConnectionIds = [
       ...new Set(
         statuses
@@ -334,23 +530,70 @@ export class AuthService {
       ),
     ];
 
-    await this.prisma.bankConsentAttempt.update({
-      where: { id: attempt.id },
-      data: {
-        status: 'VERIFIED',
-        completedAt: new Date(),
-        jobIdsJson: normalizedJobIds,
-        errorMessage: null,
-      },
+    const resolved = await this.prisma.$transaction(async (tx) => {
+      const [previousVerifiedAttemptsCount, existingConnectionsCount] =
+        await Promise.all([
+          tx.bankConsentAttempt.count({
+            where: {
+              userId: input.userId,
+              status: 'VERIFIED',
+            },
+          }),
+          tx.bankConnection.count({
+            where: {
+              userId: input.userId,
+              providerId: attempt.providerId,
+            },
+          }),
+        ]);
+
+      await tx.bankProviderUser.update({
+        where: { id: attempt.bankProviderUserId },
+        data: { userId: input.userId },
+      });
+
+      await this.upsertConnectionsFromJobs(tx, {
+        userId: input.userId,
+        providerId: attempt.providerId,
+        bankProviderUserId: attempt.bankProviderUserId,
+        statuses,
+      });
+
+      await tx.bankConsentAttempt.update({
+        where: { id: attempt.id },
+        data: {
+          userId: input.userId,
+          status: 'VERIFIED',
+          completedAt: new Date(),
+          jobIdsJson: normalizedJobIds,
+          errorMessage: null,
+        },
+      });
+
+      return {
+        previousVerifiedAttemptsCount,
+        existingConnectionsCount,
+      };
     });
 
-    await this.bootstrapUserDefaults(input.userId);
+    const session = await this.sessionService.reissueSessionForUser({
+      sessionId: input.sessionId,
+      userId: input.userId,
+      userAgent: input.userAgent,
+      ipAddress: input.ipAddress,
+    });
+
+    const isFirstSuccessfulConsentForUser =
+      resolved.previousVerifiedAttemptsCount === 0;
+    const wasFirstSuccessfulBankConnection =
+      resolved.existingConnectionsCount === 0;
 
     return {
       success: true,
       failedJobIds: [],
       pendingJobIds: [],
       message: 'Bank consent verified successfully',
+      session,
       context: {
         appUserId: input.userId,
         providerCode: AuthService.BASIQ_PROVIDER_CODE,
@@ -358,7 +601,9 @@ export class AuthService {
         providerConnectionIds,
         jobIds: normalizedJobIds,
         isFirstSuccessfulConsentForUser,
-        isFirstBankConnectionForUser,
+        bankConnectionState: session.bankConnectionState,
+        hasConnectedBank: session.hasConnectedBank,
+        wasFirstSuccessfulBankConnection,
       },
     };
   }
@@ -408,17 +653,14 @@ export class AuthService {
     });
   }
 
-  // auth.service.ts
-  private async getOrCreateBankProviderUser(
-    userId: string,
-    providerId: string,
-  ): Promise<{ id: string; providerUserId: string }> {
-    const existing = await this.prisma.bankProviderUser.findUnique({
+  private async getOrCreateBankProviderUserForUser(input: {
+    userId: string;
+    providerId: string;
+  }): Promise<{ id: string; providerUserId: string }> {
+    const existing = await this.prisma.bankProviderUser.findFirst({
       where: {
-        userId_providerId: {
-          userId,
-          providerId,
-        },
+        userId: input.userId,
+        providerId: input.providerId,
       },
       select: {
         id: true,
@@ -430,19 +672,40 @@ export class AuthService {
       return existing;
     }
 
-    if (!this.bankAuth.createProviderUser) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+      select: {
+        email: true,
+        fullName: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid user');
+    }
+
+    const email = user.email.trim();
+    const fullName = user.fullName.trim();
+    if (!email || !fullName) {
       throw new BadRequestException(
-        'Provider user creation is not supported in this CDR mode',
+        'Authenticated user must have an email and full name before starting bank consent.',
       );
     }
 
-    const created = await this.bankAuth.createProviderUser();
+    const createdProviderUserId = this.bankAuth.createProviderUser
+      ? (
+          await this.bankAuth.createProviderUser({
+            email,
+            fullName,
+          })
+        ).providerUserId
+      : `pending:${randomUUID()}`;
 
     return this.prisma.bankProviderUser.create({
       data: {
-        userId,
-        providerId,
-        providerUserId: created.providerUserId,
+        userId: input.userId,
+        providerId: input.providerId,
+        providerUserId: createdProviderUserId,
       },
       select: {
         id: true,
@@ -452,12 +715,15 @@ export class AuthService {
   }
 
   // auth.service.ts
-  private async upsertConnectionsFromJobs(input: {
-    userId: string;
-    providerId: string;
-    bankProviderUserId: string;
-    statuses: BankConsentJobStatus[];
-  }): Promise<void> {
+  private async upsertConnectionsFromJobs(
+    tx: Prisma.TransactionClient,
+    input: {
+      userId: string;
+      providerId: string;
+      bankProviderUserId: string;
+      statuses: BankConsentJobStatus[];
+    },
+  ): Promise<void> {
     const connectionIds = [
       ...new Set(
         input.statuses
@@ -466,37 +732,73 @@ export class AuthService {
       ),
     ];
 
-    for (const connectionId of connectionIds) {
-      await this.prisma.bankConnection.upsert({
-        where: {
-          providerId_providerConnectionId: {
-            providerId: input.providerId,
-            providerConnectionId: connectionId,
+    const consentedAt = new Date();
+
+    await Promise.all(
+      connectionIds.map((connectionId) =>
+        tx.bankConnection.upsert({
+          where: {
+            providerId_providerConnectionId: {
+              providerId: input.providerId,
+              providerConnectionId: connectionId,
+            },
           },
-        },
-        create: {
-          userId: input.userId,
-          providerId: input.providerId,
-          bankProviderUserId: input.bankProviderUserId,
-          providerConnectionId: connectionId,
-          encryptedAccessToken: null, // requires nullable field in schema
-          encryptedRefreshToken: null,
-          tokenExpiresAt: null,
-          consentScopesJson: {},
-          status: 'CONNECTED',
-          consentedAt: new Date(),
-        },
-        update: {
-          userId: input.userId,
-          bankProviderUserId: input.bankProviderUserId,
-          status: 'CONNECTED',
-          consentedAt: new Date(),
-          revokedAt: null,
-          lastErrorCode: null,
-          lastErrorMessage: null,
-        },
-      });
+          create: {
+            userId: input.userId,
+            providerId: input.providerId,
+            bankProviderUserId: input.bankProviderUserId,
+            providerConnectionId: connectionId,
+            encryptedAccessToken: null,
+            encryptedRefreshToken: null,
+            tokenExpiresAt: null,
+            consentScopesJson: {},
+            status: 'CONNECTED',
+            consentedAt,
+          },
+          update: {
+            userId: input.userId,
+            bankProviderUserId: input.bankProviderUserId,
+            status: 'CONNECTED',
+            consentedAt,
+            revokedAt: null,
+            lastErrorCode: null,
+            lastErrorMessage: null,
+          },
+        }),
+      ),
+    );
+  }
+
+  private resolveGoogleRedirectUri(): string {
+    const redirectUri = process.env.GOOGLE_OAUTH_REDIRECT_URI?.trim();
+    if (!redirectUri) {
+      throw new BadRequestException(
+        'Missing GOOGLE_OAUTH_REDIRECT_URI for Google authentication',
+      );
     }
+
+    return redirectUri;
+  }
+
+  private resolveGoogleBridgeTarget(input: {
+    client: 'web' | 'native';
+    origin: string | null;
+  }): string {
+    if (input.client === 'native') {
+      return normalizeRedirectTarget(
+        process.env.GOOGLE_CALLBACK_BRIDGE_NATIVE_URL,
+        'ledgerly://auth/google/callback',
+      );
+    }
+
+    const originTarget = input.origin
+      ? `${input.origin}/auth/google/callback`
+      : undefined;
+
+    return normalizeRedirectTarget(
+      originTarget ?? process.env.GOOGLE_CALLBACK_BRIDGE_WEB_URL,
+      'http://localhost:4200/auth/google/callback',
+    );
   }
 }
 
@@ -517,34 +819,18 @@ function appendClientQueryParam(
   }
 }
 
-function extractClientFromAuthorizeUrl(
-  authorizeUrl: string,
-): 'web' | 'native' | null {
+function normalizeRedirectTarget(
+  value: string | undefined,
+  fallback: string,
+): string {
+  const trimmed = value?.trim();
+  if (!trimmed) {
+    return fallback;
+  }
+
   try {
-    const parsedAuthorizeUrl = new URL(authorizeUrl);
-    const redirectUri = parsedAuthorizeUrl.searchParams.get('redirect_uri');
-
-    if (!redirectUri) {
-      return null;
-    }
-
-    const parsedRedirectUri = new URL(redirectUri);
-    const explicitClient = parsedRedirectUri.searchParams.get('client');
-
-    if (explicitClient === 'web' || explicitClient === 'native') {
-      return explicitClient;
-    }
-
-    if (parsedRedirectUri.protocol === 'ledgerly:') {
-      return 'native';
-    }
-
-    if (/^https?:$/i.test(parsedRedirectUri.protocol)) {
-      return 'web';
-    }
-
-    return null;
+    return new URL(trimmed).toString();
   } catch {
-    return null;
+    return fallback;
   }
 }

@@ -7,21 +7,28 @@
           <span>Back</span>
         </button>
       } @else {
-
+        <div class="layout-header-main">
           <h1 class="layout-header-title">{{ pageTitle() }}</h1>
-
+          <button class="layout-avatar" type="button" aria-label="Profile">
+            JD
+          </button>
+        </div>
       }
 
-      @if (!isDetailRoute()) {
+      <!-- @if (!isDetailRoute()) {
         <button class="sync-pill" type="button" aria-label="Sync status" (click)="onSyncClick()">
           <ion-icon name="refresh-outline"></ion-icon>
           <span>{{ syncLabel() }}</span>
         </button>
-      }
+      } -->
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-router-outlet></ion-router-outlet>
+<div class="layout-shell">
+  <ion-router-outlet></ion-router-outlet>
+</div>
 
-<app-layout-tabs-footer />
+<ion-footer class="layout-footer-shell">
+  <app-layout-tabs-footer />
+</ion-footer>

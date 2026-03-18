@@ -1,0 +1,13 @@
+<article class="dashboard-daily-card" aria-label="Daily pace">
+  <div>
+    <p class="dashboard-card-label">{{ dailySpendLabel() }}</p>
+    <p class="dashboard-card-value-large">{{ dailySpendValueLabel() }}</p>
+  </div>
+
+  <div class="dashboard-daily-pace-right">
+    <p class="dashboard-card-label">{{ currentPaceLabel() }}</p>
+    <p class="dashboard-card-value-medium" [class]="paceClass()">
+      {{ currentPaceValueLabel() }}
+    </p>
+  </div>
+</article>

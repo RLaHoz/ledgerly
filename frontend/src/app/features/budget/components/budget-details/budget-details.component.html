@@ -2,17 +2,14 @@
   <section class="budget-detail-page">
     @if (details(); as detail) {
       <header class="detail-header">
-        <div class="title-wrap">
-          <span class="icon-badge" [class]="'tone-' + detail.iconTone">
+        <div class="detail-title-group">
+          <span class="detail-icon" [class]="'tone-' + detail.iconTone">
             <ion-icon [name]="detail.iconName"></ion-icon>
           </span>
 
-          <div class="title-copy">
-            <h2>{{ detail.title }}</h2>
-            <div class="status-row">
-              <span class="status-pill" [class]="'status-' + detail.statusTone">{{ detail.statusLabel }}</span>
-              <span>{{ detail.noteLabel }}</span>
-            </div>
+          <div class="detail-title-copy">
+            <h2>{{ detail.categoryName }}</h2>
+            <span class="detail-status-pill" [class]="'status-' + detail.statusTone">{{ detail.statusLabel }}</span>
           </div>
         </div>
 
@@ -24,54 +21,101 @@
 
       <article class="summary-card">
         <div class="summary-grid">
-          <div>
+          <section>
             <p>Budget</p>
             <strong>{{ detail.budgetLabel }}</strong>
-          </div>
-          <div>
+          </section>
+          <section>
             <p>Spent</p>
             <strong>{{ detail.spentLabel }}</strong>
-          </div>
-          <div>
+          </section>
+          <section>
             <p>Remaining</p>
             <strong>{{ detail.remainingLabel }}</strong>
-          </div>
+          </section>
         </div>
 
-        <span class="usage-track" aria-hidden="true">
-          <span class="usage-fill" [style.width.%]="detail.usedPercent" [class]="'status-' + detail.statusTone"></span>
+        <span class="summary-track" aria-hidden="true">
+          <span class="summary-fill" [class]="'tone-' + detail.statusTone" [style.width.%]="detail.usedPercent"></span>
         </span>
 
-        <footer>
-          <p>{{ detail.usedPercent | number: '1.0-0' }}% used</p>
-          <p>{{ detail.thresholdsLabel }}</p>
+        <footer class="summary-footer">
+          <div class="summary-legend">
+            <span><i class="legend-dot safe"></i>Safe</span>
+            <span><i class="legend-dot caution"></i>Caution</span>
+            <span><i class="legend-dot over"></i>Over</span>
+          </div>
+          <strong>{{ detail.usedPercent | number: '1.0-0' }}%</strong>
         </footer>
+
+        <p class="summary-advice">{{ detail.dailySpendAdviceLabel }}</p>
       </article>
 
-      <article class="suggest-card">
+      <article class="subcategories-card">
+        <header class="section-card-header">
+          <h3>Subcategories ({{ detail.subcategories.length }})</h3>
+        </header>
+
+        <div class="subcategories-list">
+          @for (item of detail.subcategories; track item.id) {
+            <section class="subcategory-row">
+              <div class="subcategory-head">
+                <strong>{{ item.name }}</strong>
+                <span class="subcategory-left" [class]="'tone-' + item.tone">{{ item.leftLabel }}</span>
+              </div>
+
+              <span class="subcategory-track" aria-hidden="true">
+                <span class="subcategory-fill" [class]="'tone-' + item.tone" [style.width.%]="item.progressPercent"></span>
+              </span>
+
+              <p>{{ item.spentLabel }} / {{ item.limitLabel }}</p>
+            </section>
+          }
+        </div>
+      </article>
+
+      <article class="suggestion-card">
         <p>
           <ion-icon name="bulb-outline"></ion-icon>
-          <span>{{ detail.recommendation }}</span>
+          <span>Based on your 3-month average ({{ detail.averageLabel }}), we recommend a budget of <strong>{{ detail.recommendedBudgetLabel }}</strong>.</span>
         </p>
 
         <button type="button" (click)="onApplySuggestion()">Apply suggestion</button>
       </article>
 
       <article class="history-card">
-        <h3>Last 3 Months</h3>
+        <header class="section-card-header section-card-header-split">
+          <h3>Last 3 months</h3>
+          <span class="history-status">Stable</span>
+        </header>
 
         <div class="history-list">
           @for (item of detail.history; track item.monthLabel) {
             <section class="history-row">
-              <p>{{ item.monthLabel }}</p>
+              <p [class.current]="item.monthLabel === 'Feb 2026'">{{ item.monthLabel }}</p>
               <span class="history-track" aria-hidden="true">
-                <span
-                  class="history-fill"
-                  [class]="'history-fill tone-' + item.tone"
-                  [style.width.%]="item.progressPercent"
-                ></span>
+                <span class="history-fill" [class]="'tone-' + item.tone" [style.width.%]="item.progressPercent"></span>
               </span>
-              <strong>{{ item.amountLabel }}</strong>
+              <strong [class.current]="item.monthLabel === 'Feb 2026'">{{ item.amountLabel }}</strong>
+            </section>
+          }
+        </div>
+      </article>
+
+      <article class="transactions-card">
+        <header class="section-card-header section-card-header-split">
+          <h3>Recent transactions</h3>
+          <button type="button">View all <ion-icon name="chevron-forward-outline"></ion-icon></button>
+        </header>
+
+        <div class="transactions-list">
+          @for (item of detail.recentTransactions; track item.id) {
+            <section class="transaction-row">
+              <div>
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.dateLabel }}</p>
+              </div>
+              <span>{{ item.amountLabel }}</span>
             </section>
           }
         </div>
@@ -85,46 +129,23 @@
     }
   </section>
 
-  <ion-modal
-    [cssClass]="'adjust-budget-modal'"
-    class="adjust-budget-modal"
-    [isOpen]="isAdjustModalOpen()"
-    [showBackdrop]="true"
-    [backdropDismiss]="true"
-    (didDismiss)="closeAdjustModal()"
-  >
-    <ng-template>
-      <div class="modal-center-layer">
-        @if (details(); as detail) {
-          <article class="adjust-modal-card" aria-label="Adjust budget">
-            <header>
-              <h3>Adjust {{ detail.title }}</h3>
-              <button type="button" aria-label="Close" (click)="closeAdjustModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </button>
-            </header>
-
-            <label class="adjust-field">
-              <span>Monthly Budget</span>
-              <div class="amount-input">
-                <strong>$</strong>
-                <input
-                  type="text"
-                  inputmode="decimal"
-                  autocomplete="off"
-                  [value]="adjustAmountInput()"
-                  (input)="onAdjustAmountInput($event)"
-                />
-              </div>
-            </label>
-
-            <footer>
-              <button type="button" class="btn-cancel" (click)="closeAdjustModal()">Cancel</button>
-              <button type="button" class="btn-save" [disabled]="!canSaveAdjust()" (click)="onSaveAdjust()">Save</button>
-            </footer>
-          </article>
-        }
-      </div>
-    </ng-template>
-  </ion-modal>
+  @if (details(); as detail) {
+    <app-adjust-budget-modal
+      [isOpen]="isAdjustModalOpen()"
+      [title]="'Adjust ' + detail.categoryName + ' Budget'"
+      [description]="'Update your monthly budget and see the impact on your daily allowance.'"
+      [currentBudgetLabel]="detail.budgetLabel"
+      [adjustAmount]="adjustAmountInput()"
+      [recommendedBudgetLabel]="detail.recommendedBudgetLabel"
+      [subcategories]="detail.subcategories"
+      [balanceLabel]="'Subcategory total: ' + detail.budgetLabel"
+      [balanceStatusLabel]="'Balanced'"
+      [canSave]="canSaveAdjust()"
+      (dismissed)="closeAdjustModal()"
+      (amountChanged)="onAdjustAmountInput($event)"
+      (recommendedSelected)="setRecommendedAmount()"
+      (canceled)="closeAdjustModal()"
+      (saved)="onSaveAdjust()"
+    />
+  }
 </ion-content>

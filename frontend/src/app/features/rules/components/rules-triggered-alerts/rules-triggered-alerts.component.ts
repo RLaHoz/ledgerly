@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronForwardOutline } from 'ionicons/icons';
+import { notificationsOutline, pricetagOutline } from 'ionicons/icons';
 import { RulesTriggeredAlertItem } from '../../models/rules.models';
 
 @Component({
@@ -14,19 +14,17 @@ import { RulesTriggeredAlertItem } from '../../models/rules.models';
 })
 export class RulesTriggeredAlertsComponent {
   readonly title = input.required<string>();
-  readonly count = input.required<number>();
   readonly summary = input.required<string>();
   readonly items = input.required<readonly RulesTriggeredAlertItem[]>();
 
-  readonly selected = output<string>();
-
   constructor() {
     addIcons({
-      'chevron-forward-outline': chevronForwardOutline,
+      'pricetag-outline': pricetagOutline,
+      'notifications-outline': notificationsOutline,
     });
   }
 
-  onSelect(itemId: string): void {
-    this.selected.emit(itemId);
+  iconName(icon: RulesTriggeredAlertItem['icon']): string {
+    return icon === 'tag' ? 'pricetag-outline' : 'notifications-outline';
   }
 }

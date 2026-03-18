@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { IonHeader, IonIcon, IonToolbar } from '@ionic/angular/standalone';
+import { IonFooter, IonHeader, IonIcon, IonToolbar } from '@ionic/angular/standalone';
 import { IonRouterOutlet } from '@ionic/angular/standalone';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, startWith } from 'rxjs';
@@ -15,7 +15,7 @@ import { chevronBackOutline, refreshOutline } from 'ionicons/icons';
   templateUrl: './layout.page.html',
   styleUrls: ['./layout.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonIcon, IonRouterOutlet, LayoutTabsFooterComponent],
+  imports: [IonHeader, IonToolbar, IonIcon, IonFooter, IonRouterOutlet, LayoutTabsFooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutPage {

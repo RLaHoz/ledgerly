@@ -20,19 +20,17 @@ describe('DashboardPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('updates selected month when ion-datetime emits an ISO date', () => {
-    component.onMonthSelected('2026-03-15');
+  it('moves to the next month', () => {
+    component.onNextMonth();
     fixture.detectChanges();
 
     expect(component.monthLabel()).toBe('March 2026');
   });
 
-  it('ignores empty month selection', () => {
-    const initialLabel = component.monthLabel();
-
-    component.onMonthSelected('');
+  it('moves to the previous month', () => {
+    component.onPreviousMonth();
     fixture.detectChanges();
 
-    expect(component.monthLabel()).toBe(initialLabel);
+    expect(component.monthLabel()).toBe('January 2026');
   });
 });

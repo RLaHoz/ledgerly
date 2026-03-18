@@ -1,0 +1,171 @@
+:host {
+  display: block;
+}
+
+.dashboard-hero-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+}
+
+.dashboard-hero-amount-row {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard-hero-amount,
+.dashboard-hero-percentage,
+.dashboard-hero-stats-row p,
+.dashboard-hero-forecast-value,
+.dashboard-hero-forecast-secondary {
+  margin: 0;
+}
+
+.dashboard-hero-amount {
+  align-items: baseline;
+  display: inline-flex;
+  gap: 0;
+  letter-spacing: -0.025em;
+}
+
+.dashboard-hero-amount strong {
+  color: var(--text-primary);
+  font-feature-settings: 'tnum';
+  font-size: 42px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.dashboard-hero-amount span {
+  color: var(--text-secondary);
+  font-feature-settings: 'tnum';
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.dashboard-hero-percentage {
+  font-feature-settings: 'tnum';
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dashboard-hero-percentage-success {
+  color: var(--success);
+}
+
+.dashboard-hero-percentage-warning {
+  color: var(--warning);
+}
+
+.dashboard-hero-percentage-critical {
+  color: var(--critical);
+}
+
+.dashboard-hero-progress-track {
+  background: var(--border);
+  border-radius: 9999px;
+  display: block;
+  height: 5px;
+  margin-top: 16px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.dashboard-hero-progress-fill {
+  border-radius: 9999px;
+  display: block;
+  height: 100%;
+}
+
+.dashboard-hero-progress-fill-success {
+  background: var(--success);
+}
+
+.dashboard-hero-progress-fill-warning {
+  background: var(--warning);
+}
+
+.dashboard-hero-progress-fill-critical {
+  background: var(--critical);
+}
+
+.dashboard-hero-stats-row {
+  align-items: center;
+  color: var(--text-secondary);
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.dashboard-hero-stats-row p:last-child {
+  color: var(--text-tertiary);
+}
+
+.dashboard-hero-forecast-panel {
+  align-items: center;
+  background: var(--success-soft);
+  border-radius: 18px;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 12px 16px;
+}
+
+.dashboard-hero-forecast-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.dashboard-hero-forecast-value {
+  font-feature-settings: 'tnum';
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.dashboard-hero-forecast-value-success {
+  color: var(--success);
+}
+
+.dashboard-hero-forecast-value-warning {
+  color: var(--warning);
+}
+
+.dashboard-hero-forecast-value-critical {
+  color: var(--critical);
+}
+
+.dashboard-hero-forecast-secondary {
+  color: var(--success);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.dashboard-hero-forecast-link {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 4px;
+  padding: 0;
+}
+
+.dashboard-hero-forecast-link ion-icon {
+  font-size: 14px;
+}

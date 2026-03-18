@@ -15,6 +15,11 @@ const steps: CommandStep[] = [
     args: ['prisma', 'migrate', 'reset', '--force'],
   },
   {
+    label: 'Generate Prisma client',
+    command: 'npx',
+    args: ['prisma', 'generate'],
+  },
+  {
     label: 'Seed default app categories/subcategories',
     command: 'npm',
     args: ['run', 'seed:app-categories'],

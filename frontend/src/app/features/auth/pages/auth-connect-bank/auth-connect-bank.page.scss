@@ -1,0 +1,109 @@
+:host {
+  display: block;
+}
+
+.bank-connect-actions {
+  animation: fade-in-up 0.4s ease-out 0.12s both;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  inline-size: 100%;
+}
+
+.bank-connect-button,
+.bank-connect-skip {
+  align-items: center;
+  border-radius: 9999px;
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 500;
+  inline-size: 100%;
+  justify-content: center;
+  min-block-size: 52px;
+  transition: transform 160ms ease, opacity 160ms ease, background-color 160ms ease;
+}
+
+.bank-connect-button {
+  background: var(--text-primary);
+  border: 0;
+  color: var(--background);
+  gap: 10px;
+  padding: 0 20px;
+}
+
+.bank-connect-button:active,
+.bank-connect-skip:active {
+  transform: scale(0.98);
+}
+
+.bank-connect-button--success {
+  background: var(--success);
+  color: #ffffff;
+}
+
+.bank-connect-button:disabled,
+.bank-connect-skip:disabled {
+  pointer-events: none;
+}
+
+.bank-connect-button svg {
+  block-size: 20px;
+  fill: none;
+  inline-size: 20px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.bank-connect-button--success svg {
+  stroke-width: 2.5;
+}
+
+.bank-connect-button__spinner {
+  animation: spin 1s linear infinite;
+}
+
+.bank-connect-button__spinner circle {
+  stroke-dasharray: 40 20;
+}
+
+.bank-connect-skip {
+  background: transparent;
+  border: 0;
+  color: var(--text-tertiary);
+}
+
+.bank-connect-skip:disabled {
+  opacity: 0.4;
+}
+
+.bank-connect-error {
+  color: #d44c5a;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

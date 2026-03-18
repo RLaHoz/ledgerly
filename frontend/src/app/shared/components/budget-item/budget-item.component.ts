@@ -102,7 +102,7 @@ function mapStatusLabel(status: BudgetItemStatus): string {
     case 'exceeded':
       return 'Exceeded';
     case 'high-risk':
-      return 'High risk';
+      return 'At Risk';
     case 'moderate':
       return 'Moderate';
     default:

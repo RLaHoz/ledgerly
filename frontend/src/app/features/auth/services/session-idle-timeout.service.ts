@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { fromEvent, merge, Subscription, throttleTime, timer } from 'rxjs';
+import { filter, fromEvent, merge, Subscription, throttleTime, timer } from 'rxjs';
 import { AuthStore } from '../store/auth.store';
 import { environment } from 'src/environments/environment';
 
@@ -32,7 +32,9 @@ export class SessionIdleTimeoutService {
       fromEvent(window, 'keydown'),
       fromEvent(window, 'scroll'),
       fromEvent(window, 'focus'),
-      fromEvent(document, 'visibilitychange'),
+      fromEvent(document, 'visibilitychange').pipe(
+        filter(() => document.visibilityState === 'visible'),
+      ),
     ).pipe(
       throttleTime(ACTIVITY_THROTTLE_MS, undefined, {
         leading: true,
@@ -55,7 +57,10 @@ export class SessionIdleTimeoutService {
   }
 
   private onInactivityTimeout(): void {
-    if (this.authStore.isLoggedIn() && this.authStore.hasConnectedBank()) {
+    if (
+      this.authStore.hasSession() &&
+      this.authStore.bankConnectionState() === 'connected'
+    ) {
       this.authStore.expireSessionByInactivity();
     }
 

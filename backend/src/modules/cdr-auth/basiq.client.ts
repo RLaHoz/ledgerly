@@ -1,6 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import {
+  BadRequestException,
   Injectable,
+  Logger,
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -14,6 +16,7 @@ import {
   BankConsentJobOutcome,
   BankConsentJobStatus,
   CreateAuthorizeUrlInput,
+  CreateProviderUserInput,
   CreateProviderUserResult,
 } from './bank-auth.types';
 import type {
@@ -71,11 +74,14 @@ type BasiqListResponse<T> = {
   _links?: BasiqLinkContainer;
 };
 
+const BASIQ_USER_SCAN_MAX_PAGES = 100;
+
 @Injectable()
 export class BasiqClient implements BankAuthClient, BankDataClient {
   private cachedServerAccessToken:
     | { token: string; expiresAtEpochMs: number }
     | undefined;
+  private readonly logger = new Logger(BasiqClient.name);
 
   constructor(
     private readonly http: HttpService,
@@ -88,8 +94,13 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     const state = input.state;
     const nonce = randomUUID();
     const codeVerifier = randomUUID().replaceAll('-', '');
+    const userId = input.providerUserId?.trim();
+    if (!userId) {
+      throw new BadRequestException(
+        'Basiq consent requires a persisted provider user id before authorization can start.',
+      );
+    }
 
-    const userId = input.providerUserId?.trim() || (await this.resolveUserId());
     const clientAccessToken = await this.createClientAccessToken(userId);
     const consentUrl = this.createConsentUrl(
       clientAccessToken,
@@ -105,8 +116,22 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     };
   }
 
-  async createProviderUser(): Promise<CreateProviderUserResult> {
-    const providerUserId = await this.createUser();
+  async createProviderUser(
+    input: CreateProviderUserInput,
+  ): Promise<CreateProviderUserResult> {
+    const email = input.email.trim();
+    const fullName = input.fullName.trim();
+    if (!email || !fullName) {
+      throw new BadRequestException(
+        'Authenticated user email and full name are required before creating a Basiq identity.',
+      );
+    }
+
+    const providerUserId = await this.createUser({
+      email,
+      fullName,
+      mobile: input.mobile?.trim() || null,
+    });
     return { providerUserId };
   }
 
@@ -269,21 +294,15 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     return valueConnectionId === providerConnectionId;
   }
 
-  private async resolveUserId(): Promise<string> {
-    const configuredUserId = this.config.get<string>('BASIQ_USER_ID')?.trim();
-    if (configuredUserId) {
-      return configuredUserId;
-    }
-
-    return this.createUser();
-  }
-
-  private async createUser(): Promise<string> {
+  private async createUser(input: CreateProviderUserInput): Promise<string> {
     const serverToken = await this.getServerAccessToken();
-    const email = this.resolveUserEmail();
-    const mobile = this.config.get<string>('BASIQ_USER_MOBILE')?.trim();
+    const email = input.email.trim();
+    const fullName = input.fullName.trim();
+    const mobile =
+      input.mobile?.trim() || this.config.get<string>('BASIQ_USER_MOBILE')?.trim();
     const baseUrl = this.resolveBasiqBaseUrl();
     const basiqVersion = this.resolveBasiqVersion();
+    const { firstName, lastName } = splitFullName(fullName);
 
     try {
       const response = await firstValueFrom(
@@ -291,6 +310,8 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
           `${baseUrl}/users`,
           {
             email,
+            ...(firstName ? { firstName } : {}),
+            ...(lastName ? { lastName } : {}),
             ...(mobile ? { mobile } : {}),
           },
           {
@@ -307,8 +328,29 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
       if (axiosError.response?.status === 409) {
+        try {
+          const existingUserId = await this.findExistingUserIdByEmail(email);
+          if (existingUserId) {
+            this.logger.warn(
+              `Recovered existing Basiq user mapping by email for "${email}".`,
+            );
+            return existingUserId;
+          }
+        } catch (reconciliationError) {
+          this.logger.error(
+            `Failed to reconcile existing Basiq user for "${email}".`,
+            reconciliationError instanceof Error
+              ? reconciliationError.stack
+              : undefined,
+          );
+
+          throw new ServiceUnavailableException(
+            'Unable to reconcile an existing Basiq user for consent flow.',
+          );
+        }
+
         throw new ServiceUnavailableException(
-          'Basiq user already exists. Set BASIQ_USER_ID or use a unique BASIQ_USER_EMAIL.',
+          'Basiq user already exists but could not be reconciled with the local provider mapping.',
         );
       }
 
@@ -318,13 +360,55 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     }
   }
 
-  private resolveUserEmail(): string {
-    const configuredEmail = this.config.get<string>('BASIQ_USER_EMAIL')?.trim();
-    if (configuredEmail) {
-      return configuredEmail;
+  private async findExistingUserIdByEmail(email: string): Promise<string | null> {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      return null;
     }
 
-    return `ledgerly+${Date.now()}-${randomUUID().slice(0, 8)}@example.com`;
+    const serverToken = await this.getServerAccessToken();
+    const baseUrl = this.resolveBasiqBaseUrl();
+    const basiqVersion = this.resolveBasiqVersion();
+    let nextUrl: string | null = `${baseUrl}/users`;
+    let pagesVisited = 0;
+
+    while (nextUrl && pagesVisited < BASIQ_USER_SCAN_MAX_PAGES) {
+      pagesVisited += 1;
+
+      const response = await firstValueFrom(
+        this.http.get<BasiqListResponse<Record<string, unknown>>>(nextUrl, {
+          headers: {
+            Authorization: `Bearer ${serverToken}`,
+            'basiq-version': basiqVersion,
+          },
+        }),
+      );
+
+      for (const item of response.data.data ?? []) {
+        const itemEmail = this.readString(item.email)?.trim().toLowerCase();
+        if (itemEmail !== normalizedEmail) {
+          continue;
+        }
+
+        const itemId = this.readString(item.id)?.trim();
+        if (itemId) {
+          return itemId;
+        }
+      }
+
+      nextUrl = this.resolveListNextUrl(
+        baseUrl,
+        response.data.links?.next ?? response.data._links?.next,
+      );
+    }
+
+    if (pagesVisited > 0) {
+      this.logger.log(
+        `Scanned ${pagesVisited} Basiq user page(s) while reconciling "${email}".`,
+      );
+    }
+
+    return null;
   }
 
   private async getServerAccessToken(): Promise<string> {
@@ -767,6 +851,22 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     }
   }
 
+  private resolveListNextUrl(
+    baseUrl: string,
+    link: BasiqLinkValue,
+  ): string | null {
+    const raw = this.normalizeLinkValue(link);
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      return new URL(raw, baseUrl).toString();
+    } catch {
+      return null;
+    }
+  }
+
   private readString(value: unknown): string | undefined {
     if (typeof value !== 'string') return undefined;
     const trimmed = value.trim();
@@ -830,4 +930,30 @@ export class BasiqClient implements BankAuthClient, BankDataClient {
     }
     return current;
   }
+}
+
+function splitFullName(
+  fullName: string | null,
+): { firstName: string | null; lastName: string | null } {
+  if (!fullName) {
+    return { firstName: null, lastName: null };
+  }
+
+  const parts = fullName
+    .split(/\s+/)
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  if (parts.length === 0) {
+    return { firstName: null, lastName: null };
+  }
+
+  if (parts.length === 1) {
+    return { firstName: parts[0], lastName: null };
+  }
+
+  return {
+    firstName: parts[0],
+    lastName: parts.slice(1).join(' '),
+  };
 }

@@ -1,13 +1,7 @@
 :host {
-  bottom: 0;
   display: block;
-  left: 50%;
   max-width: 430px;
-  position: fixed;
-  right: auto;
-  transform: translateX(-50%);
   width: 100%;
-  z-index: 40;
 }
 
 ion-tab-bar {

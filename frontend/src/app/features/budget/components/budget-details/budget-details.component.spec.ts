@@ -31,7 +31,7 @@ describe('BudgetDetailsComponent', () => {
     fixture = createComponent('entertainment');
     const native = fixture.nativeElement as HTMLElement;
 
-    expect(native.querySelector('.title-copy h2')?.textContent).toContain('Entertainment Budget');
+    expect(native.querySelector('.detail-title-copy h2')?.textContent).toContain('Entertainment');
     expect(native.querySelector('.summary-card')).toBeTruthy();
   });
 

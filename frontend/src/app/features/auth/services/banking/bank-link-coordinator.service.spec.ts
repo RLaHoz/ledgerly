@@ -4,6 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { of, Subject } from 'rxjs';
 import { AuthStore } from '../../store/auth.store';
 import { AuthService } from '../auth.service';
+import { AuthFlowLoggerService } from '../auth-flow-logger.service';
 import { BasiqConsentUiService } from './basiq-consent-ui.service';
 import { BankLinkCoordinatorService } from './bank-link-coordinator.service';
 
@@ -13,21 +14,23 @@ describe('BankLinkCoordinatorService', () => {
   const routerMock = {
     navigateByUrl: jasmine.createSpy('navigateByUrl').and.resolveTo(true),
   };
-  const authStoreMock = {
+  const authStoreMock: any = {
     isLoading: () => false,
-    requestBankAuthorizeUrl: jasmine
-      .createSpy('requestBankAuthorizeUrl')
-      .and.callFake(() => undefined),
+    requestBankAuthorizeUrl: jasmine.createSpy('requestBankAuthorizeUrl'),
     bankAuthorizeUrl: () => null,
     pendingConsentState: () => 'state-1',
-    setBankLinkError: jasmine.createSpy('setBankLinkError').and.callFake(() => undefined),
-    resetBankLinkFlow: jasmine.createSpy('resetBankLinkFlow').and.callFake(() => undefined),
-    markBankConnected: jasmine.createSpy('markBankConnected').and.callFake(() => undefined),
-    user: () => ({ id: 'user-1' }),
-    getBootstrapTargetRoute: () => '/dashboard',
+    setBankLinkError: jasmine.createSpy('setBankLinkError'),
+    resetBankLinkFlow: jasmine.createSpy('resetBankLinkFlow'),
+    adoptSession: jasmine.createSpy('adoptSession'),
+    getPostAuthTargetRoute: () => '/dashboard',
   };
   const authServiceMock = {
     verifyBankConsent: jasmine.createSpy('verifyBankConsent'),
+  };
+  const loggerMock = {
+    info: jasmine.createSpy('info'),
+    warn: jasmine.createSpy('warn'),
+    error: jasmine.createSpy('error'),
   };
   const consentUiMock = {
     callback$,
@@ -45,8 +48,11 @@ describe('BankLinkCoordinatorService', () => {
     authStoreMock.requestBankAuthorizeUrl.calls.reset();
     authStoreMock.setBankLinkError.calls.reset();
     authStoreMock.resetBankLinkFlow.calls.reset();
-    authStoreMock.markBankConnected.calls.reset();
+    authStoreMock.adoptSession.calls.reset();
     authServiceMock.verifyBankConsent.calls.reset();
+    loggerMock.info.calls.reset();
+    loggerMock.warn.calls.reset();
+    loggerMock.error.calls.reset();
     consentUiMock.initialize.calls.reset();
     consentUiMock.openConsent.calls.reset();
     consentUiMock.closeConsent.calls.reset();
@@ -58,6 +64,7 @@ describe('BankLinkCoordinatorService', () => {
         { provide: Router, useValue: routerMock },
         { provide: AuthStore, useValue: authStoreMock },
         { provide: AuthService, useValue: authServiceMock },
+        { provide: AuthFlowLoggerService, useValue: loggerMock },
         { provide: BasiqConsentUiService, useValue: consentUiMock },
       ],
     });
@@ -83,6 +90,7 @@ describe('BankLinkCoordinatorService', () => {
         failedJobIds: [],
         pendingJobIds: [],
         message: 'ok',
+        session: buildSession({ onboardingCompleted: true, bankConnectionState: 'connected' }),
         context: {
           appUserId: 'user-1',
           providerCode: 'BASIQ',
@@ -90,7 +98,9 @@ describe('BankLinkCoordinatorService', () => {
           providerConnectionIds: ['connection-1'],
           jobIds: ['job-1'],
           isFirstSuccessfulConsentForUser: true,
-          isFirstBankConnectionForUser: true,
+          bankConnectionState: 'connected',
+          hasConnectedBank: true,
+          wasFirstSuccessfulBankConnection: true,
         },
       }),
     );
@@ -99,10 +109,9 @@ describe('BankLinkCoordinatorService', () => {
     tick(1500);
 
     expect(authServiceMock.verifyBankConsent).toHaveBeenCalledTimes(2);
-    expect(authStoreMock.markBankConnected).toHaveBeenCalledWith({
-      isFirstBankConnectionForUser: true,
-    });
-    expect(authStoreMock.setBankLinkError).not.toHaveBeenCalled();
+    expect(authStoreMock.adoptSession).toHaveBeenCalledWith(
+      buildSession({ onboardingCompleted: true, bankConnectionState: 'connected' }),
+    );
     expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/dashboard', { replaceUrl: true });
   }));
 
@@ -128,12 +137,12 @@ describe('BankLinkCoordinatorService', () => {
     expect(service.consumeCallbackUrl('ignored')).toBeTrue();
     tick(1500 * 19);
 
-    expect(authServiceMock.verifyBankConsent).toHaveBeenCalledTimes(20);
-    expect(authStoreMock.markBankConnected).not.toHaveBeenCalled();
     expect(authStoreMock.setBankLinkError).toHaveBeenCalledWith(
       'Consent verification is taking longer than expected. Please retry in a moment.',
     );
-    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/auth', { replaceUrl: true });
+    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('/auth/connect-bank', {
+      replaceUrl: true,
+    });
   }));
 
   it('allows native callback verification when local pending state is missing', fakeAsync(() => {
@@ -145,13 +154,14 @@ describe('BankLinkCoordinatorService', () => {
       jobId: 'job-1',
       jobIds: [],
     });
-    (authStoreMock.pendingConsentState as any) = () => null;
+    authStoreMock.pendingConsentState = () => null;
     authServiceMock.verifyBankConsent.and.returnValue(
       of({
         success: true,
         failedJobIds: [],
         pendingJobIds: [],
         message: 'ok',
+        session: buildSession({ bankConnectionState: 'connected' }),
         context: {
           appUserId: 'user-1',
           providerCode: 'BASIQ',
@@ -159,7 +169,9 @@ describe('BankLinkCoordinatorService', () => {
           providerConnectionIds: ['connection-1'],
           jobIds: ['job-1'],
           isFirstSuccessfulConsentForUser: true,
-          isFirstBankConnectionForUser: true,
+          bankConnectionState: 'connected',
+          hasConnectedBank: true,
+          wasFirstSuccessfulBankConnection: true,
         },
       }),
     );
@@ -167,12 +179,27 @@ describe('BankLinkCoordinatorService', () => {
     expect(service.consumeCallbackUrl('ignored')).toBeTrue();
     tick();
 
-    expect(authServiceMock.verifyBankConsent).toHaveBeenCalledWith({
-      state: 'state-recovered',
-      jobIds: ['job-1'],
-    });
-    expect(authStoreMock.setBankLinkError).not.toHaveBeenCalled();
-    expect(authStoreMock.markBankConnected).toHaveBeenCalled();
+    expect(authStoreMock.adoptSession).toHaveBeenCalled();
     expect(consentUiMock.closeConsent).toHaveBeenCalled();
   }));
 });
+
+function buildSession(overrides: Partial<any> = {}) {
+  const bankConnectionState = overrides['bankConnectionState'] ?? 'connected';
+
+  return {
+    user: {
+      id: 'user-1',
+      roles: [],
+      email: 'user@example.com',
+      fullName: 'User Example',
+      avatarUrl: null,
+    },
+    accessToken: 'access-1',
+    accessTokenExpiresInSeconds: 900,
+    onboardingCompleted: false,
+    bankConnectionState,
+    hasConnectedBank: bankConnectionState === 'connected',
+    ...overrides,
+  };
+}

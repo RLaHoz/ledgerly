@@ -3,6 +3,7 @@ import { buildIonicConfig } from './ionic-config';
 describe('buildIonicConfig', () => {
   it('disables web input scroll shims on web', () => {
     expect(buildIonicConfig(false)).toEqual({
+      animated: false,
       scrollAssist: false,
       inputShims: false,
       scrollPadding: false,
@@ -15,4 +16,3 @@ describe('buildIonicConfig', () => {
     expect(buildIonicConfig(true)).toEqual({});
   });
 });
-

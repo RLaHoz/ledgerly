@@ -4,6 +4,7 @@ import { BudgetOverviewMetricVm } from '../../models/budget.models';
 export interface BudgetOverviewViewModel {
   title: string;
   metrics: readonly BudgetOverviewMetricVm[];
+  footerLabel: string;
 }
 
 @Component({

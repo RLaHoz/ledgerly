@@ -1,16 +1,14 @@
-<section class="quick-section">
-  <h2>{{ title() }}</h2>
+<section class="rules-quick-section" aria-label="Quick create">
+  <h2 class="rules-section-title">{{ title() }}</h2>
 
-  <article class="quick-card">
-    @for (item of items(); track item.id) {
-      <button type="button" class="quick-row" (click)="onSelect(item.id)">
-        <div class="copy">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.subtitle }}</p>
-        </div>
-
-        <ion-icon name="chevron-forward-outline"></ion-icon>
+  <div class="rules-quick-grid">
+    @for (item of cards(); track item.id) {
+      <button type="button" class="rules-quick-card" (click)="onSelect(item.id)">
+        <span class="rules-quick-icon" [class.auto]="item.tone === 'auto'" [class.alert]="item.tone === 'alert'" [class.anomaly]="item.tone === 'anomaly'">
+          <ion-icon [name]="iconName(item.tone)"></ion-icon>
+        </span>
+        <span class="rules-quick-label">{{ item.title }}</span>
       </button>
     }
-  </article>
+  </div>
 </section>

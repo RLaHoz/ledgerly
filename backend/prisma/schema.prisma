@@ -21,6 +21,22 @@ enum SessionStatus {
   EXPIRED
 }
 
+enum AppAuthProvider {
+  GOOGLE
+}
+
+enum AppAuthAttemptStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  EXPIRED
+}
+
+enum AuthClientType {
+  WEB
+  NATIVE
+}
+
 enum BankConsentAttemptStatus {
   PENDING
   VERIFIED
@@ -187,7 +203,7 @@ model User {
   id                    String    @id @default(uuid()) @db.Uuid
   email                 String    @unique @db.VarChar(254)
   fullName              String    @map("full_name") @db.VarChar(120)
-  passwordHash          String?   @map("password_hash") @db.VarChar(255)
+  avatarUrl             String?   @map("avatar_url") @db.VarChar(512)
   baseCurrency          String    @default("USD") @map("base_currency") @db.Char(3)
   timeZone              String    @default("UTC") @map("time_zone") @db.VarChar(64)
   createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -207,6 +223,8 @@ model User {
   bankConnections     BankConnection[]
 
   sessions            UserSession[]
+  authIdentities      UserAuthIdentity[]
+  authAttempts        AuthAttempt[]
   bankProviderUsers   BankProviderUser[]
   bankConsentAttempts BankConsentAttempt[]
 
@@ -232,6 +250,48 @@ model UserSession {
   @@unique([refreshTokenHash])
   @@index([userId, status, expiresAt])
   @@map("user_sessions")
+}
+
+model UserAuthIdentity {
+  id               String          @id @default(uuid()) @db.Uuid
+  userId           String          @map("user_id") @db.Uuid
+  provider         AppAuthProvider
+  providerSubject  String          @map("provider_subject") @db.VarChar(255)
+  email            String?         @db.VarChar(254)
+  emailVerified    Boolean         @default(false) @map("email_verified")
+  displayName      String?         @map("display_name") @db.VarChar(120)
+  avatarUrl        String?         @map("avatar_url") @db.VarChar(512)
+  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerSubject])
+  @@index([userId, provider])
+  @@map("user_auth_identities")
+}
+
+model AuthAttempt {
+  id             String               @id @default(uuid()) @db.Uuid
+  userId         String?              @map("user_id") @db.Uuid
+  provider       AppAuthProvider
+  client         AuthClientType
+  state          String               @unique @db.VarChar(255)
+  nonce          String               @db.VarChar(255)
+  codeVerifier   String               @map("code_verifier") @db.VarChar(255)
+  redirectUri    String               @map("redirect_uri") @db.VarChar(512)
+  bridgeTargetUrl String              @map("bridge_target_url") @db.VarChar(512)
+  requestedAt    DateTime             @default(now()) @map("requested_at") @db.Timestamptz(6)
+  completedAt    DateTime?            @map("completed_at") @db.Timestamptz(6)
+  expiresAt      DateTime             @map("expires_at") @db.Timestamptz(6)
+  status         AppAuthAttemptStatus @default(PENDING)
+  errorMessage   String?              @map("error_message") @db.Text
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([provider, status, expiresAt])
+  @@index([userId, provider])
+  @@map("auth_attempts")
 }
 
 model AppCategoryList {
@@ -602,18 +662,17 @@ model BankProvider {
 
 model BankProviderUser {
   id             String   @id @default(uuid()) @db.Uuid
-  userId         String   @map("user_id") @db.Uuid
+  userId         String?  @map("user_id") @db.Uuid
   providerId     String   @map("provider_id") @db.Uuid
   providerUserId String   @map("provider_user_id") @db.VarChar(255)
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   provider        BankProvider         @relation(fields: [providerId], references: [id], onDelete: Restrict)
   connections     BankConnection[]
   consentAttempts BankConsentAttempt[]
 
-  @@unique([userId, providerId])
   @@unique([providerId, providerUserId])
   @@index([userId, providerId])
   @@map("bank_provider_users")
@@ -621,9 +680,10 @@ model BankProviderUser {
 
 model BankConsentAttempt {
   id                 String                   @id @default(uuid()) @db.Uuid
-  userId             String                   @map("user_id") @db.Uuid
+  userId             String?                  @map("user_id") @db.Uuid
   providerId         String                   @map("provider_id") @db.Uuid
   bankProviderUserId String                   @map("bank_provider_user_id") @db.Uuid
+  client             AuthClientType           @default(WEB)
   state              String                   @unique @db.VarChar(255)
   authorizeUrl       String                   @map("authorize_url") @db.Text
   requestedAt        DateTime                 @default(now()) @map("requested_at") @db.Timestamptz(6)
@@ -633,11 +693,12 @@ model BankConsentAttempt {
   jobIdsJson         Json?                    @map("job_ids_json")
   errorMessage       String?                  @map("error_message") @db.Text
 
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
   provider         BankProvider     @relation(fields: [providerId], references: [id], onDelete: Restrict)
   bankProviderUser BankProviderUser @relation(fields: [bankProviderUserId], references: [id], onDelete: Restrict)
 
   @@index([userId, status, requestedAt])
+  @@index([userId, client, status, requestedAt])
   @@index([providerId, status])
   @@index([bankProviderUserId])
   @@map("bank_consent_attempts")

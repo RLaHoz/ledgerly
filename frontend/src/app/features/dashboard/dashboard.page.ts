@@ -1,23 +1,20 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { IonContent } from '@ionic/angular/standalone';
+import { BudgetCardComponent } from './components/budget-card/budget-card.component';
 import {
-  BudgetHealthComponent,
-  BudgetHealthStatViewModel,
-} from '../../core/layout/components/budget-health/budget-health.component';
+  BudgetCategoriesTrackingComponent,
+  BudgetTrackingItemViewModel,
+} from './components/budget-categories-tracking/budget-categories-tracking.component';
 import {
-  MainBudgetInfoComponent,
-  MainBudgetInfoViewModel,
-} from '../../core/layout/components/main-budget-info/main-budget-info.component';
+  CategoriesOnTrackBudgetComponent,
+  OnTrackCategoryViewModel,
+} from './components/categories-ontrack-budget/categories-ontrack-budget.component';
 import {
-  SafePlaceAlertsComponent,
-  SafePlaceAlertsViewModel,
-} from '../../core/layout/components/safe-place-alerts/safe-place-alerts.component';
-import {
-  PriorityComponent,
-  PriorityItemViewModel,
-} from '../../core/layout/components/priority/priority.component';
-import { BudgetPressureComponent } from '../../core/layout/components/budget-pressure/budget-pressure.component';
-import { BudgetItemViewModel } from '../../shared/components/budget-item/budget-item.component';
+  CategoriesOverBudgetComponent,
+  OverBudgetCategoryViewModel,
+} from './components/categories-over-budget/categories-over-budget.component';
+import { DailySpendCardComponent } from './components/daily-spend-card/daily-spend-card.component';
+import { DashboardMonthSelectorComponent } from './components/dashboard-month-selector/dashboard-month-selector.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,11 +23,12 @@ import { BudgetItemViewModel } from '../../shared/components/budget-item/budget-
   styleUrls: ['./dashboard.page.scss'],
   imports: [
     IonContent,
-    BudgetHealthComponent,
-    MainBudgetInfoComponent,
-    SafePlaceAlertsComponent,
-    PriorityComponent,
-    BudgetPressureComponent,
+    DashboardMonthSelectorComponent,
+    CategoriesOverBudgetComponent,
+    CategoriesOnTrackBudgetComponent,
+    BudgetCardComponent,
+    DailySpendCardComponent,
+    BudgetCategoriesTrackingComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,59 +40,32 @@ export class DashboardPage {
   });
 
   readonly selectedMonthDate = signal('2026-02-01');
-  readonly minMonthDate = '2020-01-01';
-  readonly maxMonthDate = '2035-12-01';
   readonly monthLabel = computed(() => this.formatMonthLabel(this.selectedMonthDate()));
 
-  readonly budgetHealthLabel = 'Stable';
-  readonly updatedLabel = 'Updated 2m ago';
-  readonly trendLabel = 'Trend: unchanged vs last month';
-  readonly budgetHealthStats: readonly BudgetHealthStatViewModel[] = [
-    { id: 'exceeded', tone: 'danger', count: 2, label: 'exceeded' },
-    { id: 'high-risk', tone: 'warning', count: 1, label: 'high risk' },
-    { id: 'moderate', tone: 'moderate', count: 3, label: 'moderate' },
+  readonly overBudgetCategories: readonly OverBudgetCategoryViewModel[] = [
+    { id: 'home', name: 'Home', overBudgetAmount: 0 },
+    { id: 'gym', name: 'Gym', overBudgetAmount: 0 },
   ];
 
-  readonly mainBudgetInfo = computed<MainBudgetInfoViewModel>(() => ({
-    monthLabel: this.monthLabel(),
-    spentLabel: '$3,246',
-    totalLabel: '$3,920',
-    usagePercentLabel: '83%',
-    remainingLabel: '$674 remaining',
-    daysLeftLabel: '3 days left',
-    projectionLabel: 'Projected: +$284',
-    actionLabel: 'Adjust \u2192',
-    paceLabel: 'At current pace: finish +$284 above target',
-    varianceLabel: 'Primary variance: Shopping (+$87 trend)',
-    progressPercent: 83,
-  }));
+  readonly heroSpentLabel = '$3,246';
+  readonly heroBudgetLabel = '$3,920';
+  readonly heroPercentageLabel = '83%';
+  readonly heroPercentageTone = 'warning' as const;
+  readonly heroProgressPercent = 83;
+  readonly heroRemainingLabel = '$674 left';
+  readonly heroDaysRemainingLabel = '3 days remaining';
+  readonly heroForecastValueLabel = '+$284 under';
+  readonly heroForecastValueTone = 'success' as const;
+  readonly heroForecastSecondaryLabel = 'Safe to spend $225/day';
+  readonly heroForecastActionLabel = 'Details';
 
-  readonly safePlaceAlerts: SafePlaceAlertsViewModel = {
-    safePaceLabel: 'Safe pace',
-    dailyTargetLabel: '$225/day',
-    paceChipLabel: 'Under pace',
-    currentPaceLabel: 'Currently: $130/day',
-    alertsTitle: 'Alerts',
-    criticalLabel: '2 critical',
-    warningLabel: '6 warnings',
-  };
+  readonly dailySpendLabel = 'Safe daily spend';
+  readonly dailySpendValueLabel = '$225';
+  readonly currentPaceLabel = 'Current pace';
+  readonly currentPaceValueLabel = '$130/day';
+  readonly currentPaceTone = 'success' as const;
 
-  readonly priorityItems: readonly PriorityItemViewModel[] = [
-    {
-      id: 'home-gym',
-      title: 'Home & Gym exceeded',
-      actionLabel: 'Review \u2192',
-      tone: 'danger',
-    },
-    {
-      id: 'shopping',
-      title: 'Shopping nearing limit',
-      actionLabel: 'Adjust \u2192',
-      tone: 'warning',
-    },
-  ];
-
-  readonly budgetPressureItems: readonly BudgetItemViewModel[] = [
+  readonly categoryItems: readonly BudgetTrackingItemViewModel[] = [
     {
       id: 'home',
       name: 'Home',
@@ -105,6 +76,8 @@ export class DashboardPage {
       progressPercent: 100,
       iconName: 'home-outline',
       iconTone: 'home',
+      detailSummary: 'Budget fully used',
+      detailRecommendation: 'Increase budget by $50 or review spending',
     },
     {
       id: 'gym',
@@ -116,6 +89,8 @@ export class DashboardPage {
       progressPercent: 100,
       iconName: 'barbell-outline',
       iconTone: 'gym',
+      detailSummary: 'Budget fully used',
+      detailRecommendation: 'Increase budget by $15 or review spending',
     },
     {
       id: 'shopping',
@@ -127,6 +102,8 @@ export class DashboardPage {
       progressPercent: 93,
       iconName: 'bag-handle-outline',
       iconTone: 'shopping',
+      detailSummary: 'At current rate, exceeds in 2 days',
+      detailRecommendation: 'Reduce by $23/week to stay on track',
     },
     {
       id: 'transport',
@@ -134,10 +111,12 @@ export class DashboardPage {
       spentLabel: '$289',
       limitLabel: '$350',
       leftLabel: '$61 left',
-      status: 'moderate',
+      status: 'high-risk',
       progressPercent: 83,
       iconName: 'car-sport-outline',
       iconTone: 'transport',
+      detailSummary: 'At current rate, exceeds in 4 days',
+      detailRecommendation: 'Reduce by $14/week to stay on track',
     },
     {
       id: 'baby',
@@ -145,10 +124,12 @@ export class DashboardPage {
       spentLabel: '$312',
       limitLabel: '$400',
       leftLabel: '$88 left',
-      status: 'moderate',
+      status: 'on-track',
       progressPercent: 78,
       iconName: 'happy-outline',
       iconTone: 'baby',
+      detailSummary: 'On pace to finish within budget',
+      detailRecommendation: '',
     },
     {
       id: 'groceries',
@@ -156,12 +137,31 @@ export class DashboardPage {
       spentLabel: '$624',
       limitLabel: '$800',
       leftLabel: '$176 left',
-      status: 'moderate',
+      status: 'on-track',
       progressPercent: 78,
       iconName: 'cart-outline',
       iconTone: 'groceries',
+      detailSummary: 'On pace to finish within budget',
+      detailRecommendation: '',
+    },
+    {
+      id: 'entertainment',
+      name: 'Entertainment',
+      spentLabel: '$145',
+      limitLabel: '$300',
+      leftLabel: '$155 left',
+      status: 'on-track',
+      progressPercent: 48,
+      iconName: 'business-outline',
+      iconTone: 'entertainment',
+      detailSummary: 'On pace to finish within budget',
+      detailRecommendation: '',
     },
   ];
+
+  readonly onTrackCategories: readonly OnTrackCategoryViewModel[] = this.categoryItems
+    .filter((item) => item.status === 'on-track')
+    .map((item) => ({ id: item.id, name: item.name }));
 
   onPreviousMonth(): void {
     this.selectedMonthDate.update((currentMonth) => this.shiftMonth(currentMonth, -1));
@@ -171,44 +171,28 @@ export class DashboardPage {
     this.selectedMonthDate.update((currentMonth) => this.shiftMonth(currentMonth, 1));
   }
 
-  onMonthSelected(value: string): void {
-    if (!value) {
-      return;
-    }
-
-    this.selectedMonthDate.set(this.normalizeToMonthDate(value));
+  onSeeAll(): void {
+    // UI-only placeholder.
   }
 
-  onBudgetPressureItemAction(itemId: string): void {
-    void itemId;
+  onForecastAdjust(): void {
+    // UI-only placeholder.
   }
 
-  onBudgetPressureViewAll(): void {
-    // Placeholder for navigation to the full budget pressure list.
+  onUrgentCta(): void {
+    // UI-only placeholder.
   }
 
   private shiftMonth(isoMonthDate: string, delta: number): string {
-    const [year, month] = this.normalizeToMonthDate(isoMonthDate)
-      .split('-')
-      .map((part) => Number.parseInt(part, 10));
+    const [year, month] = isoMonthDate.split('-').map((part) => Number.parseInt(part, 10));
     const shifted = new Date(Date.UTC(year, month - 1 + delta, 1));
     return this.toMonthDate(shifted);
   }
 
   private formatMonthLabel(isoMonthDate: string): string {
-    const [year, month] = this.normalizeToMonthDate(isoMonthDate)
-      .split('-')
-      .map((part) => Number.parseInt(part, 10));
+    const [year, month] = isoMonthDate.split('-').map((part) => Number.parseInt(part, 10));
     const date = new Date(Date.UTC(year, month - 1, 1));
     return this.monthFormatter.format(date);
-  }
-
-  private normalizeToMonthDate(value: string): string {
-    if (/^\d{4}-\d{2}$/.test(value)) {
-      return `${value}-01`;
-    }
-
-    return value.slice(0, 10);
   }
 
   private toMonthDate(date: Date): string {

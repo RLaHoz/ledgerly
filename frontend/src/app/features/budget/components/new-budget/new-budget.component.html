@@ -1,6 +1,10 @@
 <article class="new-budget-card" aria-label="Add category budget">
   <header class="card-header">
-    <h2>Add Category Budget</h2>
+    <div class="card-heading">
+      <h2>Add Category Budget</h2>
+      <p>Create a category with optional subcategories for detailed tracking.</p>
+    </div>
+
     <button type="button" class="close-btn" aria-label="Close" (click)="closed.emit()">
       <ion-icon name="close-outline"></ion-icon>
     </button>
@@ -35,8 +39,54 @@
     </div>
   </label>
 
+  <section class="subcategories-section" aria-label="Subcategories">
+    <header class="subcategories-header">
+      <h3>Subcategories</h3>
+      <button type="button" class="add-subcategory-btn" (click)="onAddSubcategory()">
+        <ion-icon name="add-outline"></ion-icon>
+        <span>Add</span>
+      </button>
+    </header>
+
+    @if (subcategories().length === 0) {
+      <p class="subcategories-empty">No subcategories yet.</p>
+    } @else {
+      <div class="subcategory-list">
+        @for (subcategory of subcategories(); track subcategory.id) {
+          <div class="subcategory-item">
+            <input
+              class="subcategory-name-input"
+              type="text"
+              [value]="subcategory.name"
+              placeholder="Name"
+              autocomplete="off"
+              (input)="onSubcategoryNameInput(subcategory.id, $event)"
+            />
+
+            <div class="subcategory-amount-field">
+              <span class="subcategory-prefix">$</span>
+              <input
+                class="subcategory-budget-input"
+                type="text"
+                inputmode="decimal"
+                [value]="subcategory.amount"
+                placeholder="0"
+                autocomplete="off"
+                (input)="onSubcategoryAmountInput(subcategory.id, $event)"
+              />
+            </div>
+
+            <button type="button" class="delete-subcategory-btn" aria-label="Delete subcategory" (click)="onDeleteSubcategory(subcategory.id)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
   <footer class="actions">
     <button type="button" class="btn-cancel" (click)="canceled.emit()">Cancel</button>
-    <button type="button" class="btn-add" [disabled]="!canAdd()" (click)="addRequested.emit()">Add</button>
+    <button type="button" class="btn-add" [disabled]="!canAdd()" (click)="addRequested.emit()">Add Category</button>
   </footer>
 </article>

@@ -3,7 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID, createHash } from 'node:crypto';
 import { PrismaService } from 'src/sourceDB/database/prisma.service';
-import { AppSessionResponse } from '../interfaces/auth-user.interface';
+import {
+  BankConnectionState,
+  IssuedSessionResponse,
+} from '../interfaces/auth-user.interface';
 
 @Injectable()
 export class SessionService {
@@ -13,33 +16,11 @@ export class SessionService {
     private readonly config: ConfigService,
   ) {}
 
-  async createAnonymousSession(input: {
-    deviceId?: string;
-    userAgent?: string;
-    ipAddress?: string;
-  }): Promise<AppSessionResponse> {
-    // Create a lightweight app identity.
-    const user = await this.prisma.user.create({
-      data: {
-        email: `anon+${randomUUID()}@ledgerly.local`,
-        fullName: 'Ledgerly User',
-      },
-      select: { id: true },
-    });
-
-    return this.createSessionForUser({
-      userId: user.id,
-      deviceId: input.deviceId,
-      userAgent: input.userAgent,
-      ipAddress: input.ipAddress,
-    });
-  }
-
   async refreshSession(input: {
     refreshToken: string;
     userAgent?: string;
     ipAddress?: string;
-  }): Promise<AppSessionResponse> {
+  }): Promise<IssuedSessionResponse> {
     const refreshTokenHash = this.hashToken(input.refreshToken);
     const now = new Date();
 
@@ -76,15 +57,16 @@ export class SessionService {
       },
     });
 
-    const userFlags = await this.getUserSessionFlags(session.userId);
+    const sessionProfile = await this.getSessionProfile(session.userId);
 
     return {
-      user: { id: session.userId, roles: [] },
+      user: sessionProfile.user,
       accessToken: rotated.accessToken,
       refreshToken: rotated.refreshToken,
       accessTokenExpiresInSeconds: rotated.accessTokenExpiresInSeconds,
-      onboardingCompleted: userFlags.onboardingCompleted,
-      isFirstBankConnectionForUser: userFlags.isFirstBankConnectionForUser,
+      onboardingCompleted: sessionProfile.onboardingCompleted,
+      bankConnectionState: sessionProfile.bankConnectionState,
+      hasConnectedBank: sessionProfile.hasConnectedBank,
     };
   }
 
@@ -103,12 +85,65 @@ export class SessionService {
     });
   }
 
+  async issueSessionForUser(input: {
+    userId: string;
+    deviceId?: string;
+    userAgent?: string;
+    ipAddress?: string;
+  }): Promise<IssuedSessionResponse> {
+    return this.createSessionForUser(input);
+  }
+
+  async reissueSessionForUser(input: {
+    sessionId: string;
+    userId: string;
+    userAgent?: string;
+    ipAddress?: string;
+  }): Promise<IssuedSessionResponse> {
+    const existingSession = await this.prisma.userSession.findUnique({
+      where: { id: input.sessionId },
+      select: { id: true, status: true },
+    });
+
+    if (!existingSession || existingSession.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Invalid user session');
+    }
+
+    const tokens = await this.issueJwtPair({
+      userId: input.userId,
+      sessionId: input.sessionId,
+    });
+
+    await this.prisma.userSession.update({
+      where: { id: input.sessionId },
+      data: {
+        userId: input.userId,
+        refreshTokenHash: this.hashToken(tokens.refreshToken),
+        expiresAt: tokens.refreshExpiresAt,
+        userAgent: input.userAgent,
+        ipAddress: input.ipAddress,
+      },
+    });
+
+    const sessionProfile = await this.getSessionProfile(input.userId);
+
+    return {
+      user: sessionProfile.user,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      accessTokenExpiresInSeconds: tokens.accessTokenExpiresInSeconds,
+      onboardingCompleted: sessionProfile.onboardingCompleted,
+      bankConnectionState: sessionProfile.bankConnectionState,
+      hasConnectedBank: sessionProfile.hasConnectedBank,
+    };
+  }
+
   private async createSessionForUser(input: {
     userId: string;
     deviceId?: string;
     userAgent?: string;
     ipAddress?: string;
-  }): Promise<AppSessionResponse> {
+  }): Promise<IssuedSessionResponse> {
     const sessionId = randomUUID();
 
     const tokens = await this.issueJwtPair({
@@ -130,41 +165,75 @@ export class SessionService {
       select: { id: true, userId: true },
     });
 
-    const userFlags = await this.getUserSessionFlags(session.userId);
+    const sessionProfile = await this.getSessionProfile(session.userId);
 
     return {
-      user: { id: session.userId, roles: [] },
+      user: sessionProfile.user,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       accessTokenExpiresInSeconds: tokens.accessTokenExpiresInSeconds,
-      onboardingCompleted: userFlags.onboardingCompleted,
-      isFirstBankConnectionForUser: userFlags.isFirstBankConnectionForUser,
+      onboardingCompleted: sessionProfile.onboardingCompleted,
+      bankConnectionState: sessionProfile.bankConnectionState,
+      hasConnectedBank: sessionProfile.hasConnectedBank,
     };
   }
 
-  private async getUserSessionFlags(userId: string): Promise<{
+  private async getSessionProfile(userId: string): Promise<{
+    user: {
+      id: string;
+      roles: string[];
+      email: string;
+      fullName: string;
+      avatarUrl: string | null;
+    };
     onboardingCompleted: boolean;
-    isFirstBankConnectionForUser: boolean;
+    bankConnectionState: BankConnectionState;
+    hasConnectedBank: boolean;
   }> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        onboardingCompletedAt: true,
-        _count: {
-          select: {
-            bankConnections: true,
+    const [user, activeConnectionsCount, totalConnectionsCount] = await Promise.all([
+      this.prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+          avatarUrl: true,
+          onboardingCompletedAt: true,
+        },
+      }),
+      this.prisma.bankConnection.count({
+        where: {
+          userId,
+          status: {
+            in: ['CONNECTED', 'SYNCING'],
           },
         },
-      },
-    });
+      }),
+      this.prisma.bankConnection.count({
+        where: { userId },
+      }),
+    ]);
 
     if (!user) {
       throw new UnauthorizedException('Invalid user session');
     }
 
+    const bankConnectionState = resolveBankConnectionState(
+      activeConnectionsCount,
+      totalConnectionsCount,
+    );
+
     return {
+      user: {
+        id: user.id,
+        roles: [],
+        email: user.email,
+        fullName: user.fullName,
+        avatarUrl: user.avatarUrl,
+      },
       onboardingCompleted: Boolean(user.onboardingCompletedAt),
-      isFirstBankConnectionForUser: user._count.bankConnections === 0,
+      bankConnectionState,
+      hasConnectedBank: bankConnectionState === 'connected',
     };
   }
 
@@ -239,4 +308,19 @@ export class SessionService {
     if (unit === 'h') return amount * 60 * 60;
     return amount * 60 * 60 * 24;
   }
+}
+
+function resolveBankConnectionState(
+  activeConnectionsCount: number,
+  totalConnectionsCount: number,
+): BankConnectionState {
+  if (activeConnectionsCount > 0) {
+    return 'connected';
+  }
+
+  if (totalConnectionsCount > 0) {
+    return 'reconnect_required';
+  }
+
+  return 'never_connected';
 }

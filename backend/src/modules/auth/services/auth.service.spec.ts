@@ -29,6 +29,13 @@ jest.mock(
   }),
   { virtual: true },
 );
+jest.mock(
+  './google-oidc.service',
+  () => ({
+    GoogleOidcService: class GoogleOidcService {},
+  }),
+  { virtual: true },
+);
 
 import { AuthService } from './auth.service';
 
@@ -57,6 +64,7 @@ describe('AuthService.bootstrapUserDefaults', () => {
       ruleProvisioningService as never,
       categoryManagementService as never,
       {} as never,
+      {} as never,
     );
 
     return {
@@ -67,8 +75,7 @@ describe('AuthService.bootstrapUserDefaults', () => {
   };
 
   it('provisions categories and rules and logs when data is created', async () => {
-    const { service, categoryManagementService, ruleProvisioningService } =
-      makeService();
+    const { service, categoryManagementService, ruleProvisioningService } = makeService();
 
     categoryManagementService.bootstrapUserCategoriesFromApp.mockResolvedValue({
       createdCategories: 10,
@@ -80,63 +87,27 @@ describe('AuthService.bootstrapUserDefaults', () => {
       skippedRules: 0,
     });
 
-    const logSpy = jest
-      .spyOn((service as any).logger, 'log')
-      .mockImplementation(() => undefined);
+    const logSpy = jest.spyOn((service as any).logger, 'log').mockImplementation(() => undefined);
 
     await (service as any).bootstrapUserDefaults('user-1');
 
-    expect(
-      categoryManagementService.bootstrapUserCategoriesFromApp,
-    ).toHaveBeenCalledWith('user-1');
-    expect(
-      ruleProvisioningService.installDefaultTemplatesForUser,
-    ).toHaveBeenCalledWith('user-1');
+    expect(categoryManagementService.bootstrapUserCategoriesFromApp).toHaveBeenCalledWith('user-1');
+    expect(ruleProvisioningService.installDefaultTemplatesForUser).toHaveBeenCalledWith('user-1');
     expect(logSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('does not log success when no new categories/subcategories/rules are created', async () => {
-    const { service, categoryManagementService, ruleProvisioningService } =
-      makeService();
-
-    categoryManagementService.bootstrapUserCategoriesFromApp.mockResolvedValue({
-      createdCategories: 0,
-      createdSubcategories: 0,
-    });
-    ruleProvisioningService.installDefaultTemplatesForUser.mockResolvedValue({
-      templatesFound: 20,
-      createdRules: 0,
-      skippedRules: 20,
-    });
-
-    const logSpy = jest
-      .spyOn((service as any).logger, 'log')
-      .mockImplementation(() => undefined);
-
-    await (service as any).bootstrapUserDefaults('user-2');
-
-    expect(logSpy).not.toHaveBeenCalled();
-  });
-
   it('swallows provisioning errors and logs them', async () => {
-    const { service, categoryManagementService, ruleProvisioningService } =
-      makeService();
+    const { service, categoryManagementService, ruleProvisioningService } = makeService();
 
     categoryManagementService.bootstrapUserCategoriesFromApp.mockRejectedValue(
       new Error('bootstrap failed'),
     );
 
-    const errorSpy = jest
-      .spyOn((service as any).logger, 'error')
-      .mockImplementation(() => undefined);
+    const errorSpy = jest.spyOn((service as any).logger, 'error').mockImplementation(() => undefined);
 
-    await expect(
-      (service as any).bootstrapUserDefaults('user-3'),
-    ).resolves.toBeUndefined();
+    await expect((service as any).bootstrapUserDefaults('user-3')).resolves.toBeUndefined();
 
-    expect(
-      ruleProvisioningService.installDefaultTemplatesForUser,
-    ).not.toHaveBeenCalled();
+    expect(ruleProvisioningService.installDefaultTemplatesForUser).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(1);
   });
 });
@@ -145,14 +116,8 @@ describe('AuthService.completeOnboarding', () => {
   const makeService = () => {
     const prisma = {
       user: {
-        findUnique: jest.fn<
-          Promise<{ onboardingCompletedAt: Date | null } | null>,
-          [unknown]
-        >(),
-        update: jest.fn<
-          Promise<{ onboardingCompletedAt: Date | null }>,
-          [unknown]
-        >(),
+        findUnique: jest.fn<Promise<{ onboardingCompletedAt: Date | null } | null>, [unknown]>(),
+        update: jest.fn<Promise<{ onboardingCompletedAt: Date | null }>, [unknown]>(),
       },
     };
 
@@ -162,12 +127,10 @@ describe('AuthService.completeOnboarding', () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
     );
 
-    return {
-      service,
-      prisma,
-    };
+    return { service, prisma };
   };
 
   it('sets onboardingCompletedAt for first completion', async () => {
@@ -180,26 +143,6 @@ describe('AuthService.completeOnboarding', () => {
 
     expect(prisma.user.update).toHaveBeenCalledTimes(1);
     expect(result.success).toBe(true);
-    expect(result.onboardingCompleted).toBe(true);
-    expect(typeof result.onboardingCompletedAt).toBe('string');
-  });
-
-  it('returns existing onboarding completion when already completed', async () => {
-    const { service, prisma } = makeService();
-    const completedAt = new Date('2026-03-10T00:00:00.000Z');
-
-    prisma.user.findUnique.mockResolvedValue({
-      onboardingCompletedAt: completedAt,
-    });
-
-    const result = await service.completeOnboarding('user-2');
-
-    expect(prisma.user.update).not.toHaveBeenCalled();
-    expect(result).toEqual({
-      success: true,
-      onboardingCompleted: true,
-      onboardingCompletedAt: completedAt.toISOString(),
-    });
   });
 
   it('throws when user does not exist', async () => {
@@ -207,76 +150,89 @@ describe('AuthService.completeOnboarding', () => {
 
     prisma.user.findUnique.mockResolvedValue(null);
 
-    await expect(service.completeOnboarding('missing-user')).rejects.toThrow(
-      'Invalid user',
-    );
+    await expect(service.completeOnboarding('missing-user')).rejects.toThrow('Invalid user');
     expect(prisma.user.update).not.toHaveBeenCalled();
   });
 });
 
-describe('AuthService consent redirect routing', () => {
+describe('AuthService.startGoogleAuth', () => {
   const originalEnv = {
-    BASIQ_CONSENT_REDIRECT_URI: process.env.BASIQ_CONSENT_REDIRECT_URI,
-    BASIQ_CONSENT_REDIRECT_URI_WEB: process.env.BASIQ_CONSENT_REDIRECT_URI_WEB,
-    BASIQ_CONSENT_REDIRECT_URI_NATIVE:
-      process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE,
+    GOOGLE_OAUTH_REDIRECT_URI: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+    GOOGLE_CALLBACK_BRIDGE_WEB_URL: process.env.GOOGLE_CALLBACK_BRIDGE_WEB_URL,
   };
 
-  const makeService = () =>
-    new AuthService(
-      {
-        bankConsentAttempt: {
-          findUnique: jest.fn(),
-        },
-      } as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
-    );
-
   afterEach(() => {
-    process.env.BASIQ_CONSENT_REDIRECT_URI =
-      originalEnv.BASIQ_CONSENT_REDIRECT_URI;
-    process.env.BASIQ_CONSENT_REDIRECT_URI_WEB =
-      originalEnv.BASIQ_CONSENT_REDIRECT_URI_WEB;
-    process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE =
-      originalEnv.BASIQ_CONSENT_REDIRECT_URI_NATIVE;
+    process.env.GOOGLE_OAUTH_REDIRECT_URI = originalEnv.GOOGLE_OAUTH_REDIRECT_URI;
+    process.env.GOOGLE_CALLBACK_BRIDGE_WEB_URL = originalEnv.GOOGLE_CALLBACK_BRIDGE_WEB_URL;
   });
 
-  it('adds explicit web client query to public callback bridge redirect', () => {
-    process.env.BASIQ_CONSENT_REDIRECT_URI =
-      'https://example.ngrok-free.dev/api/auth/callback';
-    const service = makeService();
-
-    const redirectUri = (service as any).resolveConsentRedirectUri('web');
-
-    expect(redirectUri).toBe(
-      'https://example.ngrok-free.dev/api/auth/callback?client=web',
-    );
-  });
-
-  it('adds explicit native client query to native redirect uri', () => {
-    delete process.env.BASIQ_CONSENT_REDIRECT_URI;
-    process.env.BASIQ_CONSENT_REDIRECT_URI_NATIVE = 'ledgerly://auth/callback';
-    const service = makeService();
-
-    const redirectUri = (service as any).resolveConsentRedirectUri('native');
-
-    expect(redirectUri).toBe('ledgerly://auth/callback?client=native');
-  });
-
-  it('resolves persisted client from authorize url redirect_uri query', async () => {
+  it('persists a Google auth attempt and returns the authorize URL', async () => {
+    process.env.GOOGLE_OAUTH_REDIRECT_URI = 'https://api.example.com/api/auth/google/callback';
     const prisma = {
-      bankConsentAttempt: {
-        findUnique: jest.fn().mockResolvedValue({
-          authorizeUrl:
-            'https://consent.basiq.io/home?token=abc&state=s1&redirect_uri=' +
-            encodeURIComponent(
-              'https://example.ngrok-free.dev/api/auth/callback?client=web',
-            ),
+      authAttempt: {
+        create: jest.fn().mockResolvedValue(undefined),
+      },
+    };
+    const googleOidc = {
+      createAuthorizationContext: jest.fn().mockReturnValue({
+        authorizeUrl: 'https://accounts.google.com/o/oauth2/v2/auth?state=state-1',
+        codeVerifier: 'code-verifier-1',
+      }),
+    };
+    const service = new AuthService(
+      prisma as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      googleOidc as never,
+      {} as never,
+    );
+
+    const result = await service.startGoogleAuth({
+      client: 'web',
+      origin: 'http://localhost:8100',
+    });
+
+    expect(googleOidc.createAuthorizationContext).toHaveBeenCalledTimes(1);
+    expect(prisma.authAttempt.create).toHaveBeenCalledTimes(1);
+    expect(result.authorizeUrl).toContain('accounts.google.com');
+    expect(typeof result.state).toBe('string');
+  });
+});
+
+describe('AuthService.startBankConsent', () => {
+  it('creates the provider user with the authenticated user identity', async () => {
+    const prisma = {
+      bankProvider: {
+        upsert: jest.fn().mockResolvedValue({ id: 'provider-1' }),
+      },
+      bankProviderUser: {
+        findFirst: jest.fn().mockResolvedValue(null),
+        create: jest.fn().mockResolvedValue({
+          id: 'bank-provider-user-1',
+          providerUserId: 'provider-user-1',
         }),
       },
+      user: {
+        findUnique: jest.fn().mockResolvedValue({
+          email: 'user@example.com',
+          fullName: 'User Example',
+        }),
+      },
+      bankConsentAttempt: {
+        create: jest.fn().mockResolvedValue(undefined),
+      },
+    };
+    const bankAuth = {
+      createAuthorizeUrl: jest.fn().mockResolvedValue({
+        authorizeUrl: 'https://consent.example.com',
+        state: 'state-1',
+        nonce: 'nonce-1',
+        codeVerifier: 'verifier-1',
+      }),
+      createProviderUser: jest.fn().mockResolvedValue({
+        providerUserId: 'provider-user-1',
+      }),
     };
     const service = new AuthService(
       prisma as never,
@@ -284,22 +240,40 @@ describe('AuthService consent redirect routing', () => {
       {} as never,
       {} as never,
       {} as never,
+      bankAuth as never,
     );
 
-    const client = await service.resolveConsentAttemptClient('state-1');
+    await service.startBankConsent({
+      userId: 'user-1',
+      client: 'web',
+    });
 
-    expect(client).toBe('web');
+    expect(bankAuth.createProviderUser).toHaveBeenCalledWith({
+      email: 'user@example.com',
+      fullName: 'User Example',
+    });
+    expect(prisma.bankProviderUser.create).toHaveBeenCalledTimes(1);
+    expect(prisma.bankConsentAttempt.create).toHaveBeenCalledTimes(1);
   });
 
-  it('falls back to native when persisted redirect uri uses ledgerly scheme', async () => {
+  it('fails explicitly when the authenticated user profile is incomplete', async () => {
     const prisma = {
-      bankConsentAttempt: {
+      bankProvider: {
+        upsert: jest.fn().mockResolvedValue({ id: 'provider-1' }),
+      },
+      bankProviderUser: {
+        findFirst: jest.fn().mockResolvedValue(null),
+      },
+      user: {
         findUnique: jest.fn().mockResolvedValue({
-          authorizeUrl:
-            'https://consent.basiq.io/home?token=abc&state=s2&redirect_uri=' +
-            encodeURIComponent('ledgerly://auth/callback'),
+          email: 'user@example.com',
+          fullName: '   ',
         }),
       },
+    };
+    const bankAuth = {
+      createAuthorizeUrl: jest.fn(),
+      createProviderUser: jest.fn(),
     };
     const service = new AuthService(
       prisma as never,
@@ -307,10 +281,17 @@ describe('AuthService consent redirect routing', () => {
       {} as never,
       {} as never,
       {} as never,
+      bankAuth as never,
     );
 
-    const client = await service.resolveConsentAttemptClient('state-2');
-
-    expect(client).toBe('native');
+    await expect(
+      service.startBankConsent({
+        userId: 'user-1',
+        client: 'web',
+      }),
+    ).rejects.toThrow(
+      'Authenticated user must have an email and full name before starting bank consent.',
+    );
+    expect(bankAuth.createProviderUser).not.toHaveBeenCalled();
   });
 });

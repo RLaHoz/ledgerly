@@ -1,0 +1,54 @@
+<label class="import-direct-bank-row">
+  <ion-checkbox
+    [checked]="directDataFromBankAccounts()"
+    (ionChange)="onDirectDataFromBankAccountsChange($any($event).detail?.checked === true)"
+  ></ion-checkbox>
+  <p>Direct Data From Bank Accounts</p>
+</label>
+
+@if (isParsing()) {
+  <article class="surface-card parsing-card">
+    <div class="parsing-head">
+      <ion-icon class="parsing-spinner" name="document-text-outline"></ion-icon>
+      <p>Parsing file...</p>
+    </div>
+    <div class="parsing-bars">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </article>
+}
+
+@if (isImportReady() && summary(); as importSummary) {
+  <article class="surface-card parse-summary-card">
+    <div class="success-head">
+      <span class="success-indicator">
+        <ion-icon name="checkmark-outline"></ion-icon>
+      </span>
+      <div>
+        <p class="success-title">File parsed successfully</p>
+        <p class="success-subtitle">{{ fileName() }}</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <article class="stat-cell">
+        <p>Total rows</p>
+        <h3>{{ importSummary.totalRows }}</h3>
+      </article>
+      <article class="stat-cell">
+        <p>Valid</p>
+        <h3>{{ importSummary.validRows }}</h3>
+      </article>
+      <article class="stat-cell">
+        <p>Invalid</p>
+        <h3>{{ importSummary.invalidRows }}</h3>
+      </article>
+      <article class="stat-cell">
+        <p>Date range</p>
+        <h3>{{ importSummary.dateRangeLabel }}</h3>
+      </article>
+    </div>
+  </article>
+}

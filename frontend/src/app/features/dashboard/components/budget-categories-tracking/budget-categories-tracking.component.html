@@ -1,0 +1,42 @@
+<section class="dashboard-categories-section" aria-label="Budget categories">
+  <header class="dashboard-section-header">
+    <h2 class="dashboard-section-title">{{ title() }}</h2>
+    <button class="dashboard-link" type="button" (click)="onSeeAll()">
+      <span>{{ seeAllLabel() }}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+  </header>
+
+  <article class="dashboard-categories-card">
+    @for (item of items(); track item.id) {
+      <div class="dashboard-category-row" [class.is-expanded]="expandedItemId() === item.id">
+        <div
+          class="dashboard-category-trigger"
+          role="button"
+          tabindex="0"
+          [attr.aria-expanded]="expandedItemId() === item.id"
+          (click)="onItemToggle(item.id)"
+          (keydown.enter)="onItemToggleKeydown($event, item.id)"
+          (keydown.space)="onItemToggleKeydown($event, item.id)"
+        >
+          <app-budget-item [item]="item" [variant]="'home'" />
+        </div>
+
+        @if (expandedItemId() === item.id) {
+          <div class="dashboard-category-detail">
+            <p class="dashboard-category-detail-summary">{{ item.detailSummary }}</p>
+
+            @if (item.detailRecommendation) {
+              <p class="dashboard-category-detail-recommendation">{{ item.detailRecommendation }}</p>
+            }
+
+            <button class="dashboard-category-detail-link" type="button" (click)="onViewDetails($event, item)">
+              <span>View details</span>
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </article>
+</section>

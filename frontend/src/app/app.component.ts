@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Capacitor } from '@capacitor/core';
-import { Keyboard } from '@capacitor/keyboard';
 import { ThemeStore } from './core/store/theme/theme.store';
 import { AuthStore } from './features/auth/store/auth.store';
 import { SessionIdleTimeoutService } from './features/auth/services/session-idle-timeout.service';
+import { NativeKeyboardUiGuardService } from './core/services/native-keyboard-ui-guard.service';
+import { normalizePath } from './features/auth/store/auth-route-policy';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,9 @@ import { SessionIdleTimeoutService } from './features/auth/services/session-idle
 export class AppComponent {
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly sessionIdleTimeout = inject(SessionIdleTimeoutService);
+  private readonly keyboardUiGuard = inject(NativeKeyboardUiGuardService);
 
   constructor() {
     inject(ThemeStore);
@@ -26,7 +29,7 @@ export class AppComponent {
     // Bootstrap app session on startup to keep user logged in.
     this.authStore.ensureSession();
     this.sessionIdleTimeout.init();
-    this.initKeyboardUiGuard();
+    this.keyboardUiGuard.init(this.destroyRef);
 
     effect(() => {
       const currentUrl = this.router.url;
@@ -42,34 +45,9 @@ export class AppComponent {
       void this.router.navigateByUrl(targetRoute, { replaceUrl: true });
     });
   }
-
-  private async initKeyboardUiGuard(): Promise<void> {
-    if (!Capacitor.isNativePlatform()) {
-      return;
-    }
-
-    await Keyboard.addListener('keyboardWillShow', () => {
-      document.body.classList.add('keyboard-open');
-    });
-
-    const removeKeyboardOpenClass = () => {
-      document.body.classList.remove('keyboard-open');
-    };
-
-    await Keyboard.addListener('keyboardWillHide', removeKeyboardOpenClass);
-    await Keyboard.addListener('keyboardDidHide', removeKeyboardOpenClass);
-  }
 }
 
 function isAlreadyInTarget(currentUrl: string, targetRoute: string): boolean {
   const normalizedCurrentUrl = normalizePath(currentUrl);
   return normalizedCurrentUrl === targetRoute;
-}
-
-function normalizePath(url: string): string {
-  const [path] = url.split('?');
-  const normalized = path.split('#')[0] ?? '/';
-  return normalized.endsWith('/') && normalized.length > 1
-    ? normalized.slice(0, -1)
-    : normalized;
 }

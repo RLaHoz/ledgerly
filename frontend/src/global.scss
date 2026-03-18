@@ -3,8 +3,6 @@
 @use './app/shared/styles/budget-item' as budgetItemStyles;
 @use './app/shared/styles/data-source-info' as dataSourceInfoStyles;
 @use './app/shared/styles/preferences' as preferencesStyles;
-@use './app/shared/styles/login-form' as loginFormStyles;
-@use './app/shared/styles/backing-authentication' as backingAuthenticationStyles;
 @use './app/shared/styles/onboarding-wizard' as onboardingWizardStyles;
 
 /*
@@ -45,9 +43,12 @@
 
 html,
 body {
-  background: var(--bg-muted);
+  background: var(--background);
   color: var(--text-text-primary);
   font-family: var(--font-sans);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   height: 100%;
   min-height: 100%;
   overflow: hidden;
@@ -75,6 +76,17 @@ ion-app {
 
 * {
   font-family: var(--font-sans);
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--text-primary);
 }
 
 ion-modal.new-budget-modal {
@@ -97,7 +109,7 @@ ion-modal.new-budget-modal::part(content) {
   display: flex;
   justify-content: center;
   overflow: visible;
-  padding: 0 16px;
+  padding: 0 12px;
 }
 
 ion-modal.new-budget-modal .modal-center-layer,
@@ -111,33 +123,33 @@ ion-modal.rules-add-modal .modal-center-layer {
   margin: 0 auto;
   padding:
     max(12px, env(safe-area-inset-top, 0px))
-    max(16px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-right, 0px))
     max(12px, env(safe-area-inset-bottom, 0px))
-    max(16px, env(safe-area-inset-left, 0px));
+    max(12px, env(safe-area-inset-left, 0px));
   width: 100%;
 }
 
 ion-modal.rules-add-modal {
   --background: transparent;
-  --backdrop-opacity: 0;
+  --backdrop-opacity: 0.5;
   --box-shadow: none;
   --height: 100%;
   --width: 100%;
 }
 
 ion-modal.rules-add-modal::part(backdrop) {
-  background: transparent;
-  opacity: 0;
+  background: #000;
+  opacity: 0.5;
 }
 
 ion-modal.rules-add-modal::part(content) {
   align-items: center;
   background: transparent;
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   display: flex;
   justify-content: center;
   overflow: visible;
-  padding: 0;
+  padding: 0 12px;
 }
 
 ion-modal.adjust-budget-modal {
@@ -181,6 +193,4 @@ app-preferences {
   @include preferencesStyles.styles();
 }
 
-@include loginFormStyles.styles();
-@include backingAuthenticationStyles.styles();
 @include onboardingWizardStyles.styles();

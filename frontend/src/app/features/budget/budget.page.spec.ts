@@ -24,8 +24,8 @@ describe('BudgetPage', () => {
     const native = fixture.nativeElement as HTMLElement;
 
     expect(native.querySelector('app-budget-overview')).toBeTruthy();
-    expect(native.querySelector('app-budget-signals')).toBeTruthy();
     expect(native.querySelector('app-budget-category')).toBeTruthy();
+    expect(native.querySelector('.budget-page')).toBeTruthy();
   });
 
   it('should render new budget modal shell', () => {

@@ -2,12 +2,10 @@
   <section class="budget-page">
     <app-budget-overview [model]="overview()" />
 
-    <app-budget-signals [items]="store.signals()" />
-
     <app-budget-category
-      [title]="store.categoryTitle()"
-      [editLabel]="store.editBudgetsLabel()"
-      [items]="store.categories()"
+      [title]="'CATEGORY BUDGETS'"
+      [editLabel]="'Add category'"
+      [items]="categoryCards()"
       (editRequested)="onEditBudgets()"
       (itemAction)="onCategoryItemAction($event)"
     />

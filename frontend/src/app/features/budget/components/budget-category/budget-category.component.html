@@ -1,14 +1,48 @@
 <section class="category-section" aria-label="Category budgets">
   <header class="section-head">
     <h2>{{ title() }}</h2>
-    <button type="button" class="edit-btn" (click)="editRequested.emit()">{{ editLabel() }}</button>
+    <button type="button" class="edit-btn" (click)="editRequested.emit()">
+      <ion-icon name="add-outline"></ion-icon>
+      <span>{{ editLabel() }}</span>
+    </button>
   </header>
 
   <div class="category-list">
     @for (item of items(); track item.id) {
-      <article class="category-item-card">
-        <app-budget-item [item]="item" [editable]="true" [variant]="'budget'" (itemAction)="onItemAction($event)" />
-      </article>
+      <button type="button" class="category-item-card" (click)="onItemAction(item.id)">
+        <span class="category-icon" [class]="'tone-' + item.iconTone">
+          <ion-icon [name]="item.iconName"></ion-icon>
+        </span>
+
+        <span class="category-main">
+          <span class="category-head">
+            <span class="category-title-group">
+              <span class="category-name">{{ item.name }}</span>
+              <span class="sub-count">{{ item.subCountLabel }}</span>
+            </span>
+
+            <span class="status-pill" [class]="'status-' + item.statusTone">{{ item.statusLabel }}</span>
+          </span>
+
+          <span class="amounts-row">
+            <span class="spent-budget">{{ item.spentLabel }} / {{ item.limitLabel }}</span>
+            <span class="remaining" [class]="'remaining-' + item.statusTone">{{ item.leftLabel }}</span>
+          </span>
+
+          <span class="progress-track" aria-hidden="true">
+            <span class="progress-fill" [class]="'progress-' + item.statusTone" [style.width.%]="item.progressPercent"></span>
+          </span>
+
+          <span class="trend-row">
+            @if (item.trendTone !== 'stable') {
+              <ion-icon [name]="item.trendTone === 'up' ? 'trending-up-outline' : 'trending-down-outline'"></ion-icon>
+            }
+            <span [class]="'trend-' + item.trendTone">{{ item.trendLabel }}</span>
+          </span>
+        </span>
+
+        <ion-icon class="card-chevron" name="chevron-forward-outline"></ion-icon>
+      </button>
     }
   </div>
 </section>

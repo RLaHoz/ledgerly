@@ -1,0 +1,164 @@
+:host {
+  display: contents;
+}
+
+.assign-sheet-overlay {
+  align-items: end;
+  background: rgb(0 0 0 / 40%);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 50;
+}
+
+.assign-sheet {
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border, #e6eaf2);
+  border-bottom: 0;
+  border-radius: 18px 18px 0 0;
+  max-height: 70dvh;
+  max-width: 430px;
+  overflow-y: auto;
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  width: min(430px, 100%);
+}
+
+.assign-sheet-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 20px 12px;
+}
+
+.assign-sheet-header h3 {
+  color: var(--text-text-primary, #0b1220);
+  font-size: 17px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.sheet-close {
+  --background: transparent;
+  --color: var(--text-text-tertiary, #8a94a6);
+  --padding-start: 4px;
+  --padding-end: 4px;
+  margin: 0;
+  min-height: 32px;
+  min-width: 32px;
+}
+
+.sheet-close::part(native) {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sheet-close ion-icon,
+.sheet-search-wrap ion-icon,
+.sheet-chevron {
+  font-size: 16px;
+}
+
+.sheet-search-wrap {
+  align-items: center;
+  background: var(--bg-surface-secondary, #f2f4f8);
+  border: 1px solid var(--border, #e6eaf2);
+  border-radius: 12px;
+  display: flex;
+  margin: 0 20px 12px;
+  min-height: 40px;
+  padding: 0 12px;
+}
+
+.sheet-search-wrap ion-icon {
+  color: var(--text-text-tertiary, #8a94a6);
+  margin-right: 6px;
+}
+
+.sheet-search-wrap ion-input {
+  --color: var(--text-text-primary, #0b1220);
+  --placeholder-color: var(--text-text-tertiary, #8a94a6);
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 14px;
+}
+
+.sheet-list {
+  background: transparent;
+}
+
+.sheet-list ion-item {
+  --background: transparent;
+  --border-color: var(--border, #e6eaf2);
+  --inner-border-width: 0 0 1px 0;
+  --padding-start: 20px;
+  --inner-padding-end: 20px;
+  --min-height: 44px;
+}
+
+.sheet-list ion-item:last-child {
+  --inner-border-width: 0;
+}
+
+.sheet-list ion-item p {
+  color: var(--text-text-primary, #0b1220);
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.sheet-category-item.active {
+  --background: color-mix(in srgb, var(--bg-surface-secondary, #f2f4f8) 70%, transparent);
+}
+
+.sheet-chevron {
+  color: var(--text-text-tertiary, #8a94a6);
+  transition: transform 0.18s ease;
+}
+
+.sheet-chevron.expanded {
+  transform: rotate(90deg);
+}
+
+.sheet-subcategory-list {
+  background: color-mix(in srgb, var(--bg-surface-secondary, #f2f4f8) 50%, transparent);
+  margin: 0;
+}
+
+.sheet-subcategory-item {
+  --padding-start: 34px;
+  --inner-padding-end: 20px;
+  --min-height: 42px;
+}
+
+.sheet-empty-subcategories {
+  --background: transparent;
+  --inner-border-width: 0;
+  --min-height: 40px;
+  --padding-start: 34px;
+  --inner-padding-end: 20px;
+}
+
+.sheet-empty-subcategories p {
+  color: var(--text-text-tertiary, #8a94a6);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cat-icon {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+.cat-icon ion-icon {
+  font-size: 16px;
+}
+
+.cat-icon.tiny {
+  height: 28px;
+  width: 28px;
+}

@@ -11,6 +11,10 @@ import {
   CompleteOnboardingResponse,
   SessionResponse,
 } from '../models/auth.models';
+import {
+  CompleteGoogleAuthRequest,
+  GoogleAuthorizeUrlResponse,
+} from '../models/google-auth.models';
 import { RuntimeConfigService } from 'src/app/core/config/runtime-config.service';
 
 @Injectable({
@@ -24,31 +28,49 @@ export class AuthService {
     return this.runtimeConfig.getApiUrl();
   }
 
-  createAnonymousSession(deviceId?: string): Observable<SessionResponse> {
+  refreshSession(): Observable<SessionResponse> {
     return this.http.post<SessionResponse>(
-      `${this.baseUrl}/auth/session/anonymous`,
-      { deviceId },
+      `${this.baseUrl}/auth/session/refresh`,
+      {},
+      { withCredentials: true },
     );
   }
 
-  refreshSession(refreshToken: string): Observable<SessionResponse> {
-    return this.http.post<SessionResponse>(`${this.baseUrl}/auth/session/refresh`, {
-      refreshToken,
-    });
+  logoutSession(): Observable<{ success: true }> {
+    return this.http.post<{ success: true }>(
+      `${this.baseUrl}/auth/session/logout`,
+      {},
+      { withCredentials: true },
+    );
   }
 
-  logoutSession(refreshToken: string): Observable<{ success: true }> {
-    return this.http.post<{ success: true }>(`${this.baseUrl}/auth/session/logout`, {
-      refreshToken,
-    });
-  }
-
-  getBankAuthorizeUrl(): Observable<BankAuthorizeUrlResponse> {
+  startGoogleAuth(): Observable<GoogleAuthorizeUrlResponse> {
     const client = Capacitor.isNativePlatform() ? 'native' : 'web';
-    return this.http.get<BankAuthorizeUrlResponse>(
-      `${this.baseUrl}/auth/bankLoginUrl`,
+    return this.http.post<GoogleAuthorizeUrlResponse>(
+      `${this.baseUrl}/auth/google/start`,
+      { client },
       {
-        params: { client },
+        headers: { 'x-client-source': client },
+      },
+    );
+  }
+
+  completeGoogleAuth(
+    payload: CompleteGoogleAuthRequest,
+  ): Observable<SessionResponse> {
+    return this.http.post<SessionResponse>(
+      `${this.baseUrl}/auth/google/complete`,
+      payload,
+      { withCredentials: true },
+    );
+  }
+
+  startBankConsent(): Observable<BankAuthorizeUrlResponse> {
+    const client = Capacitor.isNativePlatform() ? 'native' : 'web';
+    return this.http.post<BankAuthorizeUrlResponse>(
+      `${this.baseUrl}/auth/bank-consent/start`,
+      { client },
+      {
         headers: { 'x-client-source': client },
       },
     );
@@ -60,6 +82,7 @@ export class AuthService {
     return this.http.post<BankConsentVerificationResponse>(
       `${this.baseUrl}/auth/bank-consent/verify`,
       payload,
+      { withCredentials: true },
     );
   }
 

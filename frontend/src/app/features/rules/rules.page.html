@@ -1,24 +1,27 @@
 <ion-content [fullscreen]="true">
   <section class="rules-page">
-    <p class="rules-intro">{{ store.description() }}</p>
+    <app-rules-health-summary
+      [title]="summaryTitle"
+      [subtitle]="summarySubtitle()"
+      [stats]="summaryStats()"
+    />
 
     <app-rules-quick-template
       [title]="store.quickTemplatesTitle()"
       [items]="store.quickTemplates()"
+      (selected)="onQuickCreateSelected($event)"
     />
 
     <app-rules-active
       [title]="store.activeTitle()"
-      [summary]="store.activeSummary()"
       [addLabel]="store.addLabel()"
-      [items]="store.activeRules()"
+      [items]="rulesListItems()"
       (addRequested)="onOpenAddRule()"
       (toggled)="onRuleToggle($event)"
     />
 
     <app-rules-triggered-alerts
       [title]="store.triggeredTitle()"
-      [count]="store.triggeredCount()"
       [summary]="store.triggeredSummary()"
       [items]="store.triggeredAlerts()"
     />
@@ -28,7 +31,7 @@
     [cssClass]="'rules-add-modal'"
     class="rules-add-modal"
     [isOpen]="store.isAddRuleModalOpen()"
-    [showBackdrop]="false"
+    [showBackdrop]="true"
     [backdropDismiss]="true"
     (didDismiss)="onCloseAddRule()"
   >
@@ -41,6 +44,7 @@
           [conditionValue]="store.addDraft().conditionValue"
           [actionType]="store.addDraft().actionType"
           [actionValue]="store.addDraft().actionValue"
+          [showTypeSelector]="showTypeSelector()"
           [ruleTypeOptions]="store.ruleTypeOptions()"
           [conditionFieldOptions]="store.conditionFieldOptions()"
           [actionTypeOptions]="store.actionTypeOptions()"

@@ -25,16 +25,38 @@ export type RequestWithUser = {
   user?: AuthUser;
 };
 
-export interface AppSessionResponse {
-  user: { id: string; roles: string[] };
+export type BankConnectionState =
+  | 'never_connected'
+  | 'connected'
+  | 'reconnect_required';
+
+interface SessionResponseBase {
+  user: {
+    id: string;
+    roles: string[];
+    email: string;
+    fullName: string;
+    avatarUrl: string | null;
+  };
   accessToken: string;
-  refreshToken: string;
   accessTokenExpiresInSeconds: number;
   onboardingCompleted: boolean;
-  isFirstBankConnectionForUser: boolean;
+  bankConnectionState: BankConnectionState;
+  hasConnectedBank: boolean;
+}
+
+export interface AppSessionResponse extends SessionResponseBase {}
+
+export interface IssuedSessionResponse extends SessionResponseBase {
+  refreshToken: string;
 }
 
 export interface BankAuthorizeUrlResponse {
+  authorizeUrl: string;
+  state: string;
+}
+
+export interface GoogleAuthorizeUrlResponse {
   authorizeUrl: string;
   state: string;
 }
@@ -44,6 +66,7 @@ export interface VerifyBankConsentResponse {
   failedJobIds: string[];
   pendingJobIds: string[];
   message: string;
+  session?: AppSessionResponse;
   context?: {
     appUserId: string;
     providerCode: string;
@@ -51,8 +74,15 @@ export interface VerifyBankConsentResponse {
     providerConnectionIds: string[];
     jobIds: string[];
     isFirstSuccessfulConsentForUser: boolean;
-    isFirstBankConnectionForUser: boolean;
+    bankConnectionState: BankConnectionState;
+    hasConnectedBank: boolean;
+    wasFirstSuccessfulBankConnection: boolean;
   };
+}
+
+export interface VerifyBankConsentResult
+  extends Omit<VerifyBankConsentResponse, 'session'> {
+  session?: IssuedSessionResponse;
 }
 
 export interface CompleteOnboardingResponse {

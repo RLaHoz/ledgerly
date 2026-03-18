@@ -9,6 +9,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { RulesModule } from '../rules/rules.module';
 import { CategoriesModule } from '../categories/categories.module';
+import { GoogleOidcService } from './services/google-oidc.service';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CategoriesModule } from '../categories/categories.module';
   providers: [
     AuthService,
     SessionService,
+    GoogleOidcService,
     AuthGuard,
     {
       provide: APP_GUARD,

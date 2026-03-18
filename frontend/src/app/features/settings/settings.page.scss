@@ -37,6 +37,11 @@ ion-content {
   --settings-switch-on: var(--switch-on);
   --settings-switch-handle: #ffffff;
   --settings-switch-on-handle: #ffffff;
+  --settings-logout-bg: var(--surface);
+  --settings-logout-border: color-mix(in srgb, var(--critical) 16%, var(--border));
+  --settings-logout-text: var(--critical);
+  --settings-logout-active-bg: var(--critical-soft);
+  --settings-logout-active-border: color-mix(in srgb, var(--critical) 28%, transparent);
 
   display: grid;
   gap: 14px;

@@ -2,8 +2,6 @@ export type RuleStatusTone = 'auto' | 'alert' | 'anomaly';
 
 export type RuleIconKind = 'tag' | 'bell' | 'warning';
 
-export type TriggeredAlertSeverity = 'warning' | 'critical';
-
 export interface RulesQuickTemplateItem {
   id: string;
   title: string;
@@ -25,8 +23,7 @@ export interface RulesActiveItem {
 export interface RulesTriggeredAlertItem {
   id: string;
   title: string;
-  severity: TriggeredAlertSeverity;
-  severityLabel: string;
+  icon: Extract<RuleIconKind, 'tag' | 'bell'>;
   ageLabel: string;
 }
 
